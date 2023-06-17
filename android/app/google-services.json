@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "269604310634",
+    "project_id": "thanhhoa-5b7f5",
+    "storage_bucket": "thanhhoa-5b7f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269604310634:android:5bc30acb0c838f8773c413",
+        "android_client_info": {
+          "package_name": "com.example.thanhhoa_garden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269604310634-mlgu3v6g3ucik2ob4nfj64k2hq33qsvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_C_fOl-xN9dwVXUO8Is_EyhdcvuayNOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269604310634-mlgu3v6g3ucik2ob4nfj64k2hq33qsvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
