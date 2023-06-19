@@ -1,13 +1,15 @@
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+
 abstract class CartEvent {
-  int? _count;
-  int? get count => _count;
+  Bonsai? _bonsai;
+  Bonsai? get bonsai => _bonsai;
 }
 
 class AddtoCart extends CartEvent {
   @override
-  int? count;
+  Bonsai? bonsai;
 
-  AddtoCart(this.count) : super();
+  AddtoCart(this.bonsai) : super();
 }
 
 class RemovetoCart extends CartEvent {}

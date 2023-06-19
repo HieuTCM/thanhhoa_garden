@@ -13,6 +13,7 @@ import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_state.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_event.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_state.dart';
+import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
@@ -78,11 +79,12 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
     return Scaffold(
-      // floatingActionButton: Builder(builder: (context) {
-      //   return _floatingButton();
-      // }),
+      backgroundColor: background,
+      floatingActionButton: Builder(builder: (context) {
+        return _floatingButton();
+      }),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
         height: size.height,
         child: Column(children: [
@@ -90,7 +92,7 @@ class _SearchScreenState extends State<SearchScreen> {
             height: 35,
           ),
           //search Bar
-          _searchBar(),
+          AppBarWiget(midle: _seachField(), tail: _filterIcon()),
           const SizedBox(
             height: 5,
           ),
@@ -111,10 +113,9 @@ class _SearchScreenState extends State<SearchScreen> {
             width: size.width,
             child: _cateList(),
           ),
-
           Container(
             height: 10,
-            decoration: const BoxDecoration(color: Colors.grey),
+            decoration: const BoxDecoration(color: divince),
           ),
           //Bonsai List
           Expanded(child: _bonsaiList())
@@ -123,64 +124,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _searchBar() {
-    var size = MediaQuery.of(context).size;
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      height: 65,
-      width: size.width,
-      // decoration: const BoxDecoration(color: Colors.amber),
-      child: Row(
-        children: [
-          Center(
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const FaIcon(
-                  FontAwesomeIcons.arrowLeft,
-                  color: buttonColor,
-                  size: 40,
-                )),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: 250,
-            height: 50,
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      borderSide:
-                          const BorderSide(width: 3, color: Colors.black)),
-                  hintText: 'Tìm kiếm',
-                  suffixIcon:
-                      IconButton(onPressed: () {}, icon: Icon(Icons.search))),
-            ),
-          ),
-          const Spacer(),
-          Center(
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.filter_alt_outlined,
-                  color: buttonColor,
-                  size: 40,
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _bonsaiList() {
-    var a = widget.cartStateSubscription;
-    var b = widget.cartStream;
     return StreamBuilder<BonsaiState>(
       stream: bonsaiStream,
       initialData: BonsaiInitial(),
@@ -194,8 +138,8 @@ class _SearchScreenState extends State<SearchScreen> {
               : ListBonsai(
                   listBonsai: state.listBonsai,
                   wherecall: 'Search Screen',
-                  cartStateSubscription: a,
-                  cartStream: b,
+                  cartStateSubscription: widget.cartStateSubscription,
+                  cartStream: widget.cartStream,
                 );
         } else if (state is BonsaiFailure) {
           return Text(state.errorMessage);
@@ -256,6 +200,91 @@ class _SearchScreenState extends State<SearchScreen> {
           return Container();
         }
       },
+    );
+  }
+
+  Widget _floatingButton() {
+    return DraggableFab(
+      child: SizedBox(
+        height: 55,
+        width: 55,
+        child: Material(
+          type: MaterialType.transparency,
+          child: Stack(
+            children: [
+              Ink(
+                decoration: BoxDecoration(
+                  border: Border.all(color: buttonColor, width: 3.0),
+                  color: Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(500.0),
+                    onTap: () {},
+                    child: const FaIcon(FontAwesomeIcons.cartShopping),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 1,
+                top: 1,
+                child: ClipOval(
+                  child: Container(
+                    color: Colors.red,
+                    width: 20,
+                    height: 20,
+                    child: Consumer<CartProvider>(
+                      builder: (context, value, _) {
+                        return Center(
+                            child: Text(
+                          (value.lits == null)
+                              ? '0'
+                              : value.lits!.length.toString(),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
+                        ));
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _seachField() {
+    return SizedBox(
+      width: 250,
+      height: 50,
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(50),
+                borderSide: const BorderSide(width: 3, color: Colors.black)),
+            hintText: 'Tìm kiếm',
+            suffixIcon: IconButton(onPressed: () {}, icon: Icon(Icons.search))),
+      ),
+    );
+  }
+
+  Widget _filterIcon() {
+    return Center(
+      child: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.filter_alt_outlined,
+            color: buttonColor,
+            size: 40,
+          )),
     );
   }
 }

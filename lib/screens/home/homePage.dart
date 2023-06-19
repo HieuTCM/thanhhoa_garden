@@ -64,9 +64,9 @@ class _HomePageState extends State<HomePage> {
     );
     _serviceStateSubscription = serviceStream.listen((state) {});
     _cartStateSubscription = cartStream.listen((event) {
-      if (event is CartSuccess) {
-        Cartcount = event.Cart;
-      }
+      // if (event is CartSuccess) {
+      //   Cartcount = event.Cart;
+      // }
     });
   }
 
@@ -169,7 +169,6 @@ class _HomePageState extends State<HomePage> {
                     ]),
               ]),
             ),
-//test
             //Services list
             Stack(
               alignment: Alignment.centerLeft,
@@ -362,7 +361,9 @@ class _HomePageState extends State<HomePage> {
                       builder: (context, value, _) {
                         return Center(
                             child: Text(
-                          (value.count == null) ? '0' : value.count.toString(),
+                          (value.lits == null)
+                              ? '0'
+                              : value.lits!.length.toString(),
                           style: const TextStyle(
                               color: Colors.white, fontSize: 12),
                         ));

@@ -10,11 +10,14 @@ import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_state.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_bloc.dart';
+import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/bonsai_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/cart_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/category_provider.dart';
+import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 // import 'package:thanhhoa_garden/screens/MyHomePage.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
@@ -25,10 +28,12 @@ import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 late SharedPreferences sharedPreferences;
 // late AuthBloc authBloc;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+List<Bonsai> Listincart = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
+
   // Bloc.observer = AppBlocObserver();
   // authBloc = AuthBloc(authProvider: AuthenticationProvider());
   // await FirebaseAuth.instance.authStateChanges().listen((User? user) {
@@ -57,6 +62,7 @@ class MyApp extends StatelessWidget {
         ListenableProvider<BonsaiProvider>(create: (_) => BonsaiProvider()),
         ListenableProvider<CategoryProvider>(create: (_) => CategoryProvider()),
         ListenableProvider<CartProvider>(create: (_) => CartProvider()),
+        ListenableProvider<FeedbackProvider>(create: (_) => FeedbackProvider()),
         ProxyProvider<AuthenticationProvider, AuthBloc>(
           update: (_, authProvider, __) => AuthBloc(authProvider: authProvider),
         ),
@@ -72,6 +78,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<CartProvider, CartBloc>(
             update: (_, cartProvider, __) =>
                 CartBloc(cartProvider: cartProvider)),
+        ProxyProvider<FeedbackProvider, FeedbackBloc>(
+            update: (_, feedbackProvider, __) =>
+                FeedbackBloc(feedbackProvider: feedbackProvider)),
       ],
       child: MaterialApp(
         title: 'Thanh Hoa Garden',

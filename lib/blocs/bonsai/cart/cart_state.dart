@@ -1,3 +1,5 @@
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+
 abstract class CartState {}
 
 class CartInitial extends CartState {}
@@ -5,8 +7,8 @@ class CartInitial extends CartState {}
 class CartLoading extends CartState {}
 
 class CartSuccess extends CartState {
-  int? Cart;
-  CartSuccess({required this.Cart});
+  List<Bonsai> list;
+  CartSuccess({required this.list});
 }
 
 class CartFailure extends CartState {

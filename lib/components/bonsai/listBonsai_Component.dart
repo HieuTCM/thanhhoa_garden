@@ -11,6 +11,7 @@ import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_event.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_state.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+import 'package:thanhhoa_garden/screens/bonsai/bonsaidetail.dart';
 
 class ListBonsai extends StatefulWidget {
   List<Bonsai>? listBonsai;
@@ -30,15 +31,15 @@ class ListBonsai extends StatefulWidget {
 
 class _ListBonsaiState extends State<ListBonsai> {
   late CartBloc cartBloc;
-  int? count;
+  // int? count;
   @override
   void initState() {
     cartBloc = Provider.of<CartBloc>(context, listen: false);
-    widget.cartStateSubscription = widget.cartStream?.listen((event) {
-      if (event is CartSuccess) {
-        count = event.Cart!;
-      }
-    });
+    //     widget.cartStateSubscription = widget.cartStream?.listen((event) {
+    //   if (event is CartSuccess) {
+    //     count = event.Cart!;
+    //   }
+    // });
     super.initState();
   }
 
@@ -54,11 +55,6 @@ class _ListBonsaiState extends State<ListBonsai> {
   }
 
   Widget _listBonsai(List<Bonsai>? listBonsai) {
-    widget.cartStateSubscription = widget.cartStream?.listen((event) {
-      if (event is CartSuccess) {
-        count = event.Cart!;
-      }
-    });
     return ListView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.zero,
@@ -74,8 +70,13 @@ class _ListBonsaiState extends State<ListBonsai> {
 
   Widget _BonsaiTab(Bonsai bonsai) {
     var f = NumberFormat("###,###,###", "en_US");
+
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BonsaiDetail(bonsai: bonsai),
+        ));
+      },
       child: Container(
         height: 150,
         margin: const EdgeInsets.all(10),
@@ -116,8 +117,7 @@ class _ListBonsaiState extends State<ListBonsai> {
                             alignment: Alignment.center,
                             iconSize: 30,
                             onPressed: () {
-                              cartBloc.send(AddtoCart(count));
-                              print(count);
+                              cartBloc.send(AddtoCart(bonsai));
                             },
                             icon: const Icon(Icons.add_shopping_cart_outlined))
                       ],

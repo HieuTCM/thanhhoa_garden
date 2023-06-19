@@ -2,18 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:thanhhoa_garden/main.dart';
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 
 class CartProvider extends ChangeNotifier {
-  int? _count;
-  int? get count => _count;
+  List<Bonsai>? _list;
+  List<Bonsai>? get lits => _list;
 
-  Future<bool> addtoCart(int? value) async {
+  Future<bool> addtoCart(Bonsai bonsai) async {
     bool result = false;
     int status = 404;
     try {
-      value ??= 0;
-      value++;
-      _count = value;
+      Listincart.add(bonsai);
+      _list = Listincart;
       notifyListeners();
     } on HttpException catch (e) {
       if (kDebugMode) {

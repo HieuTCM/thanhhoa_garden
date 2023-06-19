@@ -27,6 +27,7 @@ const narBarBackgroud = LinearGradient(
 );
 
 const background = Color(0xFFF1F7F9);
+const divince = Color(0xFFD9D9D9);
 const barColor = Color(0xFFC0DADC);
 const buttonColor = Color(0xFF0D6368);
 const darkText = Color(0xFF000000);
