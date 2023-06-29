@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable, file_names, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +15,14 @@ import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_event.dart';
 import 'package:thanhhoa_garden/blocs/service/service_state.dart';
 import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
-import 'package:thanhhoa_garden/components/navBar.dart';
+import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:thanhhoa_garden/providers/bonsai/cart_provider.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
+import 'package:thanhhoa_garden/screens/service/service.dart';
 
 class HomePage extends StatefulWidget {
   User? user;
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       key: _drawkey,
-      drawer: NavBar(user: widget.user!),
+      drawer: SideBar(user: widget.user!),
       floatingActionButton: Builder(builder: (context) {
         return _floatingButton();
       }),
@@ -383,8 +383,9 @@ class _HomePageState extends State<HomePage> {
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             const Spacer(),
             _serviceTab(listService![0], FontAwesomeIcons.seedling),
             const SizedBox(
@@ -406,7 +407,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget _serviceTab(Service? service, IconData icon) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ServiceDetail(service: service),
+        ));
+      },
       child: Container(
         padding: const EdgeInsets.all(12),
         width: 120,

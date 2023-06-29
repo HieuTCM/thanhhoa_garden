@@ -55,6 +55,7 @@ dependencies:
   draggable_fab: ^0.1.4
   intl: ^0.18.1
   flutter_markdown: ^0.6.15
+  popup_banner: ^1.0.0
 
 dev_dependencies:
   flutter_test:

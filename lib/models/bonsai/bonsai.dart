@@ -95,6 +95,30 @@ var bonsaiJson = [
         "plant_id": "1"
       },
       {
+        "id": "67",
+        "imgurl":
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedLtTWJCXIKURdrMpExn8tjk4DfbjNU3CDA&usqp=CAU",
+        "plant_id": "1"
+      },
+      {
+        "id": "67",
+        "imgurl":
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedLtTWJCXIKURdrMpExn8tjk4DfbjNU3CDA&usqp=CAU",
+        "plant_id": "1"
+      },
+      {
+        "id": "67",
+        "imgurl":
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedLtTWJCXIKURdrMpExn8tjk4DfbjNU3CDA&usqp=CAU",
+        "plant_id": "1"
+      },
+      {
+        "id": "67",
+        "imgurl":
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedLtTWJCXIKURdrMpExn8tjk4DfbjNU3CDA&usqp=CAU",
+        "plant_id": "1"
+      },
+      {
         "id": "68",
         "imgurl":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",

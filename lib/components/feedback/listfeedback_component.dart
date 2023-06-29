@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:popup_banner/popup_banner.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 
@@ -48,8 +49,8 @@ class _ListFeebbackState extends State<ListFeebback> {
     return Column(
       children: [
         Container(
-            height: 130,
-            padding: const EdgeInsets.only(top: 10),
+            // height: 200,
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -69,8 +70,8 @@ class _ListFeebbackState extends State<ListFeebback> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 275,
+                    SizedBox(
+                      width: size.width - 125,
                       child: Row(
                         children: [
                           SizedBox(
@@ -98,7 +99,7 @@ class _ListFeebbackState extends State<ListFeebback> {
                     Row(
                       children: [
                         SizedBox(
-                          width: 275,
+                          width: size.width - 125,
                           child: AutoSizeText(
                             feedback.description.toString().substring(
                                 0,
@@ -106,12 +107,56 @@ class _ListFeebbackState extends State<ListFeebback> {
                                     ? 100
                                     : feedback.description.toString().length),
                             maxLines: 3,
-                            style:
-                                const TextStyle(color: darkText, fontSize: 17),
+                            style: const TextStyle(
+                                color: darkText, fontSize: 17, height: 1.5),
                           ),
                         ),
                       ],
                     ),
+                    Container(
+                        width: size.width - 125,
+                        child: SingleChildScrollView(
+                          // shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: <Widget>[
+                            for (int i = 0; i < feedback.listImg!.length; i++)
+                              GestureDetector(
+                                onTap: () {
+                                  PopupBanner(
+                                    fit: BoxFit.cover,
+                                    height: size.width,
+                                    context: context,
+                                    images: [
+                                      for (int i = 0;
+                                          i < feedback.listImg!.length;
+                                          i++)
+                                        feedback.listImg![i].imgurl
+                                    ],
+                                    autoSlide: false,
+                                    dotsAlignment: Alignment.bottomCenter,
+                                    dotsColorActive: buttonColor,
+                                    dotsColorInactive:
+                                        Colors.grey.withOpacity(0.5),
+                                    onClick: (index) {
+                                      debugPrint("CLICKED $index");
+                                    },
+                                  ).show();
+                                },
+                                child: Container(
+                                    margin: const EdgeInsets.all(5),
+                                    height: (size.width / 5) - 20,
+                                    width: (size.width / 5) - 20,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              feedback.listImg![i].imgurl)),
+                                    )),
+                              ),
+                          ]),
+                        )),
                     Row(
                       children: [
                         Text(
@@ -123,7 +168,7 @@ class _ListFeebbackState extends State<ListFeebback> {
                               fontSize: 15),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 )
               ],

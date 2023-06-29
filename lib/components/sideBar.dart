@@ -8,15 +8,15 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 
-class NavBar extends StatefulWidget {
+class SideBar extends StatefulWidget {
   User user;
-  NavBar({super.key, required this.user});
+  SideBar({super.key, required this.user});
 
   @override
-  State<NavBar> createState() => _NavBarState();
+  State<SideBar> createState() => _SideBarState();
 }
 
-class _NavBarState extends State<NavBar> {
+class _SideBarState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
     final authBloc = Provider.of<AuthBloc>(context, listen: false);

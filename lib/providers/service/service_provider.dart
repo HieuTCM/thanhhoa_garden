@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:thanhhoa_garden/models/bonsai/bonsaiImg.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 
 class ServiceProvider extends ChangeNotifier {
@@ -22,7 +23,15 @@ class ServiceProvider extends ChangeNotifier {
       if (status == 200) {
         //  var jsonData = json.decode(serviceJson);
         for (var data in serviceJson) {
-          _service = Service.fromJson(data);
+          List<PlantImage> listImg = [];
+          var imgData = data["list_img"];
+          if (imgData is List) {
+            for (var img in imgData) {
+              listImg.add(PlantImage.fromJson(img));
+            }
+          }
+
+          _service = Service.fromJson(data, listImg);
           list.add(_service!);
         }
         _listSeriver = list;

@@ -49,6 +49,8 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
       body: Stack(
         children: [
           SingleChildScrollView(
+              // shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
@@ -221,7 +223,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
           ),
         ),
         SizedBox(
-          height: 395,
+          // height: 395,
           child: Consumer<FeedbackProvider>(
             builder: (context, value, _) {
               return (value.listFeedback == null)

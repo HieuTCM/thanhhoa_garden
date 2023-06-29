@@ -29,8 +29,8 @@ class _ListImgState extends State<ListImg> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.all(20),
-      height: 300,
+      padding: const EdgeInsets.all(10),
+      height: (size.width / 5) * 4,
       width: size.width,
       child: Row(
         children: [
@@ -39,8 +39,8 @@ class _ListImgState extends State<ListImg> {
             children: <Widget>[
               for (var img in listImage)
                 Container(
-                    height: 275,
-                    width: 270,
+                    height: (size.width / 5) * 4 - 20,
+                    width: (size.width / 5) * 4 - 20,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
@@ -60,8 +60,8 @@ class _ListImgState extends State<ListImg> {
                   },
                   child: Container(
                       margin: const EdgeInsets.all(5),
-                      height: 70,
-                      width: 70,
+                      height: (size.width / 5) - 20,
+                      width: (size.width / 5) - 20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
