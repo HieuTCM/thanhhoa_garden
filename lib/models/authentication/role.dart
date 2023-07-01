@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 class Role {
-  late final id;
-  late final name;
+  late final roleID;
+  late final roleName;
 
-  Role({this.id, this.name});
+  Role({this.roleID, this.roleName});
 
   Role.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
+    roleID = json['roleID'];
+    roleName = json['roleName'];
   }
 }

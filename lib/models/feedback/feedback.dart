@@ -1,4 +1,4 @@
-import 'package:thanhhoa_garden/models/bonsai/bonsaiImg.dart';
+import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 
 class FeedbackModel {
   late final name_creater;
@@ -6,7 +6,7 @@ class FeedbackModel {
   late final create_date;
   late final description;
   late final rating;
-  late List<PlantImage>? listImg;
+  late List<ImageURL>? listImg;
 
   FeedbackModel(
       {this.create_date,
@@ -17,7 +17,7 @@ class FeedbackModel {
       this.imgurl});
 
   FeedbackModel.fromJson(
-      Map<String, dynamic> json, List<PlantImage>? listImgage) {
+      Map<String, dynamic> json, List<ImageURL>? listImgage) {
     name_creater = json["name_creater"];
     create_date = json["create_date"];
     rating = json["rating"];
@@ -39,43 +39,43 @@ var feedbackList = [
     "listImg": [
       {
         "id": "65",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhGBCS9NCNjgwkm5AG3YdueTODZ31ngbpayw&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "66",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKdofWcH2chdhzWYbnCuencDeZTWd4vYLymQ&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "67",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedLtTWJCXIKURdrMpExn8tjk4DfbjNU3CDA&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "68",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "68",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "68",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "68",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
         "plant_id": "1"
       },
@@ -92,13 +92,13 @@ var feedbackList = [
     "listImg": [
       {
         "id": "65",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhGBCS9NCNjgwkm5AG3YdueTODZ31ngbpayw&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "68",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
         "plant_id": "1"
       }
@@ -115,19 +115,19 @@ var feedbackList = [
     "listImg": [
       {
         "id": "65",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhGBCS9NCNjgwkm5AG3YdueTODZ31ngbpayw&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "68",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
         "plant_id": "1"
       },
       {
         "id": "66",
-        "imgurl":
+        "url":
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKdofWcH2chdhzWYbnCuencDeZTWd4vYLymQ&usqp=CAU",
         "plant_id": "1"
       },

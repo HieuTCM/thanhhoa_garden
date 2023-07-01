@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
+import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -26,14 +27,22 @@ class AuthBloc {
       case LoginEvent:
         {
           _authStateController.add(AuthLoading());
-          await _authProvider.login(event.user, event.pass).then((success) {
+          Map<String, String?> params =
+              ({'username': event.user, 'password': event.pass});
+          await _authProvider.login(params).then((success) async {
             if (success) {
-              final user = _authProvider.loggedInUser;
-              _authStateController.add(AuthSuccess(user: user));
-              sharedPreferences.setString('Token', 'This is authen token');
+              await _authProvider.getUserInfor().then((value) {
+                if (value) {
+                  final user = _authProvider.loggedInUser;
+                  _authStateController.add(AuthSuccess(user: user));
+                } else {
+                  _authStateController.add(AuthFailure(
+                      errorMessage: 'Tải thông tin người dùng thất bại'));
+                }
+              });
             } else {
-              _authStateController.add(
-                  AuthFailure(errorMessage: 'Invalid username or password.'));
+              _authStateController.add(AuthFailure(
+                  errorMessage: 'Tài khoản hoặc mật khẩu không đúng'));
             }
           });
         }
@@ -41,14 +50,31 @@ class AuthBloc {
       case LoginWithGGEvent:
         {
           _authStateController.add(AuthLoading());
-          await _authProvider.loginWithGG().then((value) {
-            if (value) {
-              final user = _authProvider.loggedInUser;
-              _authStateController.add(AuthSuccess(user: user));
-              sharedPreferences.setString('Token', 'This is authen token');
+          await _authProvider.loginWithGG().then((value) async {
+            if (value != null) {
+              Map<String, String?> params =
+                  ({'loginType': 'EMAIL', 'email': value});
+              await _authProvider
+                  .loginWithGGorPhone(params)
+                  .then((value) async {
+                if (value) {
+                  await _authProvider.getUserInfor().then((value) {
+                    if (value) {
+                      final user = _authProvider.loggedInUser;
+                      _authStateController.add(AuthSuccess(user: user));
+                    } else {
+                      _authStateController.add(AuthFailure(
+                          errorMessage: 'Tải thông tin người dùng thất bại'));
+                    }
+                  });
+                } else {
+                  _authStateController
+                      .add(AuthFailure(errorMessage: 'Email chưa đăng kí'));
+                }
+              });
             } else {
-              _authStateController.add(
-                  AuthFailure(errorMessage: 'Invalid username or password.'));
+              _authStateController.add(AuthFailure(
+                  errorMessage: 'Đăng nhập email không thành công'));
             }
           });
         }

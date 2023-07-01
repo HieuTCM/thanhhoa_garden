@@ -6,7 +6,7 @@ class User {
   late final address;
   late final avatar;
   late final email;
-  late final full_name;
+  late final fullName;
   late final gender;
   late final password;
   late final phone;
@@ -22,7 +22,7 @@ class User {
       this.password,
       this.avatar,
       this.email,
-      this.full_name,
+      this.fullName,
       this.gender,
       this.role});
 
@@ -30,7 +30,7 @@ class User {
     address = json['address'];
     avatar = json['avatar'];
     email = json['email'];
-    full_name = json['full_name'];
+    fullName = json['fullName'];
     gender = json['gender'];
     password = json['password'];
     phone = json['phone'];
@@ -40,32 +40,16 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['phone'] = phone;
     data['password'] = password;
-    data['status'] = status;
     data['username'] = username;
-    data['role'] = role;
-    data['full_name'] = full_name;
+    data['fullName'] = fullName;
     data['gender'] = gender;
     data['address'] = address;
-    data['status'] = status;
-    data['role'] = role;
+    data['avatar'] = avatar;
+    data['email'] = email;
 
     return data;
   }
-
-  Map<String, dynamic> loggedUser = {
-    "address": "Quận 9, TP HCM",
-    "avatar":
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyOkI7jCSQ6X-zUxWna8V4C-r-pbprAMWCVQ&usqp=CAU",
-    "email": "abc@gmail.com",
-    "full_name": "Hieu Test 1",
-    "gender": "True",
-    "password": "123456789",
-    "phone": "123456789",
-    "status": "Active",
-    "username": "testacc1",
-    "role_id": "5",
-  };
 }

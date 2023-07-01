@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:thanhhoa_garden/models/bonsai/bonsaiImg.dart';
+import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
+import 'package:http/http.dart' as http;
+import 'package:thanhhoa_garden/utils/connection/utilsConnection.dart';
+import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ServiceProvider extends ChangeNotifier {
   Service? _service;
@@ -15,25 +19,31 @@ class ServiceProvider extends ChangeNotifier {
   Future<bool> getAllService() async {
     bool result = false;
     List<Service> list = [];
-    // Simulate an asynchronous API call
-    int status = 404;
+    var header = getheader(getTokenAuthenFromSharedPrefs());
     try {
-      await Future.delayed(const Duration(seconds: 2))
-          .then((value) => {status = 200});
-      if (status == 200) {
+      final res =
+          await http.get(Uri.parse(mainURL + getServiceURL), headers: header);
+      if (res.statusCode == 200) {
         //  var jsonData = json.decode(serviceJson);
-        for (var data in serviceJson) {
-          List<PlantImage> listImg = [];
-          var imgData = data["list_img"];
-          if (imgData is List) {
-            for (var img in imgData) {
-              listImg.add(PlantImage.fromJson(img));
-            }
-          }
 
-          _service = Service.fromJson(data, listImg);
-          list.add(_service!);
+        if (res.body.isNotEmpty) {
+          var jsondata = json.decode(res.body);
+          for (var data in jsondata) {
+            List<ImageURL> imglist = [];
+            List<TypeService> typeList = [];
+            var listImge = data['imgList'];
+            for (var listdata in listImge) {
+              imglist.add(ImageURL.fromJson(listdata));
+            }
+            var listType = data['typeList'];
+            for (var data in listType) {
+              typeList.add(TypeService.fromJson(data));
+            }
+            _service = Service.fromJson(data, typeList, imglist);
+            list.add(_service!);
+          }
         }
+
         _listSeriver = list;
         result = true;
         notifyListeners();

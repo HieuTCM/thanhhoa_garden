@@ -28,7 +28,7 @@ class _SideBarState extends State<SideBar> {
           children: [
             UserAccountsDrawerHeader(
                 accountName: Text(
-                  widget.user.full_name,
+                  widget.user.fullName,
                   style: const TextStyle(color: lightText),
                 ),
                 accountEmail: Text(widget.user.email,

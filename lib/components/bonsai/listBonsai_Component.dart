@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -55,21 +56,26 @@ class _ListBonsaiState extends State<ListBonsai> {
   }
 
   Widget _listBonsai(List<Bonsai>? listBonsai) {
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: (widget.wherecall != null)
-          ? const ScrollPhysics()
-          : const NeverScrollableScrollPhysics(),
-      itemCount: listBonsai!.length,
-      itemBuilder: (context, index) {
-        return _BonsaiTab(listBonsai[index]);
-      },
-    );
+    return listBonsai!.isEmpty
+        ? const Center(
+            child: Text('Không tìm thấy cây cảnh'),
+          )
+        : ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: (widget.wherecall != null)
+                ? const ScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
+            itemCount: listBonsai!.length,
+            itemBuilder: (context, index) {
+              return _BonsaiTab(listBonsai[index]);
+            },
+          );
   }
 
   Widget _BonsaiTab(Bonsai bonsai) {
     var f = NumberFormat("###,###,###", "en_US");
+    var cm = NumberFormat("###", "en_US");
 
     return GestureDetector(
       onTap: () {
@@ -92,7 +98,7 @@ class _ListBonsaiState extends State<ListBonsai> {
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(bonsai.listImg![0].imgurl)),
+                    image: NetworkImage(bonsai.listImg![0].url)),
               )),
           Padding(
             padding: const EdgeInsets.only(top: 15, left: 18, right: 0),
@@ -105,12 +111,15 @@ class _ListBonsaiState extends State<ListBonsai> {
                     height: 25,
                     child: Row(
                       children: [
-                        Text(
-                          bonsai.name,
-                          style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w500),
+                        Expanded(
+                          child: AutoSizeText(
+                            bonsai.name,
+                            maxLines: 1,
+                            style: const TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.w500),
+                          ),
                         ),
-                        const Spacer(),
+                        // const Spacer(),
                         IconButton(
                             color: buttonColor,
                             padding: EdgeInsets.zero,
@@ -127,15 +136,19 @@ class _ListBonsaiState extends State<ListBonsai> {
                     height: 10,
                   ),
                   Text(
-                    'Kèm chậu: ${bonsai.with_pot == 'True' ? 'Có' : 'Không' ''}',
+                    'Kèm chậu: ${bonsai.withPot == 'True' ? 'Có' : 'Không' ''}',
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    '${'Tổng chiều cao: ~ ' + bonsai.height} Cm',
-                    style: const TextStyle(fontSize: 18),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 20 - 150 - 36,
+                    child: AutoSizeText(
+                      maxLines: 1,
+                      '${'Tổng chiều cao: ~ ' + cm.format(bonsai.height)} Cm',
+                      style: const TextStyle(fontSize: 18),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -146,7 +159,7 @@ class _ListBonsaiState extends State<ListBonsai> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${f.format(double.parse(bonsai.price))} đ',
+                          '${f.format(bonsai.price)} đ',
                           style:
                               const TextStyle(fontSize: 18, color: priceColor),
                         ),

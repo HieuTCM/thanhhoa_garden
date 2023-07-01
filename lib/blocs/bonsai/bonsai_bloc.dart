@@ -24,7 +24,7 @@ class BonsaiBloc {
     switch (event.runtimeType) {
       case GetAllBonsaiEvent:
         _BonsaiStateController.add(BonsaiLoading());
-        await _BonsaiProvider.getAllBonsai().then((value) {
+        await _BonsaiProvider.fetchBonsaiList(event).then((value) {
           if (value) {
             final listBonsai = _BonsaiProvider.listBonsai;
             _BonsaiStateController.add(

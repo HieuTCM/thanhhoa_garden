@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:thanhhoa_garden/models/bonsai/bonsaiImg.dart';
+import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 
 class ListImg extends StatefulWidget {
-  List<PlantImage> listImage;
+  List<ImageURL> listImage;
   ListImg({super.key, required this.listImage});
 
   @override
@@ -12,7 +12,7 @@ class ListImg extends StatefulWidget {
 }
 
 class _ListImgState extends State<ListImg> {
-  List<PlantImage> listImage = [];
+  List<ImageURL> listImage = [];
   int index = 0;
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _ListImgState extends State<ListImg> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                          fit: BoxFit.cover, image: NetworkImage(img.imgurl)),
+                          fit: BoxFit.cover, image: NetworkImage(img.url)),
                     )),
             ],
           ),
@@ -67,7 +67,7 @@ class _ListImgState extends State<ListImg> {
                         image: DecorationImage(
                             opacity: (index == i) ? 1 : 0.5,
                             fit: BoxFit.cover,
-                            image: NetworkImage(listImage[i].imgurl)),
+                            image: NetworkImage(listImage[i].url)),
                       )),
                 ),
             ]),

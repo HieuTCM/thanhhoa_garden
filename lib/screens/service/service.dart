@@ -119,7 +119,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            '${f.format(double.parse(widget.service.price))} đ',
+            '${f.format(widget.service.price)} đ',
             style: const TextStyle(
                 fontSize: 20, color: priceColor, fontWeight: FontWeight.w500),
           ),

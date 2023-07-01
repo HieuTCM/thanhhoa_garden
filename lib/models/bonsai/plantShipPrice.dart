@@ -2,14 +2,14 @@
 
 class PlantShipPrice {
   late final id;
-  late final pot_size;
-  late final price_per_plant;
+  late final potSize;
+  late final pricePerPlant;
 
-  PlantShipPrice({this.id, this.pot_size, this.price_per_plant});
+  PlantShipPrice({this.id, this.potSize, this.pricePerPlant});
 
   PlantShipPrice.fromJson(Map<dynamic, dynamic> json) {
     id = json["id"];
-    pot_size = json["pot_size"];
-    price_per_plant = json["price_per_plant"];
+    potSize = json["potSize"];
+    pricePerPlant = json["pricePerPlant"];
   }
 }

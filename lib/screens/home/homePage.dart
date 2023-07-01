@@ -57,23 +57,21 @@ class _HomePageState extends State<HomePage> {
     serviceStream = serviceBloc.authStateStream;
     cartStream = cartBloc.cartStateStream;
 
-    bonsaiBloc.send(GetAllBonsaiEvent());
+    bonsaiBloc.send(
+        GetAllBonsaiEvent(pageNo: 0, pageSize: 3, sortBy: 'ID', sortAsc: true));
     serviceBloc.send(GetAllServiceEvent());
-    _bonsaiStateSubscription = bonsaiStream.listen(
-      (event) {},
-    );
-    _serviceStateSubscription = serviceStream.listen((state) {});
-    _cartStateSubscription = cartStream.listen((event) {
-      // if (event is CartSuccess) {
-      //   Cartcount = event.Cart;
-      // }
-    });
+    // _bonsaiStateSubscription = bonsaiStream.listen(
+    //   (event) {},
+    // );
+    // _serviceStateSubscription = serviceStream.listen((state) {});
+    // _cartStateSubscription = cartStream.listen((event) {});
   }
 
   @override
   void didChangeDependencies() {
     _serviceStateSubscription?.cancel();
     _bonsaiStateSubscription?.cancel();
+    _cartStateSubscription?.cancel();
     super.didChangeDependencies();
   }
 
@@ -81,6 +79,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     serviceBloc.dispose();
     // bonsaiBloc.dispose();
+    _cartStateSubscription?.cancel();
     _serviceStateSubscription?.cancel();
     _bonsaiStateSubscription?.cancel();
 
@@ -170,18 +169,21 @@ class _HomePageState extends State<HomePage> {
               ]),
             ),
             //Services list
-            Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                Row(
+            SizedBox(
+                height: 200,
+                child: Column(
                   children: [
-                    Container(
-                      width: 40,
-                      height: 330,
-                      decoration: const BoxDecoration(color: buttonColor),
-                    ),
-                    const SizedBox(
-                      width: 40,
+                    Row(
+                      children: const [
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text('Các Dịch Vụ',
+                            style: TextStyle(
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
+                                color: buttonColor)),
+                      ],
                     ),
                     StreamBuilder<ServiceState>(
                       stream: serviceStream,
@@ -200,23 +202,14 @@ class _HomePageState extends State<HomePage> {
                         } else if (state is ServiceFailure) {
                           return Text(state.errorMessage);
                         } else {
-                          return Container();
+                          return Container(
+                            child: Text('Load faild'),
+                          );
                         }
                       },
                     ),
                   ],
-                ),
-                Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    width: (size.width / 4),
-                    // height: (size.height) / 2 - 50,
-                    child: const AutoSizeText(
-                      'Các Dịch Vụ',
-                      minFontSize: 35,
-                      maxLines: 3,
-                    ))
-              ],
-            ),
+                )),
             const SizedBox(
               height: 15,
             ),
@@ -245,22 +238,15 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //Derection search View
                 Positioned(
-                    bottom: 5,
+                    bottom: -1,
                     left: 15,
                     child: SizedBox(
                       width: size.width,
                       child: Row(
                         children: [
-                          const Text(
-                            "Cây cảnh",
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: buttonColor,
-                                fontWeight: FontWeight.bold),
-                          ),
                           const Spacer(),
-                          IconButton(
-                              onPressed: () {
+                          GestureDetector(
+                              onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => SearchScreen(
                                     cartStateSubscription:
@@ -269,10 +255,22 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ));
                               },
-                              icon: const FaIcon(
-                                FontAwesomeIcons.arrowRight,
-                                size: 35,
-                                color: buttonColor,
+                              child: Row(
+                                children: const [
+                                  Text('Xem thêm',
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: buttonColor)),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  FaIcon(
+                                    FontAwesomeIcons.arrowRight,
+                                    size: 35,
+                                    color: buttonColor,
+                                  ),
+                                ],
                               )),
                           const SizedBox(
                             width: 25,
@@ -280,33 +278,53 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     )),
-                SizedBox(
-                  height: 510,
-                  child: StreamBuilder<BonsaiState>(
-                    stream: bonsaiStream,
-                    initialData: BonsaiInitial(),
-                    builder: (context, snapshot) {
-                      final state = snapshot.data;
-                      if (state is BonsaiLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (state is ListBonsaiSuccess) {
-                        return state.listBonsai == null
-                            ? Container()
-                            : ListBonsai(
-                                listBonsai: state.listBonsai,
-                                cartStateSubscription: _cartStateSubscription,
-                                cartStream: cartStream,
-                              );
-                      } else if (state is BonsaiFailure) {
-                        return Text(state.errorMessage);
-                      } else {
-                        return Container();
-                      }
-                    },
-                  ),
-                )
+                // const SizedBox(
+                //   height: 510,
+                // ),
+
+                Column(
+                  children: [
+                    Row(
+                      children: const [
+                        Text('Cây Cảnh Bán Chạy',
+                            style: TextStyle(
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
+                                color: buttonColor)),
+                      ],
+                    ),
+                    SizedBox(
+                      // height: 510,
+                      child: StreamBuilder<BonsaiState>(
+                        stream: bonsaiStream,
+                        initialData: BonsaiInitial(),
+                        builder: (context, snapshot) {
+                          final state = snapshot.data;
+                          if (state is BonsaiLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (state is ListBonsaiSuccess) {
+                            return state.listBonsai == null
+                                ? Container()
+                                : ListBonsai(
+                                    listBonsai: state.listBonsai,
+                                    cartStateSubscription:
+                                        _cartStateSubscription,
+                                    cartStream: cartStream,
+                                  );
+                          } else if (state is BonsaiFailure) {
+                            return Text(state.errorMessage);
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ]),
             ),
+
             const SizedBox(
               height: 20,
             ),
@@ -380,29 +398,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _listService(List<Service>? listService) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Spacer(),
-            _serviceTab(listService![0], FontAwesomeIcons.seedling),
-            const SizedBox(
-              width: 20,
-            ),
-            _serviceTab(listService[1], FontAwesomeIcons.tree),
-            const Spacer(),
-          ]),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            _serviceTab(listService[2], FontAwesomeIcons.leaf),
-          ]),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.all(10),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: listService!.length,
+          itemBuilder: (context, index) {
+            return Container(
+                width: 130,
+                height: 145,
+                alignment: Alignment.center,
+                child: _serviceTab(listService[index], icons[index]));
+          },
+        ));
   }
 
   Widget _serviceTab(Service? service, IconData icon) {
@@ -413,32 +422,41 @@ class _HomePageState extends State<HomePage> {
         ));
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
-        width: 120,
-        height: 140,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), gradient: tabBackground),
+            borderRadius: BorderRadius.circular(50), color: Colors.transparent),
         child: Center(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 25,
-            ),
-            FaIcon(icon, size: 35, color: buttonColor),
+            Container(
+                width: 80,
+                height: 80,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    border: Border.all(color: darkText),
+                    borderRadius: BorderRadius.circular(50),
+                    color: barColor),
+                child: FaIcon(icon, size: 35, color: buttonColor)),
             const SizedBox(
               height: 20,
             ),
             AutoSizeText(
               service!.name,
+              maxLines: 2,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-              maxFontSize: 18,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+              maxFontSize: 30,
             ),
           ],
         )),
       ),
     );
   }
+
+  List<IconData> icons = [
+    FontAwesomeIcons.leaf,
+    FontAwesomeIcons.plantWilt,
+    FontAwesomeIcons.sunPlantWilt,
+  ];
 }

@@ -12,6 +12,7 @@ import 'package:thanhhoa_garden/blocs/authentication/auth_state.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
+import 'package:thanhhoa_garden/screens/authentication/registerPage.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -115,7 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                       height: 7,
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const RegisterPage()));
+                        },
                         child: const Text(
                           'Đăng ký tài khoản',
                           style: TextStyle(
@@ -146,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         Timer(const Duration(seconds: 1), () {
           _btnController.reset();
           Fluttertoast.showToast(
-              msg: "Logging success",
+              msg: "Đăng Nhập thành công",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,

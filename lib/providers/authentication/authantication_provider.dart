@@ -1,11 +1,19 @@
 // ignore_for_file: library_prefixes
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/authentication/role.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
+import 'package:thanhhoa_garden/utils/connection/utilsConnection.dart';
+import 'package:http/http.dart' as http;
+import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   UserObj.User? _loggedInUser;
@@ -14,32 +22,114 @@ class AuthenticationProvider extends ChangeNotifier {
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<bool> login(String? username, String? password) async {
-    // Simulate an asynchronous API call to validate the username and password
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Check if the provided username and password match the expected values
-    if (username == 'abc' && password == '123456') {
-      // Create a User object with the provided information
-      Role role = Role(id: 5, name: 'Customer');
-      Map<String, dynamic> userJson = UserObj.User(role: role).loggedUser;
-      _loggedInUser = UserObj.User.login(userJson, role);
-      notifyListeners();
-      return true;
-    } else {
-      return false;
+  Future<bool> login(Map<String, String?> param) async {
+    bool result = false;
+    var body = json.encode(param);
+    // String queryString = Uri(queryParameters: param).query;
+    try {
+      final res = await http.post(
+          Uri.parse(mainURL + loginWithUsernamePasswordURL),
+          headers: headerLogin,
+          body: body);
+      if (res.statusCode == 200) {
+        var jsondata = json.decode(res.body);
+        sharedPreferences.setString('Token', jsondata['token']);
+        notifyListeners();
+        result = true;
+      } else {
+        Fluttertoast.showToast(
+            msg: "Đăng nhập thất bại",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
+
+    return result;
   }
 
-  Future<bool> loginWithGG() async {
+  Future<bool> loginWithGGorPhone(Map<String, String?> param) async {
+    bool result = false;
+    String queryString = Uri(queryParameters: param).query;
+    try {
+      final res = await http.post(
+          Uri.parse(mainURL + loginWithGGorPhoneURL + queryString),
+          headers: headerLogin);
+      if (res.statusCode == 200) {
+        var jsondata = json.decode(res.body);
+        sharedPreferences.setString('Token', jsondata['token']);
+        notifyListeners();
+        result = true;
+      } else {
+        Fluttertoast.showToast(
+            msg: "Đăng nhập thất bại",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+
+    return result;
+  }
+
+  Future<bool> getUserInfor() async {
+    bool result = false;
+
+    try {
+      // print('Token user: ' + getTokenAuthenFromSharedPrefs());
+      var header = getheader(getTokenAuthenFromSharedPrefs());
+      final res =
+          await http.get(Uri.parse(mainURL + getUserInfoURL), headers: header);
+      if (res.statusCode == 200) {
+        var jsondata = json.decode(res.body);
+        Role role = Role.fromJson(jsondata);
+        _loggedInUser = UserObj.User.login(jsondata, role);
+        notifyListeners();
+        result = true;
+      } else {
+        Fluttertoast.showToast(
+            msg: "Đăng nhập thất bại",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return result;
+  }
+
+  Future<String?> loginWithGG() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
     await googleSignIn
         .disconnect()
         .catchError((e) {})
         .onError((error, stackTrace) => null);
     googleSignIn.isSignedIn().then((value) async {
-      await googleSignIn.signOut().onError((error, stackTrace) => null);
-      await FirebaseAuth.instance.signOut();
+      if (value) {
+        await googleSignIn.signOut().onError((error, stackTrace) {});
+
+        await FirebaseAuth.instance.signOut();
+      }
     });
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
@@ -55,24 +145,45 @@ class AuthenticationProvider extends ChangeNotifier {
     var credent = await FirebaseAuth.instance.signInWithCredential(credential);
     if (credent.user?.uid != null) {
       var user = FirebaseAuth.instance.currentUser;
-      _loggedInUser = UserObj.User(
-          username: '',
-          full_name: user?.displayName,
-          email: user?.email,
-          password: '',
-          address: 'Quận 9, TP HCM',
-          avatar: user?.photoURL,
-          phone: user?.phoneNumber);
-      notifyListeners();
-      return true;
+      return user?.email;
     } else {
-      return false;
+      return null;
     }
   }
 
-  void logout() {
+  Future<String> register(UserObj.User user) async {
+    String result = 'faild';
+    var data = user.toJson();
+    var body = json.encode(data);
+    try {
+      final res = await http.post(Uri.parse(mainURL + registerURL),
+          headers: headerLogin, body: body);
+      if (res.statusCode == 200) {
+        return result = 'Success';
+      } else if (res.statusCode == 400) {
+        return result = res.body;
+      } else {
+        return result = 'faild';
+      }
+    } on HttpException catch (e) {
+      print(e.toString());
+    }
+
+    return result;
+  }
+
+  void logout() async {
     sharedPreferences.clear();
-    // print(getTokenAuthenFromSharedPrefs());
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn
+        .disconnect()
+        .catchError((e) {})
+        .onError((error, stackTrace) => null);
+    googleSignIn.isSignedIn().then((value) async {
+      await googleSignIn.signOut().onError((error, stackTrace) => null);
+      await FirebaseAuth.instance.signOut();
+    });
+
     _loggedInUser = null;
     notifyListeners();
   }

@@ -56,6 +56,7 @@ dependencies:
   intl: ^0.18.1
   flutter_markdown: ^0.6.15
   popup_banner: ^1.0.0
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:thanhhoa_garden/models/bonsai/bonsaiImg.dart';
+import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 
 class FeedbackProvider extends ChangeNotifier {
@@ -22,11 +22,11 @@ class FeedbackProvider extends ChangeNotifier {
       if (status == 200) {
         if (feedbackList.isNotEmpty) {
           for (var data in feedbackList) {
-            List<PlantImage> listImg = [];
+            List<ImageURL> listImg = [];
             var imgData = data["listImg"];
             if (imgData is List) {
               for (var img in imgData) {
-                listImg.add(PlantImage.fromJson(img));
+                listImg.add(ImageURL.fromJson(img));
               }
             }
             _feedback = FeedbackModel.fromJson(data, listImg);

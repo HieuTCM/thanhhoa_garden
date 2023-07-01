@@ -43,7 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
   late CartBloc cartBloc;
 
   var selectedTab = 0;
-
+  String cateID = '';
   @override
   void initState() {
     super.initState();
@@ -52,8 +52,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
     bonsaiStream = bonsaiBloc.authStateStream;
     categoryStream = categoryBloc.categoryStateStream;
-
-    bonsaiBloc.send(SearchBonsaiEvent());
+    _getPlant(0, 10, 'ID', true);
+    // bonsaiBloc.send(SearchBonsaiEvent());
     categoryBloc.send(GetAllCategoryEvent());
 
     _bonsaiStateSubscription = bonsaiStream.listen((event) {});
@@ -74,6 +74,49 @@ class _SearchScreenState extends State<SearchScreen> {
     _bonsaiStateSubscription?.cancel();
     _CategoryStateSubscription?.cancel();
     super.dispose();
+  }
+
+  _getPlant(
+    int pageNo,
+    int pageSize,
+    String sortBy,
+    bool sortAsc,
+    // String? plantName,
+    // String? categoryID,
+    // double? min,
+    // double? max,
+  ) {
+    bonsaiBloc.send(GetAllBonsaiEvent(
+      pageNo: pageNo,
+      pageSize: pageSize,
+      sortBy: sortBy,
+      sortAsc: sortAsc,
+      // plantName: plantName,
+      // categoryID: categoryID,
+      // min: min,
+      // max: max
+    ));
+  }
+
+  _searchPlant(
+    int pageNo,
+    int pageSize,
+    String sortBy,
+    bool sortAsc,
+    String? plantName,
+    String? categoryID,
+    double? min,
+    double? max,
+  ) {
+    bonsaiBloc.send(GetAllBonsaiEvent(
+        pageNo: pageNo,
+        pageSize: pageSize,
+        sortBy: sortBy,
+        sortAsc: sortAsc,
+        plantName: plantName,
+        categoryID: categoryID,
+        min: min,
+        max: max));
   }
 
   @override
@@ -134,7 +177,9 @@ class _SearchScreenState extends State<SearchScreen> {
           return const Center(child: CircularProgressIndicator());
         } else if (state is ListBonsaiSuccess) {
           return state.listBonsai == null
-              ? Container()
+              ? const Center(
+                  child: Text('Không tìm thấy Bonsai'),
+                )
               : ListBonsai(
                   listBonsai: state.listBonsai,
                   wherecall: 'Search Screen',
@@ -159,8 +204,9 @@ class _SearchScreenState extends State<SearchScreen> {
             onTap: () {
               setState(() {
                 selectedTab = index;
+                cateID = list[index].categoryID;
               });
-              bonsaiBloc.send(SearchBonsaiEvent());
+              _searchPlant(0, 10, 'ID', true, null, cateID, null, null);
             },
             child: Container(
               alignment: Alignment.center,
@@ -171,7 +217,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   color: (selectedTab == index) ? buttonColor : barColor,
                   borderRadius: BorderRadius.circular(50)),
               margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              child: AutoSizeText(list[index].name,
+              child: AutoSizeText(list[index].categoryName,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w800,
@@ -268,8 +314,13 @@ class _SearchScreenState extends State<SearchScreen> {
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
                 borderSide: const BorderSide(width: 3, color: Colors.black)),
-            hintText: 'Tìm kiếm',
-            suffixIcon: IconButton(onPressed: () {}, icon: Icon(Icons.search))),
+            hintText: 'Tên cây cảnh',
+            suffixIcon: IconButton(
+                onPressed: () {
+                  _searchPlant(0, 10, 'ID', true, _searchController.text,
+                      cateID, null, null);
+                },
+                icon: Icon(Icons.search))),
       ),
     );
   }

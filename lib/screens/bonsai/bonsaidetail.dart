@@ -122,7 +122,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
               'Kèm Chậu: ',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(bonsai.with_pot == 'True' ? 'Có' : 'Không',
+            Text(bonsai.withPot == 'True' ? 'Có' : 'Không',
                 style: const TextStyle(fontSize: 18)
                 // style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -137,7 +137,8 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
               'Tổng Chiều Cao: ',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(bonsai.height + ' Cm', style: const TextStyle(fontSize: 18)
+            Text(bonsai.height.toString() + ' Cm',
+                style: const TextStyle(fontSize: 18)
                 // style: TextStyle(fontWeight: FontWeight.bold),
                 ),
           ],
@@ -152,7 +153,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${f.format(double.parse(bonsai.price))} đ',
+              '${f.format(bonsai.price)} đ',
               style: const TextStyle(
                   fontSize: 20, color: priceColor, fontWeight: FontWeight.w500),
             ),
@@ -179,7 +180,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
             height: 5,
           ),
           AutoSizeText(
-            bonsai.care_note, style: const TextStyle(fontSize: 16, height: 1.5),
+            bonsai.careNote, style: const TextStyle(fontSize: 16, height: 1.5),
             // style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(

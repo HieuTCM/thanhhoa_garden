@@ -1,16 +1,16 @@
 // ignore_for_file: file_names
 
-import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
+Map<String, String> getheader(String token) {
+  Map<String, String> header = {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'Accept': 'application/json',
+    'Accept-Charset': 'UTF-8',
+    'Authorization': 'Bearer $token'
+  };
+  return header;
+}
 
-String token = getTokenAuthenFromSharedPrefs();
-
-final Map<String, String> header = {
-  'Content-Type': 'application/json; charset=UTF-8',
-  'Accept': 'application/json',
-  'Accept-Charset': 'UTF-8',
-  "Authorization": 'Bearer $token'
-};
-final Map<String, String> headerLogin = {
+Map<String, String> headerLogin = {
   'Content-Type': 'application/json; charset=UTF-8',
   'Accept': 'application/json',
   'Accept-Charset': 'UTF-8',
@@ -20,12 +20,18 @@ final Map<String, String> headerLogin = {
 const mainURL = 'https://thanhhoagarden.herokuapp.com';
 
 //User
-const login = '/user/login?';
-const loginWithGGorPhone = '/user/loginWithEmailOrPhone?';
-const register = '/user/register';
-const updatefcmToken = '/user/createFcmToken';
+const loginWithUsernamePasswordURL = '/user/login?';
+const loginWithGGorPhoneURL = '/user/loginWithEmailOrPhone?';
+const registerURL = '/user/register';
+const updatefcmTokenURL = '/user/createFcmToken';
+const getUserInfoURL = '/user/getByToken';
 
 //Bonsai
-const getPlant = '/plant?';
-const getPlantByID = '/plant/';
-const searchPlant = '/plant/plantFilter?';
+const getPlantByIDURL = '/plant/';
+const getListPlantURL = '/plant/plantFilter?';
+
+//category
+const getAllCategoryURL = '/category';
+
+//service
+const getServiceURL = '/service?pageNo=0&pageSize=100&sortBy=ID&sortAsc=true';

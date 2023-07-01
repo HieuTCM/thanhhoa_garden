@@ -131,7 +131,7 @@ class _ListFeebbackState extends State<ListFeebback> {
                                       for (int i = 0;
                                           i < feedback.listImg!.length;
                                           i++)
-                                        feedback.listImg![i].imgurl
+                                        feedback.listImg![i].url
                                     ],
                                     autoSlide: false,
                                     dotsAlignment: Alignment.bottomCenter,
@@ -152,7 +152,7 @@ class _ListFeebbackState extends State<ListFeebback> {
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(
-                                              feedback.listImg![i].imgurl)),
+                                              feedback.listImg![i].url)),
                                     )),
                               ),
                           ]),
