@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_event.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_state.dart';
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/providers/bonsai/bonsai_provider.dart';
 
 class BonsaiBloc {
@@ -23,12 +24,18 @@ class BonsaiBloc {
   void send(BonsaiEvent event) async {
     switch (event.runtimeType) {
       case GetAllBonsaiEvent:
-        _BonsaiStateController.add(BonsaiLoading());
+        if (event.pageNo == 0) {
+          _BonsaiStateController.add(BonsaiLoading());
+        }
         await _BonsaiProvider.fetchBonsaiList(event).then((value) {
           if (value) {
             final listBonsai = _BonsaiProvider.listBonsai;
+            List<Bonsai> fetchBonsaiList = [
+              ...event.listBonsai!,
+              ...listBonsai!
+            ];
             _BonsaiStateController.add(
-                ListBonsaiSuccess(listBonsai: listBonsai));
+                ListBonsaiSuccess(listBonsai: fetchBonsaiList));
           } else {
             _BonsaiStateController.add(
                 BonsaiFailure(errorMessage: 'Get Bonsai List Failed'));

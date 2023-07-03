@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:thanhhoa_garden/blocs/bonsai/category/cate_state.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
 import 'package:thanhhoa_garden/providers/bonsai/cart_provider.dart';
 
@@ -30,6 +32,9 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  List<Bonsai> listPlant = [];
 
   late BonsaiBloc bonsaiBloc;
   late CategoryBloc categoryBloc;
@@ -44,6 +49,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
   var selectedTab = 0;
   String cateID = '';
+  bool isLoading = false;
+
+  int pageNo = 0;
+  int PageSize = 10;
+
   @override
   void initState() {
     super.initState();
@@ -52,12 +62,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
     bonsaiStream = bonsaiBloc.authStateStream;
     categoryStream = categoryBloc.categoryStateStream;
-    _getPlant(0, 10, 'ID', true);
+    _getPlant(0, PageSize, 'ID', true);
     // bonsaiBloc.send(SearchBonsaiEvent());
     categoryBloc.send(GetAllCategoryEvent());
 
     _bonsaiStateSubscription = bonsaiStream.listen((event) {});
     _CategoryStateSubscription = categoryStream.listen((event) {});
+    _scrollController.addListener(() {
+      _getMorePlant();
+    });
   }
 
   @override
@@ -76,26 +89,51 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
+  _getMorePlant() async {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      int totalPage = listPlant[0].totalPage.round() - 1;
+      if (pageNo >= totalPage) {
+        // setState(() {
+        //   isLoading = false;
+        // });
+        Fluttertoast.showToast(
+            msg: "Hết trang",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: buttonColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Đang tải thêm cây ...",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: buttonColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        pageNo++;
+        int nextPage = pageNo;
+        await _searchPlant(
+            nextPage, PageSize, 'ID', true, null, cateID, null, null);
+      }
+    }
+  }
+
   _getPlant(
     int pageNo,
     int pageSize,
     String sortBy,
     bool sortAsc,
-    // String? plantName,
-    // String? categoryID,
-    // double? min,
-    // double? max,
   ) {
     bonsaiBloc.send(GetAllBonsaiEvent(
-      pageNo: pageNo,
-      pageSize: pageSize,
-      sortBy: sortBy,
-      sortAsc: sortAsc,
-      // plantName: plantName,
-      // categoryID: categoryID,
-      // min: min,
-      // max: max
-    ));
+        pageNo: pageNo,
+        pageSize: pageSize,
+        sortBy: sortBy,
+        sortAsc: sortAsc,
+        listBonsai: listPlant));
   }
 
   _searchPlant(
@@ -109,6 +147,7 @@ class _SearchScreenState extends State<SearchScreen> {
     double? max,
   ) {
     bonsaiBloc.send(GetAllBonsaiEvent(
+        listBonsai: listPlant,
         pageNo: pageNo,
         pageSize: pageSize,
         sortBy: sortBy,
@@ -150,7 +189,6 @@ class _SearchScreenState extends State<SearchScreen> {
             height: 20,
           ),
           //Category list
-          // _cateList(),
           Container(
             height: 50,
             width: size.width,
@@ -161,7 +199,7 @@ class _SearchScreenState extends State<SearchScreen> {
             decoration: const BoxDecoration(color: divince),
           ),
           //Bonsai List
-          Expanded(child: _bonsaiList())
+          Expanded(child: _bonsaiList()),
         ]),
       ),
     );
@@ -176,12 +214,14 @@ class _SearchScreenState extends State<SearchScreen> {
         if (state is BonsaiLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is ListBonsaiSuccess) {
-          return state.listBonsai == null
+          listPlant = [...state.listBonsai!];
+          return listPlant.isEmpty
               ? const Center(
                   child: Text('Không tìm thấy Bonsai'),
                 )
               : ListBonsai(
-                  listBonsai: state.listBonsai,
+                  scrollController: _scrollController,
+                  listBonsai: listPlant,
                   wherecall: 'Search Screen',
                   cartStateSubscription: widget.cartStateSubscription,
                   cartStream: widget.cartStream,
@@ -205,8 +245,10 @@ class _SearchScreenState extends State<SearchScreen> {
               setState(() {
                 selectedTab = index;
                 cateID = list[index].categoryID;
+                listPlant.clear();
+                pageNo = 0;
               });
-              _searchPlant(0, 10, 'ID', true, null, cateID, null, null);
+              _searchPlant(0, PageSize, 'ID', true, null, cateID, null, null);
             },
             child: Container(
               alignment: Alignment.center,
@@ -317,6 +359,10 @@ class _SearchScreenState extends State<SearchScreen> {
             hintText: 'Tên cây cảnh',
             suffixIcon: IconButton(
                 onPressed: () {
+                  setState(() {
+                    listPlant.clear();
+                    pageNo = 0;
+                  });
                   _searchPlant(0, 10, 'ID', true, _searchController.text,
                       cateID, null, null);
                 },

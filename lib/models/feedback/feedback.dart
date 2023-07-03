@@ -90,18 +90,18 @@ var feedbackList = [
     "description":
         "Mọi thứ đều ổn. Nhưng cây của tui mấy mấy cái lá hơi xấu nên tui cho 4 sao thui.",
     "listImg": [
-      {
-        "id": "65",
-        "url":
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhGBCS9NCNjgwkm5AG3YdueTODZ31ngbpayw&usqp=CAU",
-        "plant_id": "1"
-      },
-      {
-        "id": "68",
-        "url":
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
-        "plant_id": "1"
-      }
+      // {
+      //   "id": "65",
+      //   "url":
+      //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhGBCS9NCNjgwkm5AG3YdueTODZ31ngbpayw&usqp=CAU",
+      //   "plant_id": "1"
+      // },
+      // {
+      //   "id": "68",
+      //   "url":
+      //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6aZodFeLihM-q18vpDMlBV85bEpQZkY1cXQ&usqp=CAU",
+      //   "plant_id": "1"
+      // }
     ]
   },
   {

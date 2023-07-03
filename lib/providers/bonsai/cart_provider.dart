@@ -11,7 +11,7 @@ class CartProvider extends ChangeNotifier {
 
   Future<bool> addtoCart(Bonsai bonsai) async {
     bool result = false;
-    int status = 404;
+
     try {
       Listincart.add(bonsai);
       _list = Listincart;

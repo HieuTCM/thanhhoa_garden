@@ -19,8 +19,10 @@ class ListBonsai extends StatefulWidget {
   String? wherecall;
   StreamSubscription<CartState>? cartStateSubscription;
   Stream<CartState>? cartStream;
+  ScrollController? scrollController;
   ListBonsai(
       {required this.listBonsai,
+      this.scrollController,
       super.key,
       this.wherecall,
       this.cartStateSubscription,
@@ -36,11 +38,6 @@ class _ListBonsaiState extends State<ListBonsai> {
   @override
   void initState() {
     cartBloc = Provider.of<CartBloc>(context, listen: false);
-    //     widget.cartStateSubscription = widget.cartStream?.listen((event) {
-    //   if (event is CartSuccess) {
-    //     count = event.Cart!;
-    //   }
-    // });
     super.initState();
   }
 
@@ -61,6 +58,7 @@ class _ListBonsaiState extends State<ListBonsai> {
             child: Text('Không tìm thấy cây cảnh'),
           )
         : ListView.builder(
+            controller: widget.scrollController,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: (widget.wherecall != null)

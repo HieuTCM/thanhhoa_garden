@@ -113,50 +113,55 @@ class _ListFeebbackState extends State<ListFeebback> {
                         ),
                       ],
                     ),
-                    Container(
-                        width: size.width - 125,
-                        child: SingleChildScrollView(
-                          // shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          child: Row(children: <Widget>[
-                            for (int i = 0; i < feedback.listImg!.length; i++)
-                              GestureDetector(
-                                onTap: () {
-                                  PopupBanner(
-                                    fit: BoxFit.cover,
-                                    height: size.width,
-                                    context: context,
-                                    images: [
-                                      for (int i = 0;
-                                          i < feedback.listImg!.length;
-                                          i++)
-                                        feedback.listImg![i].url
-                                    ],
-                                    autoSlide: false,
-                                    dotsAlignment: Alignment.bottomCenter,
-                                    dotsColorActive: buttonColor,
-                                    dotsColorInactive:
-                                        Colors.grey.withOpacity(0.5),
-                                    onClick: (index) {
-                                      debugPrint("CLICKED $index");
+                    (feedback.listImg!.isEmpty)
+                        ? Container()
+                        : Container(
+                            width: size.width - 125,
+                            child: SingleChildScrollView(
+                              // shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              child: Row(children: <Widget>[
+                                for (int i = 0;
+                                    i < feedback.listImg!.length;
+                                    i++)
+                                  GestureDetector(
+                                    onTap: () {
+                                      PopupBanner(
+                                        fit: BoxFit.cover,
+                                        height: size.width,
+                                        context: context,
+                                        images: [
+                                          for (int i = 0;
+                                              i < feedback.listImg!.length;
+                                              i++)
+                                            feedback.listImg![i].url
+                                        ],
+                                        autoSlide: false,
+                                        dotsAlignment: Alignment.bottomCenter,
+                                        dotsColorActive: buttonColor,
+                                        dotsColorInactive:
+                                            Colors.grey.withOpacity(0.5),
+                                        onClick: (index) {
+                                          debugPrint("CLICKED $index");
+                                        },
+                                      ).show();
                                     },
-                                  ).show();
-                                },
-                                child: Container(
-                                    margin: const EdgeInsets.all(5),
-                                    height: (size.width / 5) - 20,
-                                    width: (size.width / 5) - 20,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              feedback.listImg![i].url)),
-                                    )),
-                              ),
-                          ]),
-                        )),
+                                    child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        height: (size.width / 5) - 20,
+                                        width: (size.width / 5) - 20,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  feedback.listImg![i].url)),
+                                        )),
+                                  ),
+                              ]),
+                            )),
                     Row(
                       children: [
                         Text(

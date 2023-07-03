@@ -5,6 +5,8 @@ abstract class CartEvent {
   Bonsai? get bonsai => _bonsai;
 }
 
+class GetCart extends CartEvent {}
+
 class AddtoCart extends CartEvent {
   @override
   Bonsai? bonsai;

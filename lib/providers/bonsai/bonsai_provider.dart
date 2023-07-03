@@ -54,9 +54,20 @@ class BonsaiProvider extends ChangeNotifier {
             for (var category in data['plantCategoryList']) {
               listCategory.add(PlantCategory.fromJson(category));
             }
-            for (var img in data['plantIMGList']) {
-              listImg.add(ImageURL.fromJson(img));
+            var imgData = data['plantIMGList'];
+            if (imgData is List) {
+              if (imgData.isNotEmpty) {
+                for (var img in data['plantIMGList']) {
+                  listImg.add(ImageURL.fromJson(img));
+                }
+              } else {
+                ImageURL img = ImageURL(
+                    url:
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyRE2zZSPgbJThiOrx55_b4yG-J1eyADnhKw&usqp=CAU');
+                listImg.add(img);
+              }
             }
+
             _bonsai =
                 Bonsai.fromJson(data, plantShipPrice, listCategory, listImg);
             list.add(_bonsai!);

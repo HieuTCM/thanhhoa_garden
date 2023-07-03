@@ -18,6 +18,7 @@ import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:thanhhoa_garden/providers/bonsai/cart_provider.dart';
@@ -46,6 +47,9 @@ class _HomePageState extends State<HomePage> {
 
   late CartBloc cartBloc;
   int? Cartcount = 0;
+
+  List<Bonsai> listPlant = [];
+
   @override
   void initState() {
     super.initState();
@@ -57,8 +61,12 @@ class _HomePageState extends State<HomePage> {
     serviceStream = serviceBloc.authStateStream;
     cartStream = cartBloc.cartStateStream;
 
-    bonsaiBloc.send(
-        GetAllBonsaiEvent(pageNo: 0, pageSize: 3, sortBy: 'ID', sortAsc: true));
+    bonsaiBloc.send(GetAllBonsaiEvent(
+        pageNo: 0,
+        pageSize: 3,
+        sortBy: 'ID',
+        sortAsc: true,
+        listBonsai: listPlant));
     serviceBloc.send(GetAllServiceEvent());
     // _bonsaiStateSubscription = bonsaiStream.listen(
     //   (event) {},

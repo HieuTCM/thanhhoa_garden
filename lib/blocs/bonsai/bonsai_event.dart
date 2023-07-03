@@ -1,3 +1,5 @@
+import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+
 abstract class BonsaiEvent {
   String? _id;
   String? get id => _id;
@@ -25,6 +27,9 @@ abstract class BonsaiEvent {
 
   bool? _sortAsc;
   bool? get sortAsc => _sortAsc;
+
+  List<Bonsai>? _listBonsai;
+  List<Bonsai>? get listBonsai => _listBonsai;
 }
 
 class GetAllBonsaiEvent extends BonsaiEvent {
@@ -36,6 +41,7 @@ class GetAllBonsaiEvent extends BonsaiEvent {
   int pageSize;
   String sortBy;
   bool sortAsc;
+  List<Bonsai> listBonsai;
 
   GetAllBonsaiEvent(
       {this.plantName,
@@ -45,7 +51,8 @@ class GetAllBonsaiEvent extends BonsaiEvent {
       required this.pageNo,
       required this.pageSize,
       required this.sortBy,
-      required this.sortAsc})
+      required this.sortAsc,
+      required this.listBonsai})
       : super();
 }
 
