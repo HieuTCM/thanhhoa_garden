@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_bloc.dart';
-import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_event.dart';
-import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_state.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
+
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/screens/bonsai/bonsaidetail.dart';
@@ -64,7 +65,7 @@ class _ListBonsaiState extends State<ListBonsai> {
             physics: (widget.wherecall != null)
                 ? const ScrollPhysics()
                 : const NeverScrollableScrollPhysics(),
-            itemCount: listBonsai!.length,
+            itemCount: listBonsai.length,
             itemBuilder: (context, index) {
               return _BonsaiTab(listBonsai[index]);
             },
@@ -124,7 +125,7 @@ class _ListBonsaiState extends State<ListBonsai> {
                             alignment: Alignment.center,
                             iconSize: 30,
                             onPressed: () {
-                              cartBloc.send(AddtoCart(bonsai));
+                              cartBloc.send(AddToCart(bonsai.plantID, 1));
                             },
                             icon: const Icon(Icons.add_shopping_cart_outlined))
                       ],

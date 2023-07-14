@@ -25,6 +25,7 @@ class BonsaiProvider extends ChangeNotifier {
   Future<bool> fetchBonsaiList(BonsaiEvent event) async {
     bool result = false;
     List<Bonsai> list = [];
+
     Map<String, dynamic> param = ({});
     param['pageNo'] = '${event.pageNo}';
     param['pageSize'] = '${event.pageSize}';
@@ -35,7 +36,9 @@ class BonsaiProvider extends ChangeNotifier {
       param['categoryID'] = event.categoryID;
     if (event.min != null) param['min'] = '${event.min}';
     if (event.max != null) param['max'] = '${event.max}';
+
     String queryString = Uri(queryParameters: param).query;
+
     var header = getheader(getTokenAuthenFromSharedPrefs());
     try {
       final res = await http.get(

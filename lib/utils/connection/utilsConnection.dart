@@ -35,3 +35,9 @@ const getAllCategoryURL = '/category';
 
 //service
 const getServiceURL = '/service?pageNo=0&pageSize=100&sortBy=ID&sortAsc=true';
+
+//cart
+const CartURL = '/cart';
+
+//store
+const StoreURL = '/store';

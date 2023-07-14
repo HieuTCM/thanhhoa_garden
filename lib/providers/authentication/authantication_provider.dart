@@ -88,7 +88,6 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<bool> getUserInfor() async {
     bool result = false;
-
     try {
       // print('Token user: ' + getTokenAuthenFromSharedPrefs());
       var header = getheader(getTokenAuthenFromSharedPrefs());

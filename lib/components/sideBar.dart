@@ -7,6 +7,7 @@ import 'package:thanhhoa_garden/blocs/authentication/auth_event.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
+import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
 
 class SideBar extends StatefulWidget {
   User user;
@@ -85,9 +86,11 @@ class _SideBarState extends State<SideBar> {
                   Icons.abc,
                   size: 40,
                 )),
-            _listTile(
-                'Cơ Sở Thanh Hóa',
-                () {},
+            _listTile('Cơ Sở Thanh Hóa', () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const StoreScreen(),
+              ));
+            },
                 const Icon(
                   Icons.abc,
                   size: 40,

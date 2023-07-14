@@ -9,19 +9,22 @@ import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_event.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_state.dart';
-import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_bloc.dart';
-import 'package:thanhhoa_garden/blocs/bonsai/cart/cart_state.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
+
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_event.dart';
 import 'package:thanhhoa_garden/blocs/service/service_state.dart';
 import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
+import 'package:thanhhoa_garden/components/cart/cartButton.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:draggable_fab/draggable_fab.dart';
-import 'package:thanhhoa_garden/providers/bonsai/cart_provider.dart';
+import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/service/service.dart';
 
@@ -68,6 +71,7 @@ class _HomePageState extends State<HomePage> {
         sortAsc: true,
         listBonsai: listPlant));
     serviceBloc.send(GetAllServiceEvent());
+    cartBloc.send(GetCart());
     // _bonsaiStateSubscription = bonsaiStream.listen(
     //   (event) {},
     // );
@@ -102,7 +106,7 @@ class _HomePageState extends State<HomePage> {
       key: _drawkey,
       drawer: SideBar(user: widget.user!),
       floatingActionButton: Builder(builder: (context) {
-        return _floatingButton();
+        return const CartButton();
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: background,
@@ -210,9 +214,7 @@ class _HomePageState extends State<HomePage> {
                         } else if (state is ServiceFailure) {
                           return Text(state.errorMessage);
                         } else {
-                          return Container(
-                            child: Text('Load faild'),
-                          );
+                          return const Text('Load faild');
                         }
                       },
                     ),
@@ -223,7 +225,7 @@ class _HomePageState extends State<HomePage> {
             ),
             //Bonsai list
             SizedBox(
-              height: 570,
+              height: 580,
               width: size.width,
               // decoration: const BoxDecoration(color: Colors.deepOrange),
               child: Stack(children: [
@@ -246,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //Derection search View
                 Positioned(
-                    bottom: -1,
+                    bottom: 0,
                     left: 15,
                     child: SizedBox(
                       width: size.width,
@@ -334,7 +336,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
           ]),
         ),
@@ -349,59 +351,6 @@ class _HomePageState extends State<HomePage> {
               },
             ))
       ]),
-    );
-  }
-
-  Widget _floatingButton() {
-    return DraggableFab(
-      child: SizedBox(
-        height: 55,
-        width: 55,
-        child: Material(
-          type: MaterialType.transparency,
-          child: Stack(
-            children: [
-              Ink(
-                decoration: BoxDecoration(
-                  border: Border.all(color: buttonColor, width: 3.0),
-                  color: Colors.transparent,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(500.0),
-                    onTap: () {},
-                    child: const FaIcon(FontAwesomeIcons.cartShopping),
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 1,
-                top: 1,
-                child: ClipOval(
-                  child: Container(
-                    color: Colors.red,
-                    width: 20,
-                    height: 20,
-                    child: Consumer<CartProvider>(
-                      builder: (context, value, _) {
-                        return Center(
-                            child: Text(
-                          (value.lits == null)
-                              ? '0'
-                              : value.lits!.length.toString(),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 12),
-                        ));
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
