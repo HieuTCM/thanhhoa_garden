@@ -37,7 +37,17 @@ const getAllCategoryURL = '/category';
 const getServiceURL = '/service?pageNo=0&pageSize=100&sortBy=ID&sortAsc=true';
 
 //cart
-const CartURL = '/cart';
+const cartURL = '/cart';
 
 //store
-const StoreURL = '/store';
+const storeURL = '/store';
+
+//Distance Price
+const distanceURL = '/distancePrice';
+
+//order
+const orderURL = '/order';
+const getOrderURL = '/order/getAllOrderByUsername?';
+
+//enum
+const orderStatus = '/enum/order';

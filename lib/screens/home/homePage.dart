@@ -23,8 +23,6 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
-import 'package:draggable_fab/draggable_fab.dart';
-import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/service/service.dart';
 
@@ -56,6 +54,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     serviceBloc = Provider.of<ServiceBloc>(context, listen: false);
     bonsaiBloc = Provider.of<BonsaiBloc>(context, listen: false);
     cartBloc = Provider.of<CartBloc>(context, listen: false);

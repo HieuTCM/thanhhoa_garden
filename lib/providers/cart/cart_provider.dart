@@ -21,7 +21,7 @@ class CartProvider extends ChangeNotifier {
     List<OrderCart> list = [];
     var header = getheader(getTokenAuthenFromSharedPrefs());
     try {
-      final res = await http.get(Uri.parse(mainURL + CartURL), headers: header);
+      final res = await http.get(Uri.parse(mainURL + cartURL), headers: header);
       if (res.statusCode == 200) {
         if (res.body.isNotEmpty) {
           var jsondata = json.decode(res.body);
@@ -52,7 +52,7 @@ class CartProvider extends ChangeNotifier {
     param['quantity'] = quantity;
     var body = json.encode(param);
     try {
-      final res = await http.post(Uri.parse(mainURL + CartURL),
+      final res = await http.post(Uri.parse(mainURL + cartURL),
           body: body, headers: header);
       if (res.statusCode == 200) {
         await getCart().then((value) {
@@ -86,7 +86,7 @@ class CartProvider extends ChangeNotifier {
     param['quantity'] = quantity;
     var body = json.encode(param);
     try {
-      final res = await http.put(Uri.parse(mainURL + CartURL),
+      final res = await http.put(Uri.parse(mainURL + cartURL),
           body: body, headers: header);
       if (res.statusCode == 200) {
         await getCart().then((value) {

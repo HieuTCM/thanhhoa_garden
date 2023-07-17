@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const String GG_API_Key = 'AIzaSyA2yiHIRWwyTMebbwJmYDiQcN6AZxpyvrI';
+// const String GG_API_Key = 'AIzaSyA2yiHIRWwyTMebbwJmYDiQcN6AZxpyvrI';
+const String GG_API_Key = 'AIzaSyCGhBhR1KfeRlTi_vn8vD8SZEmO1pr-74I';
 
 const tabBackground = LinearGradient(
   colors: [
@@ -38,3 +39,34 @@ const highLightText = Color(0xFFFF97A3);
 const ErorText = Color(0xFFFD6B6B);
 const HintIcon = Color(0xFFA0A0A0);
 const priceColor = Color(0xFFBD5864);
+
+String convertStatus(String value) {
+  String result = "";
+  switch (value) {
+    case "ALL":
+      result = 'Tất cả';
+      break;
+    case "WAITING":
+      result = 'Chờ xác nhận';
+      break;
+    case "APPROVED":
+      result = 'Đã xác nhận';
+      break;
+    case "DENIED":
+      result = 'Bị từ chối';
+      break;
+    case "PACKAGING":
+      result = 'Đang đống gói';
+      break;
+    case "DELIVERING":
+      result = 'Đang giao';
+      break;
+    case "RECEIVED":
+      result = 'Đã nhận';
+      break;
+    case "CANCELED":
+      result = 'Đã huỷ';
+      break;
+  }
+  return result;
+}

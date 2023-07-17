@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+
 import 'package:geolocator/geolocator.dart';
-import 'package:google_api_headers/google_api_headers.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/directions.dart';
-import 'package:google_maps_webservice/places.dart';
+
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
@@ -37,12 +35,15 @@ class _MapScreenState extends State<MapScreen> {
   bool isLoading = false;
   List<Store> listStore = [];
 
+  LatLng origin = LatLng(0, 0);
+
   getListStore() async {
     isLoading = true;
     await _storeProvider.getStore().then((value) {
       if (value) {
         getUserCurrentLocation().then((value) {
           setState(() {
+            origin = LatLng(value.latitude, value.longitude);
             listStore = _storeProvider.list!;
             for (var store in listStore) {
               getCoordinatesFromAddress(store.address, store.storeName);
@@ -226,7 +227,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
         GestureDetector(
           onTap: () {
-            widget.callback(_searchController.text);
+            widget.callback(_searchController.text, origin);
             Navigator.pop(context);
           },
           child: Container(
@@ -252,6 +253,7 @@ class _MapScreenState extends State<MapScreen> {
   void _addMarker(LatLng pos) async {
     getAddressFromCoordinates(pos).then((value) {
       setState(() {
+        origin = pos;
         _searchController.text = value;
       });
     });

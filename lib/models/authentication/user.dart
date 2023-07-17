@@ -3,6 +3,7 @@
 import 'package:thanhhoa_garden/models/authentication/role.dart';
 
 class User {
+  late final id;
   late final address;
   late final avatar;
   late final email;
@@ -15,7 +16,8 @@ class User {
   late Role? role;
 
   User(
-      {this.phone,
+      {this.id,
+      this.phone,
       this.status,
       this.username,
       this.address,
@@ -27,6 +29,7 @@ class User {
       this.role});
 
   User.login(Map<String, dynamic> json, Role role) {
+    id = json['id'];
     address = json['address'];
     avatar = json['avatar'];
     email = json['email'];
@@ -38,9 +41,17 @@ class User {
     username = json['username'];
     role = role;
   }
+  User.fetchInfo(Map<String, dynamic> json) {
+    id = json['id'];
+    address = json['address'];
+    email = json['email'];
+    fullName = json['fullName'];
+    phone = json['phone'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     data['phone'] = phone;
     data['password'] = password;
     data['username'] = username;

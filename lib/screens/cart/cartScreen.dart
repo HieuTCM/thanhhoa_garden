@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/cart/listcart_component.dart';
@@ -198,7 +199,8 @@ class _CartScreenState extends State<CartScreen> {
             ],
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
+              await getCart();
               litsPlantinCart.clear();
               listCart.forEach((key, value) {
                 litsPlantinCart = [

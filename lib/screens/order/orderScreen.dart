@@ -5,19 +5,29 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoder2/geocoder2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:thanhhoa_garden/models/order/distance.dart';
+import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
+import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
+import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
+import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class OrderScreen extends StatefulWidget {
   List<OrderCart> listPlant;
@@ -33,6 +43,7 @@ class _OrderScreenState extends State<OrderScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+  late CartBloc cartBloc;
 
   MapController _mapController = MapController();
   List<LatLng> _routePoints = [];
@@ -43,20 +54,34 @@ class _OrderScreenState extends State<OrderScreen> {
 
   AuthenticationProvider _authenticationProvider = AuthenticationProvider();
   StoreProvider _storeProvider = StoreProvider();
+  OrderProvider _orderProvider = OrderProvider();
 
   List<Store> listStore = [];
   UserObj.User? user;
+  Distance distancePrice = Distance();
 
   Map<String, dynamic> listDistance = {};
   Map<String, dynamic> distance = {};
 
+  LatLng origin = LatLng(0, 0);
+
   bool isLoading = false;
   @override
   void initState() {
-    // TODO: implement initState
+    cartBloc = Provider.of<CartBloc>(context, listen: false);
     getListStore();
-
     super.initState();
+  }
+
+  getDistancePrice() async {
+    await _orderProvider.getDistancePrice().then((value) {
+      if (value) {
+        setState(() {
+          distancePrice = _orderProvider.distancePrice!;
+          isLoading = false;
+        });
+      }
+    });
   }
 
   getUserInfor() async {
@@ -69,19 +94,39 @@ class _OrderScreenState extends State<OrderScreen> {
           _phoneController.text = user!.phone;
           _addressController.text = user!.address;
         });
-        getListDistance().then((value) {
-          distance = value;
+        getCoordinatesFromAddress(user!.address).then((value) {
           setState(() {
-            isLoading = false;
+            origin = value;
+            getDistanceNearBy().then((value) {
+              distance = value;
+              getDistancePrice();
+            });
           });
         });
       }
     });
   }
 
-  setAdress(String address) {
+  Future<LatLng> getCoordinatesFromAddress(String address) async {
+    LatLng latLng = LatLng(0.0, 0.0);
+    GeoData data = await Geocoder2.getDataFromAddress(
+        address: address, googleMapApiKey: GG_API_Key, language: 'vi');
+    latLng = LatLng(data.latitude, data.longitude);
+
+    return latLng;
+  }
+
+  setAdress(String address, LatLng orgin) {
     setState(() {
+      origin = orgin;
       _addressController.text = address;
+      isLoading = true;
+      getDistanceNearBy().then((value) {
+        distance = value;
+        setState(() {
+          isLoading = false;
+        });
+      });
     });
   }
 
@@ -97,35 +142,36 @@ class _OrderScreenState extends State<OrderScreen> {
     });
   }
 
-  Future<Map<String, int>> getListDistance() async {
-    Map<String, int> Distance = {};
+  Future<Map<String, double>> getDistanceNearBy() async {
+    Map<String, double> Distance = {};
     for (var store in listStore) {
-      await getDistance(user!.address, store.address).then((value) {
-        listDistance[store.id] = value;
+      await getCoordinatesFromAddress(store.address).then((value) async {
+        await getDistance(origin, value).then((value) {
+          listDistance[store.id] = value;
+        });
       });
     }
-    var thevalue = listDistance.values.first;
-    var thekey;
+    double thevalue = listDistance.values.first ?? 0;
+    String thekey = '';
     listDistance.forEach((k, v) {
-      if (v < thevalue || v == 0) {
+      if (v < thevalue) {
         thevalue = v;
         thekey = k;
       }
     });
-    Distance[thekey] = thevalue;
+    Distance[thekey] = double.parse((thevalue / 1000).toStringAsFixed(1));
     return Distance;
   }
 
-  Future<int> getDistance(String origin, String destination) async {
-    int distance = 0;
+  Future<double> getDistance(LatLng origin, LatLng destination) async {
+    double distance = 0.0;
     try {
-      final res = await http.post(Uri.parse(
-          'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$GG_API_Key'));
+      final res = await http.get(Uri.parse(
+          'https://api.mapbox.com/directions/v5/mapbox/driving/${origin.longitude},${origin.latitude};${destination.longitude},${destination.latitude}?alternatives=false&annotations=state_of_charge%2Cduration&geometries=geojson&language=vi&overview=simplified&steps=true&access_token=sk.eyJ1IjoicGV4aW5ocHJvMjYiLCJhIjoiY2xpOXhpNHRwNGFxNzNrbnRrM2ZscjRnbSJ9.F9fRoMST9bhfFDgoZWZ5dQ'));
       if (res.statusCode == 200) {
         var jsondata = json.decode(res.body);
-        if (jsondata['error_message'] == null) {
-          distance = jsondata['routes'][0]['legs'][0]['distance']['value'] ?? 0;
-        }
+
+        distance = jsondata['routes'][0]['distance'] ?? 0;
       }
     } on HttpException catch (e) {}
     return distance;
@@ -133,6 +179,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void dispose() {
+    cartBloc.dispose();
     super.dispose();
   }
 
@@ -183,14 +230,23 @@ class _OrderScreenState extends State<OrderScreen> {
                 decoration: const BoxDecoration(color: divince),
               ),
               (user == null)
-                  ? const Center(
-                      child: CircularProgressIndicator(),
+                  ? const SizedBox(
+                      height: 200,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     )
-                  : _shipTab(widget.listPlant),
-              Container(
-                height: 10,
-                decoration: const BoxDecoration(color: divince),
-              ),
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _shipTab(widget.listPlant),
+                        Container(
+                          height: 10,
+                          decoration: const BoxDecoration(color: divince),
+                        ),
+                        _paymentTab()
+                      ],
+                    ),
               Container(
                 height: 90,
               ),
@@ -221,11 +277,77 @@ class _OrderScreenState extends State<OrderScreen> {
                       fontSize: 16,
                       fontWeight: FontWeight.w500))
               : Text(
-                  '${f.format((widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!)) + (widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!)) + ((distance.values.first / 1000) * 7000))} đ',
+                  '${f.format((widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!)) + (widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!)) + ((distance.values.first) * distancePrice.pricePerKm ?? 0))} đ',
                   style: const TextStyle(
                       color: priceColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w500)),
+          const Spacer(),
+          (isLoading)
+              ? Container()
+              : GestureDetector(
+                  onTap: () {
+                    List<Map<String, dynamic>> plant = [];
+                    String method = COD ? 'Offline' : 'Online';
+                    double dis = distance.values.first;
+                    OrderObject order = OrderObject(
+                        fullName: _nameController.text,
+                        email: _emailController.text,
+                        phone: _phoneController.text,
+                        address: _addressController.text,
+                        paymentMethod: method,
+                        distance: dis);
+
+                    for (var data in widget.listPlant) {
+                      plant.add(data.toJson());
+                    }
+                    var data = order.createOrder(plant, distance.keys.first,
+                        distancePrice.distancePriceID);
+                    // print('object');
+                    // var data = order.createOrder(
+                    //     plant, 'S001', distancePrice.distancePriceID);
+                    _orderProvider.createOrder(data).then((value) {
+                      if (value) {
+                        cartBloc.send(GetCart());
+                        Fluttertoast.showToast(
+                            msg: "Tạo Đơn Hàng Thành Công",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: buttonColor,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const OrderHistoryScreen(),
+                        ));
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Tạo Đơn Hàng Thất Bại",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10, right: 10),
+                    width: 130,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: buttonColor,
+                        borderRadius: BorderRadius.circular(50)),
+                    child: const Text(
+                      'Đặt hàng',
+                      style: TextStyle(
+                          color: lightText,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
         ],
       ),
     );
@@ -295,6 +417,7 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  bool _visibility = false;
   Widget _shipTab(List<OrderCart> listPlant) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,84 +446,155 @@ class _OrderScreenState extends State<OrderScreen> {
             builder: (context) => MapScreen(callback: setAdress),
           ));
         }, _addressController),
-        Center(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50), color: buttonColor),
-            child: const Text(
-              'Kiểm tra phí vận chuyển',
-              style: TextStyle(
-                  color: lightText, fontSize: 16, fontWeight: FontWeight.w500),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _visibility = !_visibility;
+            });
+          },
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50), color: buttonColor),
+              child: const Text(
+                'Kiểm tra phí vận chuyển',
+                style: TextStyle(
+                    color: lightText,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
             ),
           ),
         ),
-        const Divider(
-          height: 5,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
-            Text('Phí vận chuyễn',
-                style: TextStyle(
-                    color: darkText,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500)),
-          ],
-        ),
-        (!isLoading)
-            ? Container(
+        Visibility(
+          visible: _visibility,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Divider(
+                height: 5,
+              ),
+              Container(
                 padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                child: const Text(
+                  'Thông tin giao hàng',
+                  style: TextStyle(
+                      color: darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              (!isLoading)
+                  ? Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('Phí vận chuyển cây : ',
-                              style: TextStyle(color: darkText, fontSize: 16)),
-                          Text('Phí giao hàng: ',
-                              style: TextStyle(color: darkText, fontSize: 16)),
-                        ]),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                            '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!))} đ',
-                            style:
-                                const TextStyle(color: darkText, fontSize: 16)),
-                        Text(
-                            '${f.format((distance.values.first / 1000) * 7000)} đ',
-                            style:
-                                const TextStyle(color: darkText, fontSize: 16)),
-                        Text(' ( ${(distance.values.first / 1000)} Km )',
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 15)),
-                      ],
+                        children: [
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text('Phí vận chuyển cây : ',
+                                    style: TextStyle(
+                                        color: darkText, fontSize: 16)),
+                                Text('Phí giao hàng: ',
+                                    style: TextStyle(
+                                        color: darkText, fontSize: 16)),
+                              ]),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                  '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!))} đ',
+                                  style: const TextStyle(
+                                      color: darkText, fontSize: 16)),
+                              Text(
+                                  '${f.format((distance.values.first) * distancePrice.pricePerKm ?? 0)} đ',
+                                  style: const TextStyle(
+                                      color: darkText, fontSize: 16)),
+                              Text(' ( ${(distance.values.first)} Km )',
+                                  style: const TextStyle(
+                                      color: Colors.red, fontSize: 15)),
+                            ],
+                          )
+                        ],
+                      ),
                     )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        '*Hệ thống sẽ tự động chọn cửa hàng gần nhất cho bạn (${distancePrice.pricePerKm} / km)',
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        )),
                   ],
                 ),
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
               ),
-        Container(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              Text(
-                  '*Hệ thống sẽ tự động chọn cửa hàng gần nhất cho bạn (7000đ / km)',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 12,
-                  )),
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _paymentTab() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          child: const Text(
+            'Phương thức thanh toán',
+            style: TextStyle(
+                color: darkText, fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+        Row(
+          children: [
+            Checkbox(
+              checkColor: Colors.white,
+              fillColor: MaterialStateProperty.resolveWith(getColor),
+              value: COD,
+              onChanged: (value) {
+                setState(() {
+                  COD = value!;
+                });
+              },
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            const Text('Thanh toán khi nhận hàng')
+          ],
+        ),
+        Row(
+          children: [
+            Checkbox(
+              checkColor: Colors.white,
+              fillColor: MaterialStateProperty.resolveWith(getColor),
+              value: !COD,
+              onChanged: (value) {
+                setState(() {
+                  COD = !value!;
+                });
+              },
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            const Text('Thanh toán trực tuyến')
+          ],
+        )
       ],
     );
   }
@@ -439,5 +633,18 @@ class _OrderScreenState extends State<OrderScreen> {
             )),
       ],
     );
+  }
+
+  bool COD = true;
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    return buttonColor;
   }
 }

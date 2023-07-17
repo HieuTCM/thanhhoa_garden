@@ -18,7 +18,7 @@ class StoreProvider extends ChangeNotifier {
     var header = getheader(getTokenAuthenFromSharedPrefs());
     try {
       final res =
-          await http.get(Uri.parse(mainURL + StoreURL), headers: header);
+          await http.get(Uri.parse(mainURL + storeURL), headers: header);
       if (res.statusCode == 200) {
         if (res.body.isNotEmpty) {
           var jsondata = json.decode(res.body);

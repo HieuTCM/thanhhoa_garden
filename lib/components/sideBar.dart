@@ -7,6 +7,7 @@ import 'package:thanhhoa_garden/blocs/authentication/auth_event.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
+import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
 
 class SideBar extends StatefulWidget {
@@ -65,9 +66,11 @@ class _SideBarState extends State<SideBar> {
                   Icons.abc,
                   size: 40,
                 )),
-            _listTile(
-                'Lịch Sử Mua Hàng',
-                () {},
+            _listTile('Lịch Sử Mua Hàng', () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const OrderHistoryScreen(),
+              ));
+            },
                 const Icon(
                   Icons.abc,
                   size: 40,
