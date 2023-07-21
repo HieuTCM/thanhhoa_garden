@@ -18,15 +18,19 @@ import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/components/cart/cartButton.dart';
+import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 
 class SearchScreen extends StatefulWidget {
-  StreamSubscription<CartState>? cartStateSubscription;
-  Stream<CartState>? cartStream;
-  SearchScreen({super.key, this.cartStateSubscription, this.cartStream});
+  // StreamSubscription<CartState>? cartStateSubscription;
+  // Stream<CartState>? cartStream;
+  SearchScreen({
+    super.key,
+    //  this.cartStateSubscription, this.cartStream
+  });
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -164,6 +168,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: SideBar(),
       backgroundColor: background,
       floatingActionButton: Builder(builder: (context) {
         return const CartButton();
@@ -225,8 +230,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   scrollController: _scrollController,
                   listBonsai: listPlant,
                   wherecall: 'Search Screen',
-                  cartStateSubscription: widget.cartStateSubscription,
-                  cartStream: widget.cartStream,
+                  // cartStateSubscription: widget.cartStateSubscription,
+                  // cartStream: widget.cartStream,
                 );
         } else if (state is BonsaiFailure) {
           return Text(state.errorMessage);

@@ -26,6 +26,12 @@ class OrderProvider extends ChangeNotifier {
   List<OrderObject>? _list;
   List<OrderObject>? get list => _list;
 
+  OrderDetail? _orderDetail;
+  OrderDetail? get orderDetail => _orderDetail;
+
+  List<OrderDetail>? _detalList;
+  List<OrderDetail>? get detalList => _detalList;
+
   Future<bool> getOrderList(OrderEvent event) async {
     bool result = false;
     List<OrderObject> list = [];
@@ -144,6 +150,68 @@ class OrderProvider extends ChangeNotifier {
         }
       }
       notifyListeners();
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return result;
+  }
+
+  Future<bool> getOrderDetail(String OrderID) async {
+    bool result = false;
+
+    List<OrderDetail> list = [];
+
+    var header = getheader(getTokenAuthenFromSharedPrefs());
+    try {
+      final res = await http.get(
+          Uri.parse(mainURL + getOrderDetailURL + OrderID),
+          headers: header);
+      if (res.statusCode == 200) {
+        if (res.body.isNotEmpty) {
+          var jsondata = json.decode(res.body);
+          for (var data in jsondata) {
+            OrderCart plant = OrderCart();
+            plant = OrderCart.fromJson(data['showPlantModel']);
+            _orderDetail = OrderDetail.fromJson(data, plant);
+            list.add(_orderDetail!);
+          }
+        }
+        _detalList = list;
+        result = true;
+        notifyListeners();
+      } else {
+        result = false;
+        notifyListeners();
+      }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return result;
+  }
+
+  Future<bool> cancelOrder(OrderEvent event) async {
+    bool result = false;
+    Map<String, dynamic> param = ({});
+    param['orderID'] = '${event.orderID}';
+    param['reason'] = '${event.reason}';
+    if (event.status != null) param['status'] = event.status;
+    String queryString = Uri(queryParameters: param).query;
+    var header = getheader(getTokenAuthenFromSharedPrefs());
+    try {
+      final res = await http.put(
+          Uri.parse(mainURL + cancelOrderURL + queryString),
+          headers: header);
+      if (res.statusCode == 200) {
+        result = true;
+        notifyListeners();
+      } else {
+        result = false;
+        notifyListeners();
+      }
     } on HttpException catch (e) {
       if (kDebugMode) {
         print(e.toString());

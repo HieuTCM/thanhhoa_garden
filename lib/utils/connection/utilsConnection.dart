@@ -48,6 +48,8 @@ const distanceURL = '/distancePrice';
 //order
 const orderURL = '/order';
 const getOrderURL = '/order/getAllOrderByUsername?';
+const getOrderDetailURL = '/order/orderDetail/';
+const cancelOrderURL = '/order/rejectOrder?';
 
 //enum
 const orderStatus = '/enum/order';

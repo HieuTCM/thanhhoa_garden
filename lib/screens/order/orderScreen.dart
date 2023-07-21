@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -28,6 +29,7 @@ import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 class OrderScreen extends StatefulWidget {
   List<OrderCart> listPlant;
@@ -303,34 +305,252 @@ class _OrderScreenState extends State<OrderScreen> {
                     }
                     var data = order.createOrder(plant, distance.keys.first,
                         distancePrice.distancePriceID);
-                    // print('object');
-                    // var data = order.createOrder(
-                    //     plant, 'S001', distancePrice.distancePriceID);
-                    _orderProvider.createOrder(data).then((value) {
-                      if (value) {
-                        cartBloc.send(GetCart());
-                        Fluttertoast.showToast(
-                            msg: "Tạo Đơn Hàng Thành Công",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: buttonColor,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const OrderHistoryScreen(),
-                        ));
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Tạo Đơn Hàng Thất Bại",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      }
-                    });
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Center(
+                            child: Text(
+                              'Xác Nhận Đơn Hàng',
+                              style:
+                                  TextStyle(color: buttonColor, fontSize: 25),
+                            ),
+                          ),
+                          content: SizedBox(
+                            height: 395,
+                            width: size.width - 10,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _rowInfor('Tên', order.fullName),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  _rowInfor('Email', order.email),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  _rowInfor('Phone', order.phone),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 7,
+                                        width: 7,
+                                        decoration: BoxDecoration(
+                                            color: buttonColor,
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      const Text(
+                                        'Địa chỉ: ',
+                                        style: TextStyle(
+                                            color: buttonColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    width: size.width - 10,
+                                    child: AutoSizeText(
+                                      '\t\t' + order.address,
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Thông tin đơn hàng : ',
+                                    style: TextStyle(
+                                        color: buttonColor,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(children: [
+                                    Text(
+                                        '${widget.listPlant.fold(0, (sum, item) => sum + item.quantity!)} sản phẩm'),
+                                    const Spacer(),
+                                    const Text('Giá: '),
+                                    Text(
+                                      '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!))} đ',
+                                      style: const TextStyle(color: priceColor),
+                                    ),
+                                  ]),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: const [Text('Phí giao hàng: ')],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [
+                                            Text('Phí vận chuyển cây : ',
+                                                style: TextStyle(
+                                                    color: darkText,
+                                                    fontSize: 16)),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text('Phí giao hàng: ',
+                                                style: TextStyle(
+                                                    color: darkText,
+                                                    fontSize: 16)),
+                                          ]),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                              '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!))} đ',
+                                              style: const TextStyle(
+                                                  color: priceColor)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                              '${f.format((distance.values.first) * distancePrice.pricePerKm ?? 0)} đ',
+                                              style: const TextStyle(
+                                                  color: priceColor)),
+                                          Text(
+                                              ' ( ${(distance.values.first)} Km )',
+                                              style: const TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Center(
+                                    child: Column(children: [
+                                      const Text('Tổng cộng : ',
+                                          style: TextStyle(
+                                              color: darkText,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500)),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                          '${f.format((widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!)) + (widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!)) + ((distance.values.first) * distancePrice.pricePerKm ?? 0))} đ',
+                                          style: const TextStyle(
+                                              color: priceColor,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500)),
+                                    ]),
+                                  )
+                                ]),
+                          ),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 110,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                        color: buttonColor,
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: const Text('Quay lại',
+                                        style: TextStyle(
+                                            color: lightText,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500)),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    OverlayLoadingProgress.start(context);
+                                    _orderProvider
+                                        .createOrder(data)
+                                        .then((value) {
+                                      if (value) {
+                                        cartBloc.send(GetCart());
+
+                                        Fluttertoast.showToast(
+                                            msg: "Tạo Đơn Hàng Thành Công",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: buttonColor,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                        Navigator.of(context)
+                                            .pushReplacement(MaterialPageRoute(
+                                          builder: (context) =>
+                                              const OrderHistoryScreen(),
+                                        ));
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: "Tạo Đơn Hàng Thất Bại",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                      OverlayLoadingProgress.stop();
+                                    });
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 110,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                        color: buttonColor,
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: const Text('Xác Nhận',
+                                        style: TextStyle(
+                                            color: lightText,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500)),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                              ],
+                            )
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 10, right: 10),
@@ -631,6 +851,35 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
               ),
             )),
+      ],
+    );
+  }
+
+  Widget _rowInfor(String title, String value) {
+    return Row(
+      children: [
+        Container(
+          height: 7,
+          width: 7,
+          decoration: BoxDecoration(
+              color: buttonColor, borderRadius: BorderRadius.circular(50)),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          '$title :  ',
+          style: const TextStyle(
+              color: buttonColor, fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+        Expanded(
+            child: AutoSizeText(
+          value,
+          maxLines: 2,
+          style: const TextStyle(
+            fontSize: 18,
+          ),
+        ))
       ],
     );
   }

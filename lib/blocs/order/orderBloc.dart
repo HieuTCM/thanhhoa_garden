@@ -41,6 +41,23 @@ class OrderBloc {
           }
         });
         break;
+      case CancelOrderEvent:
+        await _OrderProvider.cancelOrder(event).then((value) {
+          if (value) {
+            send(GetAllOrderEvent(
+                pageNo: 0,
+                pageSize: 10,
+                sortBy: 'CREATEDDATE',
+                sortAsc: false,
+                listOrder: []));
+            _OrderStateController.add(
+                OrderCancelSuccess(errorMessage: 'Update Success'));
+          } else {
+            _OrderStateController.add(
+                OrderFailure(errorMessage: 'Update Failed'));
+          }
+        });
+        break;
     }
   }
 

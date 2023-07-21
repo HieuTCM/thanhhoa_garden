@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var token = getTokenAuthenFromSharedPrefs();
+
     return MultiProvider(
       providers: [
         ListenableProvider<AuthenticationProvider>(

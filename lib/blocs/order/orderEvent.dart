@@ -1,6 +1,12 @@
 import 'package:thanhhoa_garden/models/order/order.dart';
 
 abstract class OrderEvent {
+  String? _orderID;
+  String? get orderID => _orderID;
+
+  String? _reason;
+  String? get reason => _reason;
+
   String? _status;
   String? get status => _status;
 
@@ -38,7 +44,15 @@ class GetAllOrderEvent extends OrderEvent {
       : super();
 }
 
-class SearchOrderEvent extends OrderEvent {}
+class CancelOrderEvent extends OrderEvent {
+  String status;
+  String orderID;
+  String reason;
+
+  CancelOrderEvent(
+      {required this.status, required this.orderID, required this.reason})
+      : super();
+}
 
 class GetByIDOrderEvent extends OrderEvent {
   @override

@@ -157,10 +157,8 @@ class _LoginPageState extends State<LoginPage> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => HomePage(
-                    user: _user,
-                  )));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => HomePage()));
         });
         break;
     }

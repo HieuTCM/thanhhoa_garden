@@ -7,6 +7,7 @@ import 'package:thanhhoa_garden/blocs/store/storeBloc.dart';
 import 'package:thanhhoa_garden/blocs/store/storeEvent.dart';
 import 'package:thanhhoa_garden/blocs/store/storeState.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
+import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
@@ -48,6 +49,7 @@ class _StoreScreenState extends State<StoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideBar(),
       backgroundColor: background,
       body: SingleChildScrollView(
           child: Column(

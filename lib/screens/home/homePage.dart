@@ -20,23 +20,28 @@ import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/components/cart/cartButton.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/service/service.dart';
+import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
+import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class HomePage extends StatefulWidget {
-  User? user;
-  HomePage({super.key, required this.user});
+  // User? user;
+  HomePage({
+    super.key,
+    //  required this.user
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-final GlobalKey<ScaffoldState> _drawkey = GlobalKey();
-
 class _HomePageState extends State<HomePage> {
+  UserObj.User user = getCuctomerIDFromSharedPrefs();
   late ServiceBloc serviceBloc;
   late BonsaiBloc bonsaiBloc;
   StreamSubscription<ServiceState>? _serviceStateSubscription;
@@ -50,7 +55,7 @@ class _HomePageState extends State<HomePage> {
   int? Cartcount = 0;
 
   List<Bonsai> listPlant = [];
-
+  GlobalKey<ScaffoldState> drawkey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -93,7 +98,6 @@ class _HomePageState extends State<HomePage> {
     _cartStateSubscription?.cancel();
     _serviceStateSubscription?.cancel();
     _bonsaiStateSubscription?.cancel();
-
     super.dispose();
   }
 
@@ -102,8 +106,8 @@ class _HomePageState extends State<HomePage> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: _drawkey,
-      drawer: SideBar(user: widget.user!),
+      key: drawkey,
+      drawer: SideBar(),
       floatingActionButton: Builder(builder: (context) {
         return const CartButton();
       }),
@@ -257,11 +261,7 @@ class _HomePageState extends State<HomePage> {
                           GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SearchScreen(
-                                    cartStateSubscription:
-                                        _cartStateSubscription,
-                                    cartStream: cartStream,
-                                  ),
+                                  builder: (context) => SearchScreen(),
                                 ));
                               },
                               child: Row(
@@ -317,9 +317,9 @@ class _HomePageState extends State<HomePage> {
                                 ? Container()
                                 : ListBonsai(
                                     listBonsai: state.listBonsai,
-                                    cartStateSubscription:
-                                        _cartStateSubscription,
-                                    cartStream: cartStream,
+                                    // cartStateSubscription:
+                                    //     _cartStateSubscription,
+                                    // cartStream: cartStream,
                                   );
                           } else if (state is BonsaiFailure) {
                             return Text(state.errorMessage);
@@ -346,7 +346,7 @@ class _HomePageState extends State<HomePage> {
               icon: const FaIcon(FontAwesomeIcons.gripLines,
                   color: buttonColor, size: 40),
               onPressed: () {
-                _drawkey.currentState!.openDrawer();
+                drawkey.currentState!.openDrawer();
               },
             ))
       ]),

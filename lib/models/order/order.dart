@@ -86,13 +86,14 @@ class OrderObject {
     distance = json["distance"];
     total = json["total"];
     status = json["status"];
+    totalPage = json["totalPage"];
+    numOfPlant = json["numOfPlant"];
+    totalShipCost = json["totalShipCost"];
     showStaffModel = StaffModel;
     showCustomerModel = CustomerModel;
     showDistancePriceModel = DistancePriceModel;
     showStoreModel = StoreModel;
     showPlantModel = PlantModel;
-    totalPage = json["totalPage"];
-    numOfPlant = json["numOfPlant"];
   }
 
   Map<String, dynamic> createOrder(List<Map<String, dynamic>> plant,
@@ -108,5 +109,31 @@ class OrderObject {
     data['distancePriceID'] = DistancePriceID;
     data['detailList'] = plant;
     return data;
+  }
+}
+
+class OrderDetail {
+  late final id;
+  late final quantity;
+  late final price;
+  late final isFeedback;
+  late OrderCart? showPlantModel;
+
+  OrderDetail(
+      {this.id,
+      this.quantity,
+      this.price,
+      this.isFeedback,
+      this.showPlantModel});
+
+  OrderDetail.fromJson(
+    Map<String, dynamic> json,
+    OrderCart? PlantModel,
+  ) {
+    id = json["id"];
+    quantity = json["quantity"];
+    price = json["price"];
+    isFeedback = json["isFeedback"];
+    showPlantModel = PlantModel;
   }
 }

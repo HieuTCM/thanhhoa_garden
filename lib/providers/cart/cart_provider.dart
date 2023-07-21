@@ -46,6 +46,7 @@ class CartProvider extends ChangeNotifier {
 
   Future<bool> AddToCart(String? plantID, int? quantity) async {
     bool result = false;
+    List<OrderCart> list = [];
     var header = getheader(getTokenAuthenFromSharedPrefs());
     Map<String, dynamic> param = ({});
     param['plantID'] = '${plantID}';
@@ -55,19 +56,23 @@ class CartProvider extends ChangeNotifier {
       final res = await http.post(Uri.parse(mainURL + cartURL),
           body: body, headers: header);
       if (res.statusCode == 200) {
-        await getCart().then((value) {
-          Fluttertoast.showToast(
-              msg: "Thêm cây thành công",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          return result = true;
-        });
+        var jsondata = json.decode(res.body);
+        for (var data in jsondata) {
+          OrderCart cart = OrderCart();
+          cart = OrderCart.fromJson(data);
+          list.add(cart);
+        }
+        Fluttertoast.showToast(
+            msg: "Thêm cây thành công",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        result = true;
       }
-
+      _list = list;
       notifyListeners();
     } on HttpException catch (e) {
       if (kDebugMode) {
@@ -80,6 +85,7 @@ class CartProvider extends ChangeNotifier {
 
   Future<bool> MinustoCart(String? cartID, int? quantity) async {
     bool result = false;
+    List<OrderCart> list = [];
     var header = getheader(getTokenAuthenFromSharedPrefs());
     Map<String, dynamic> param = ({});
     param['cartID'] = '${cartID}';
@@ -89,19 +95,23 @@ class CartProvider extends ChangeNotifier {
       final res = await http.put(Uri.parse(mainURL + cartURL),
           body: body, headers: header);
       if (res.statusCode == 200) {
-        await getCart().then((value) {
-          Fluttertoast.showToast(
-              msg: "Cập nhật cây thành công",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          return result = true;
-        });
+        var jsondata = json.decode(res.body);
+        for (var data in jsondata) {
+          OrderCart cart = OrderCart();
+          cart = OrderCart.fromJson(data);
+          list.add(cart);
+        }
+        Fluttertoast.showToast(
+            msg: "Thêm cây thành công",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        result = true;
       }
-
+      _list = list;
       notifyListeners();
     } on HttpException catch (e) {
       if (kDebugMode) {

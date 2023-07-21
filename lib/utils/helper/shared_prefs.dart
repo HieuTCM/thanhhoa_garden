@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:thanhhoa_garden/main.dart';
+import 'package:thanhhoa_garden/models/authentication/role.dart';
+import 'package:thanhhoa_garden/models/authentication/user.dart';
 
 String getTokenAuthenFromSharedPrefs() {
   if (sharedPreferences.getString('Token') == null) {
@@ -7,6 +11,10 @@ String getTokenAuthenFromSharedPrefs() {
   return sharedPreferences.getString('Token')!;
 }
 
-int getCuctomerIDFromSharedPrefs() {
-  return sharedPreferences.getInt('User')!;
+User getCuctomerIDFromSharedPrefs() {
+  Role role = Role();
+  User user = User.login(
+      jsonDecode(sharedPreferences.getString('User')!) as Map<String, dynamic>,
+      role);
+  return user;
 }

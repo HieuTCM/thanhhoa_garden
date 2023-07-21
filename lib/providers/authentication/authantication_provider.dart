@@ -97,6 +97,7 @@ class AuthenticationProvider extends ChangeNotifier {
         var jsondata = json.decode(res.body);
         Role role = Role.fromJson(jsondata);
         _loggedInUser = UserObj.User.login(jsondata, role);
+        sharedPreferences.setString('User', jsonEncode(jsondata));
         notifyListeners();
         result = true;
       } else {

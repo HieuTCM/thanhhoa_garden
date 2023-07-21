@@ -21,3 +21,8 @@ class OrderFailure extends OrderState {
   final String errorMessage;
   OrderFailure({required this.errorMessage});
 }
+
+class OrderCancelSuccess extends OrderState {
+  final String errorMessage;
+  OrderCancelSuccess({required this.errorMessage});
+}

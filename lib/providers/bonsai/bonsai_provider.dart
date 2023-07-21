@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_event.dart';
+import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
@@ -64,9 +65,7 @@ class BonsaiProvider extends ChangeNotifier {
                   listImg.add(ImageURL.fromJson(img));
                 }
               } else {
-                ImageURL img = ImageURL(
-                    url:
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyRE2zZSPgbJThiOrx55_b4yG-J1eyADnhKw&usqp=CAU');
+                ImageURL img = ImageURL(url: NoIMG);
                 listImg.add(img);
               }
             }

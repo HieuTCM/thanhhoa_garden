@@ -5,20 +5,44 @@ import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_bloc.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_event.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
+import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
+import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
+import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
+import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
+import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
+import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class SideBar extends StatefulWidget {
-  User user;
-  SideBar({super.key, required this.user});
+  // User user;
+  SideBar({
+    super.key,
+    //  required this.user
+  });
 
   @override
   State<SideBar> createState() => _SideBarState();
 }
 
 class _SideBarState extends State<SideBar> {
+  AuthenticationProvider _authenticationProvider = AuthenticationProvider();
+  UserObj.User user = getCuctomerIDFromSharedPrefs();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authBloc = Provider.of<AuthBloc>(context, listen: false);
@@ -30,15 +54,15 @@ class _SideBarState extends State<SideBar> {
           children: [
             UserAccountsDrawerHeader(
                 accountName: Text(
-                  widget.user.fullName,
+                  user.fullName,
                   style: const TextStyle(color: lightText),
                 ),
-                accountEmail: Text(widget.user.email,
-                    style: const TextStyle(color: lightText)),
+                accountEmail:
+                    Text(user.email, style: const TextStyle(color: lightText)),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(
                     child: Image.network(
-                      widget.user.avatar,
+                      user.avatar,
                       fit: BoxFit.cover,
                       width: 90,
                       height: 90,
@@ -52,9 +76,24 @@ class _SideBarState extends State<SideBar> {
                       image: NetworkImage(
                           'https://oflutter.com/wp-content/uploads/2021/02/profile-bg3.jpg')),
                 )),
-            _listTile(
-                'Xem cây cảnh',
-                () {},
+            _listTile('Trang chủ', () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage(),
+                  ),
+                  (Route<dynamic> route) => false);
+            },
+                const Icon(
+                  Icons.abc,
+                  size: 40,
+                )),
+            _listTile('Xem cây cảnh', () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => SearchScreen(),
+              ));
+            },
                 const Icon(
                   Icons.abc,
                   size: 40,
@@ -67,6 +106,7 @@ class _SideBarState extends State<SideBar> {
                   size: 40,
                 )),
             _listTile('Lịch Sử Mua Hàng', () {
+              Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const OrderHistoryScreen(),
               ));
@@ -90,6 +130,7 @@ class _SideBarState extends State<SideBar> {
                   size: 40,
                 )),
             _listTile('Cơ Sở Thanh Hóa', () {
+              Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const StoreScreen(),
               ));

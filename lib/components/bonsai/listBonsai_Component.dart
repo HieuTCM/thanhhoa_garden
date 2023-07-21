@@ -18,16 +18,17 @@ import 'package:thanhhoa_garden/screens/bonsai/bonsaidetail.dart';
 class ListBonsai extends StatefulWidget {
   List<Bonsai>? listBonsai;
   String? wherecall;
-  StreamSubscription<CartState>? cartStateSubscription;
-  Stream<CartState>? cartStream;
+  // StreamSubscription<CartState>? cartStateSubscription;
+  // Stream<CartState>? cartStream;
   ScrollController? scrollController;
-  ListBonsai(
-      {required this.listBonsai,
-      this.scrollController,
-      super.key,
-      this.wherecall,
-      this.cartStateSubscription,
-      this.cartStream});
+  ListBonsai({
+    required this.listBonsai,
+    this.scrollController,
+    super.key,
+    this.wherecall,
+    // this.cartStateSubscription,
+    // this.cartStream
+  });
 
   @override
   State<ListBonsai> createState() => _ListBonsaiState();
