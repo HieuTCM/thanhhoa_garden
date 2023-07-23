@@ -3,19 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
+import 'package:thanhhoa_garden/blocs/bonsai/bonsai_event.dart';
+import 'package:thanhhoa_garden/blocs/bonsai/bonsai_state.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
+import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_event.dart';
+import 'package:thanhhoa_garden/blocs/feedback/feedback_state.dart';
 
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/feedback/listfeedback_component.dart';
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+import 'package:thanhhoa_garden/models/feedback/feedback.dart';
+import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
 
 class BonsaiDetail extends StatefulWidget {
-  Bonsai bonsai;
-  BonsaiDetail({super.key, required this.bonsai});
+  String bonsaiID;
+  String name;
+  BonsaiDetail({super.key, required this.bonsaiID, required this.name});
 
   @override
   State<BonsaiDetail> createState() => _BonsaiDetailState();
@@ -25,13 +34,36 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
   Bonsai bonsai = Bonsai();
   var f = NumberFormat("###,###,###", "en_US");
   late FeedbackBloc feedbackBloc;
+  late Stream<FeedbackState> feedbackStream;
+
+  late BonsaiBloc bonsaiBloc;
+  late Stream<BonsaiState> bonsaiStream;
+
+  CartProvider cartProvider = CartProvider();
+  late CartBloc cartBloc;
+
   int count = 0;
   @override
   void initState() {
-    bonsai = widget.bonsai;
+    cartBloc = Provider.of<CartBloc>(context, listen: false);
     feedbackBloc = Provider.of<FeedbackBloc>(context, listen: false);
-    feedbackBloc.send(GetAllFeedbackEvent());
+    bonsaiBloc = Provider.of<BonsaiBloc>(context, listen: false);
+
+    feedbackStream = feedbackBloc.feedbackStateStream;
+    bonsaiStream = bonsaiBloc.authStateStream;
+    getBonsai();
+    feedbackBloc.send(GetAllFeedbackEventByPlantID(
+        plantID: widget.bonsaiID,
+        listFeedback: [],
+        pageNo: 0,
+        pageSize: 3,
+        sortBy: 'ID',
+        sortAsc: false));
     super.initState();
+  }
+
+  getBonsai() {
+    bonsaiBloc.send(GetByIDBonsaiEvent(id: widget.bonsaiID));
   }
 
   @override
@@ -57,28 +89,33 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
                   const SizedBox(
                     height: 35,
                   ),
-                  AppBarWiget(title: bonsai.name),
-                  //list Image
-                  ListImg(listImage: bonsai.listImg!),
-                  Container(
-                    height: 10,
-                    decoration: const BoxDecoration(color: divince),
+                  AppBarWiget(title: widget.name),
+                  StreamBuilder<BonsaiState>(
+                    stream: bonsaiStream,
+                    initialData: BonsaiInitial(),
+                    builder: (context, snapshot) {
+                      final state = snapshot.data;
+                      if (state is BonsaiLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is BonsaiSuccess) {
+                        bonsai = state.bonsai!;
+                        return _plantTab();
+                      } else if (state is BonsaiFailure) {
+                        return Text(state.errorMessage);
+                      } else {
+                        return Container();
+                      }
+                    },
                   ),
-                  //Plant Information
-                  _plantInformation(),
-                  Container(
-                    height: 10,
-                    decoration: const BoxDecoration(color: divince),
-                  ),
-                  //Note
-                  _noteCare(),
                   Container(
                     height: 10,
                     decoration: const BoxDecoration(color: divince),
                   ),
                   //feedback
                   _feedback(),
-
+                  Container(
+                    height: 10,
+                  ),
                   Container(
                     height: 10,
                     decoration: const BoxDecoration(color: divince),
@@ -91,6 +128,26 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
           Positioned(top: size.height - 65, child: _floatingBar()),
         ],
       ),
+    );
+  }
+
+  Widget _plantTab() {
+    return Column(
+      children: [
+        ListImg(listImage: bonsai.listImg!),
+        Container(
+          height: 10,
+          decoration: const BoxDecoration(color: divince),
+        ),
+        //Plant Information
+        _plantInformation(),
+        Container(
+          height: 10,
+          decoration: const BoxDecoration(color: divince),
+        ),
+        //Note
+        _noteCare(),
+      ],
     );
   }
 
@@ -196,61 +253,77 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
       width: size.width,
-      // height: 476,
       decoration: const BoxDecoration(),
-      child: Column(children: [
-        Row(
-          children: const [
-            Text(
-              'Khách Hàng Cùng Đánh giá: ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Spacer(),
-            Icon(Icons.star, color: Colors.yellow, size: 25),
-            Text(
-              '4.5',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(width: 5),
-            Text('(75 đánh giá)')
-          ],
-        ),
-        Center(
-          child: Container(
-            margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
-            height: 1.5,
-            width: size.width,
-            decoration: const BoxDecoration(color: divince),
-          ),
-        ),
-        SizedBox(
+      child: SizedBox(
           // height: 395,
-          child: Consumer<FeedbackProvider>(
-            builder: (context, value, _) {
-              return (value.listFeedback == null)
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListFeebback(
-                      listData: value.listFeedback!,
-                    );
-            },
-          ),
-        ),
-        Center(
-          child: Container(
-              alignment: Alignment.center,
-              height: 40,
-              child: GestureDetector(
-                child: const Text(
-                  'Xem tất cả >>',
-                  style: TextStyle(
-                      color: buttonColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-        )
-      ]),
+          child: StreamBuilder<FeedbackState>(
+              initialData: FeedbackInitial(),
+              stream: feedbackStream,
+              builder: (context, snapshot) {
+                final state = snapshot.data;
+                if (state is FeedbackLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is ListFeedbackSuccess) {
+                  return state.listFeedback!.isEmpty
+                      ? const Center(
+                          child: Text('Không tìm thấy đáng giá'),
+                        )
+                      : _listFeedback(state.listFeedback!);
+                } else if (state is FeedbackFailure) {
+                  return Text(state.errorMessage);
+                } else {
+                  return Container();
+                }
+              })),
     );
+  }
+
+  Widget _listFeedback(List<FeedbackModel> listFeedback) {
+    var size = MediaQuery.of(context).size;
+    return Column(children: [
+      Row(
+        children: [
+          const Text(
+            'Khách Hàng Cùng Đánh giá: ',
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+          ),
+          const Spacer(),
+          const Icon(Icons.star, color: Colors.yellow, size: 25),
+          Text(
+            listFeedback[0].avgRatingFeedback.toString(),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(width: 5),
+          Text(
+              '(${listFeedback[0].totalFeedback.toString().split('.')[0]} đánh giá)')
+        ],
+      ),
+      Center(
+        child: Container(
+          margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
+          height: 1.5,
+          width: size.width,
+          decoration: const BoxDecoration(color: divince),
+        ),
+      ),
+      ListFeebback(
+        listData: listFeedback,
+      ),
+      Center(
+        child: Container(
+            alignment: Alignment.center,
+            height: 40,
+            child: GestureDetector(
+              child: const Text(
+                'Xem tất cả >>',
+                style: TextStyle(
+                    color: buttonColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+            )),
+      )
+    ]);
   }
 
   Widget _floatingBar() {
@@ -309,7 +382,9 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
           ),
           Spacer(),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              cartBloc.send(AddToCart(widget.bonsaiID, count));
+            },
             child: Container(
               height: 45,
               width: 150,

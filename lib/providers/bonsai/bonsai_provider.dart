@@ -110,45 +110,41 @@ class BonsaiProvider extends ChangeNotifier {
     return result;
   }
 
-  Future<bool> searchBonsai() async {
+  Future<bool> getBonsaiByID(String ID) async {
     bool result = false;
     List<Bonsai> list = [];
-    // Simulate an asynchronous API call
-    int status = 404;
+
+    var header = getheader(getTokenAuthenFromSharedPrefs());
     try {
-      await Future.delayed(const Duration(seconds: 2))
-          .then((value) => {status = 200});
-      if (status == 200) {
-        // if (bonsaiSearchJson.isNotEmpty) {
-        //   for (var data in bonsaiSearchJson) {
-        //     PlantShipPrice plantShipPrice = PlantShipPrice();
-        //     List<PlantCategory> listCategory = [];
-        //     List<ImageURL> listImg = [];
-        //     var shipPriceData = data["plant_ship_price"];
-        //     var categoryData = data["plant_category"];
-        //     var imgData = data["list_img"];
-        //     if (shipPriceData is Map) {
-        //       plantShipPrice = PlantShipPrice.fromJson(shipPriceData);
-        //     }
+      final res = await http.get(Uri.parse(mainURL + getPlantByIDURL + ID),
+          headers: header);
+      if (res.statusCode == 200) {
+        if (res.body.isNotEmpty) {
+          var jsondata = json.decode(res.body);
 
-        //     if (categoryData is List) {
-        //       for (var cataData in categoryData) {
-        //         listCategory.add(PlantCategory.fromJson(cataData));
-        //       }
-        //     }
+          PlantShipPrice plantShipPrice = PlantShipPrice();
+          List<PlantCategory> listCategory = [];
+          List<ImageURL> listImg = [];
+          plantShipPrice =
+              PlantShipPrice.fromJson(jsondata['showPlantShipPriceModel']);
+          for (var category in jsondata['plantCategoryList']) {
+            listCategory.add(PlantCategory.fromJson(category));
+          }
+          var imgData = jsondata['plantIMGList'];
+          if (imgData is List) {
+            if (imgData.isNotEmpty) {
+              for (var img in jsondata['plantIMGList']) {
+                listImg.add(ImageURL.fromJson(img));
+              }
+            } else {
+              ImageURL img = ImageURL(url: NoIMG);
+              listImg.add(img);
+            }
+          }
 
-        //     if (imgData is List) {
-        //       for (var img in imgData) {
-        //         listImg.add(ImageURL.fromJson(img));
-        //       }
-        //     }
-
-        //     _bonsai =
-        //         Bonsai.fromJson(data, plantShipPrice, listCategory, listImg);
-        //     list.add(_bonsai!);
-        //   }
-        // }
-        _listBonsai = list;
+          _bonsai =
+              Bonsai.fromJson(jsondata, plantShipPrice, listCategory, listImg);
+        }
         result = true;
         notifyListeners();
       } else {

@@ -14,6 +14,8 @@ import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
+import 'package:thanhhoa_garden/screens/feedback/feedbackScreen.dart';
+import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderDetail.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
@@ -415,7 +417,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 child: const AutoSizeText(NotiOrder2),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ListFeedbackScreen(),
+                  ));
+                },
                 child: Container(
                   alignment: Alignment.center,
                   width: 100,

@@ -6,6 +6,7 @@ import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
+import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 
 class ServiceDetail extends StatefulWidget {
   Service service;
@@ -17,9 +18,21 @@ class ServiceDetail extends StatefulWidget {
 
 class _ServiceDetailState extends State<ServiceDetail> {
   Service service = Service();
+  List<ServicePack> listServicePack = [];
+  ServiceProvider serviceProvider = ServiceProvider();
+
   void initState() {
     service = widget.service;
+    getServicePack();
     super.initState();
+  }
+
+  getServicePack() {
+    serviceProvider.getAllServicePack().then((value) {
+      setState(() {
+        listServicePack = serviceProvider.listSeriverPack!;
+      });
+    });
   }
 
   @override

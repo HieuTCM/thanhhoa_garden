@@ -56,3 +56,22 @@ class TypeService {
     serviceID = json['serviceID'];
   }
 }
+
+class ServicePack {
+  late final id;
+  late final range;
+  late final percentage;
+  late final applyDate;
+  late final status;
+
+  ServicePack(
+      {this.id, this.status, this.range, this.percentage, this.applyDate});
+
+  ServicePack.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    range = json['range'];
+    percentage = json['percentage'];
+    applyDate = json['applyDate'];
+    status = json['status'];
+  }
+}

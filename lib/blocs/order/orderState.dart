@@ -12,6 +12,11 @@ class ListOrderSuccess extends OrderState {
   ListOrderSuccess({required this.listOrder});
 }
 
+class ListOrderDetailSuccess extends OrderState {
+  final List<OrderDetail>? listOrderDetail;
+  ListOrderDetailSuccess({required this.listOrderDetail});
+}
+
 class OrderSuccess extends OrderState {
   final OrderObject? Order;
   OrderSuccess({required this.Order});

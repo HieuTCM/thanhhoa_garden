@@ -42,20 +42,17 @@ class BonsaiBloc {
           }
         });
         break;
-      case SearchBonsaiEvent:
+      case GetByIDBonsaiEvent:
         _BonsaiStateController.add(BonsaiLoading());
-        await _BonsaiProvider.searchBonsai().then((value) {
+        await _BonsaiProvider.getBonsaiByID(event.id!).then((value) {
           if (value) {
-            final listBonsai = _BonsaiProvider.listBonsai;
-            _BonsaiStateController.add(
-                ListBonsaiSuccess(listBonsai: listBonsai));
+            final Bonsai = _BonsaiProvider.bonsai;
+            _BonsaiStateController.add(BonsaiSuccess(bonsai: Bonsai));
           } else {
             _BonsaiStateController.add(
-                BonsaiFailure(errorMessage: 'Get Bonsai List Failed'));
+                BonsaiFailure(errorMessage: 'Get Bonsai Failed'));
           }
         });
-        break;
-      case GetByIDBonsaiEvent:
         break;
     }
   }

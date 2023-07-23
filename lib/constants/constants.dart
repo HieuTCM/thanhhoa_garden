@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 
 // const String GG_API_Key = 'AIzaSyA2yiHIRWwyTMebbwJmYDiQcN6AZxpyvrI';
@@ -75,6 +76,21 @@ String convertStatus(String value) {
   return result;
 }
 
+String scoreFeedback(int score) {
+  switch (score) {
+    case 1:
+      return 'Chưa hài lòng';
+    case 2:
+      return 'Tạm ổn';
+    case 3:
+      return 'Bình thường';
+    case 4:
+      return 'Hài lòng';
+    default:
+      return 'Rất hài lòng';
+  }
+}
+
 String converDate(OrderObject order) {
   String result = order.createdDate.toString().substring(0, 10);
   switch (order.progressStatus) {
@@ -124,4 +140,9 @@ List<String> listReason() {
     'Khách không muốn mua nữa',
     'Lý do khác'
   ];
+}
+
+String getDate(String date) {
+  DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+  return date = DateFormat('MM/dd/yyyy hh:mm a').format(parseDate);
 }

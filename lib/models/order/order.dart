@@ -1,5 +1,6 @@
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
+import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 import 'package:thanhhoa_garden/models/order/distance.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
 
@@ -117,23 +118,49 @@ class OrderDetail {
   late final quantity;
   late final price;
   late final isFeedback;
+  late User? showStaffModel;
+  late User? showCustomerModel;
+  late Distance? showDistancePriceModel;
+  late Store? showStoreModel;
   late OrderCart? showPlantModel;
+  late FeedbackModel? showFeedbackModel;
+  late OrderObject? showOrderModel;
+  late final totalPage;
 
   OrderDetail(
       {this.id,
       this.quantity,
       this.price,
       this.isFeedback,
-      this.showPlantModel});
+      this.showPlantModel,
+      this.showCustomerModel,
+      this.showDistancePriceModel,
+      this.showStoreModel,
+      this.showStaffModel,
+      this.showFeedbackModel,
+      this.showOrderModel,
+      this.totalPage});
 
   OrderDetail.fromJson(
     Map<String, dynamic> json,
+    User? StaffModel,
+    User? CustomerModel,
+    Distance? DistancePriceModel,
+    Store? StoreModel,
     OrderCart? PlantModel,
+    FeedbackModel? FeedbackModel,
+    OrderObject? OrderModel,
   ) {
     id = json["id"];
     quantity = json["quantity"];
     price = json["price"];
     isFeedback = json["isFeedback"];
     showPlantModel = PlantModel;
+    showCustomerModel = CustomerModel;
+    showDistancePriceModel = DistancePriceModel;
+    showStoreModel = StoreModel;
+    showStaffModel = StaffModel;
+    showFeedbackModel = FeedbackModel;
+    showOrderModel = OrderModel;
   }
 }

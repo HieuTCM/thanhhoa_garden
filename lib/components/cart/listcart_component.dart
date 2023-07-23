@@ -97,7 +97,10 @@ class _LitsCartState extends State<LitsCart> {
         ? Container()
         : GestureDetector(
             onTap: () {
-              print('detail');
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    BonsaiDetail(bonsaiID: cart.plantID, name: cart.plantName),
+              ));
             },
             child: Container(
               width: size.width,

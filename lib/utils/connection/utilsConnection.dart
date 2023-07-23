@@ -36,6 +36,9 @@ const getAllCategoryURL = '/category';
 //service
 const getServiceURL = '/service?pageNo=0&pageSize=100&sortBy=ID&sortAsc=true';
 
+//Service Patck
+const getServicePackURL = '/servicePack';
+
 //cart
 const cartURL = '/cart';
 
@@ -50,6 +53,14 @@ const orderURL = '/order';
 const getOrderURL = '/order/getAllOrderByUsername?';
 const getOrderDetailURL = '/order/orderDetail/';
 const cancelOrderURL = '/order/rejectOrder?';
+const getOrderDetaiByFeedbackStatuslURL = '/order/getOrderDetailByIsFeedback?';
 
+//feedback
+const getFeedbackByPlantIDURL = '/feedback/orderFeedback/byPlantID?';
+const getFeedbackURL = '/feedback/orderFeedback?';
+const createFeedbackDURL = '/feedback/createOrderFB';
+
+//rating
+const getRatingURL = '/feedback/getRating';
 //enum
 const orderStatus = '/enum/order';

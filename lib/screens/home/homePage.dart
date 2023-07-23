@@ -25,7 +25,7 @@ import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
-import 'package:thanhhoa_garden/screens/service/service.dart';
+import 'package:thanhhoa_garden/screens/service/serviceScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 

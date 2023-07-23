@@ -41,6 +41,25 @@ class OrderBloc {
           }
         });
         break;
+      case GetAllOrderDetailEvent:
+        if (event.pageNo == 0) {
+          _OrderStateController.add(OrderLoading());
+        }
+        await _OrderProvider.getOrderDetailByFeedback(event).then((value) {
+          if (value) {
+            final listOrderDetail = _OrderProvider.detalList;
+            List<OrderDetail> fetchOrderDetailList = [
+              ...event.listOrderDetial!,
+              ...listOrderDetail!
+            ];
+            _OrderStateController.add(
+                ListOrderDetailSuccess(listOrderDetail: fetchOrderDetailList));
+          } else {
+            _OrderStateController.add(
+                OrderFailure(errorMessage: 'Get Order List Failed'));
+          }
+        });
+        break;
       case CancelOrderEvent:
         await _OrderProvider.cancelOrder(event).then((value) {
           if (value) {

@@ -68,6 +68,7 @@ dependencies:
   google_maps_webservice: ^0.0.20-nullsafety.5
   overlay_loading_progress: ^1.0.1
   url_launcher: ^6.1.11
+  image_picker: ^1.0.1
 
 dev_dependencies:
   flutter_test:

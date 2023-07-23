@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:thanhhoa_garden/blocs/order/orderEvent.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
+import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 import 'package:thanhhoa_garden/models/order/distance.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
@@ -173,8 +174,37 @@ class OrderProvider extends ChangeNotifier {
           var jsondata = json.decode(res.body);
           for (var data in jsondata) {
             OrderCart plant = OrderCart();
+            User showStaffModel = User();
+            User showCustomerModel = User();
+            Distance showDistancePriceModel = Distance();
+            Store showStoreModel = Store();
+            FeedbackModel feedback = FeedbackModel();
             plant = OrderCart.fromJson(data['showPlantModel']);
-            _orderDetail = OrderDetail.fromJson(data, plant);
+            showStaffModel = User.fetchInfo(data['showStaffModel']);
+            showCustomerModel = User.fetchInfo(data['showCustomerModel']);
+            showDistancePriceModel =
+                Distance.fromJson(data['showDistancePriceModel']);
+            showStoreModel = Store.fromJson(data['showStoreModel']);
+            if (data['showOrderFeedbackModel'] != null) {
+              feedback = FeedbackModel.fromJson(data['showOrderFeedbackModel']);
+            }
+            _order = OrderObject.fromJson(
+                data['showOrderModel'],
+                showStaffModel,
+                showCustomerModel,
+                showDistancePriceModel,
+                showStoreModel,
+                plant);
+
+            _orderDetail = OrderDetail.fromJson(
+                data,
+                showStaffModel,
+                showCustomerModel,
+                showDistancePriceModel,
+                showStoreModel,
+                plant,
+                feedback,
+                _order);
             list.add(_orderDetail!);
           }
         }
@@ -206,6 +236,75 @@ class OrderProvider extends ChangeNotifier {
           Uri.parse(mainURL + cancelOrderURL + queryString),
           headers: header);
       if (res.statusCode == 200) {
+        result = true;
+        notifyListeners();
+      } else {
+        result = false;
+        notifyListeners();
+      }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return result;
+  }
+
+  Future<bool> getOrderDetailByFeedback(OrderEvent event) async {
+    bool result = false;
+
+    List<OrderDetail> list = [];
+    Map<String, dynamic> param = ({});
+    param['isFeedback'] = '${event.isFeedback}';
+    param['pageNo'] = '${event.pageNo}';
+    param['pageSize'] = '${event.pageSize}';
+    param['sortBy'] = event.sortBy;
+    param['sortAsc'] = '${event.sortAsc}';
+
+    String queryString = Uri(queryParameters: param).query;
+    var header = getheader(getTokenAuthenFromSharedPrefs());
+    try {
+      final res = await http.get(
+          Uri.parse(mainURL + getOrderDetaiByFeedbackStatuslURL + queryString),
+          headers: header);
+      if (res.statusCode == 200) {
+        if (res.body.isNotEmpty) {
+          var jsondata = json.decode(res.body);
+          for (var data in jsondata) {
+            OrderCart plant = OrderCart();
+            User showStaffModel = User();
+            User showCustomerModel = User();
+            Distance showDistancePriceModel = Distance();
+            Store showStoreModel = Store();
+            FeedbackModel feedback = FeedbackModel();
+            plant = OrderCart.fromJson(data['showPlantModel']);
+            showStaffModel = User.fetchInfo(data['showStaffModel']);
+            showCustomerModel = User.fetchInfo(data['showCustomerModel']);
+            showDistancePriceModel =
+                Distance.fromJson(data['showDistancePriceModel']);
+            showStoreModel = Store.fromJson(data['showStoreModel']);
+            feedback = FeedbackModel.fromJson(data['showOrderFeedbackModel']);
+            _order = OrderObject.fromJson(
+                data['showOrderModel'],
+                showStaffModel,
+                showCustomerModel,
+                showDistancePriceModel,
+                showStoreModel,
+                plant);
+
+            _orderDetail = OrderDetail.fromJson(
+                data,
+                showStaffModel,
+                showCustomerModel,
+                showDistancePriceModel,
+                showStoreModel,
+                plant,
+                feedback,
+                _order);
+            list.add(_orderDetail!);
+          }
+        }
+        _detalList = list;
         result = true;
         notifyListeners();
       } else {

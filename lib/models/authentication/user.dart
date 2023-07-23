@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, non_constant_identifier_names
 
+import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/role.dart';
 
 class User {
@@ -47,6 +48,7 @@ class User {
     email = json['email'];
     fullName = json['fullName'];
     phone = json['phone'];
+    avatar = json['avatar'] ?? NoIMG;
   }
 
   Map<String, dynamic> toJson() {

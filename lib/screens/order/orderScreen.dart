@@ -330,7 +330,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  _rowInfor('Phone', order.phone),
+                                  _rowInfor('Số điện thoại', order.phone),
                                   const SizedBox(
                                     height: 10,
                                   ),

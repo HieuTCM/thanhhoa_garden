@@ -80,7 +80,8 @@ class _ListBonsaiState extends State<ListBonsai> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BonsaiDetail(bonsai: bonsai),
+          builder: (context) =>
+              BonsaiDetail(bonsaiID: bonsai.plantID, name: bonsai.name),
         ));
       },
       child: Container(

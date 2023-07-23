@@ -10,6 +10,7 @@ import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
+import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
@@ -85,8 +86,9 @@ class _SideBarState extends State<SideBar> {
                   (Route<dynamic> route) => false);
             },
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.home,
+                  size: 30,
+                  color: buttonColor,
                 )),
             _listTile('Xem cây cảnh', () {
               Navigator.pop(context);
@@ -95,15 +97,17 @@ class _SideBarState extends State<SideBar> {
               ));
             },
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.yard,
+                  size: 30,
+                  color: buttonColor,
                 )),
             _listTile(
                 'Xem Dịch Vụ',
                 () {},
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.cleaning_services_outlined,
+                  size: 30,
+                  color: buttonColor,
                 )),
             _listTile('Lịch Sử Mua Hàng', () {
               Navigator.pop(context);
@@ -112,22 +116,28 @@ class _SideBarState extends State<SideBar> {
               ));
             },
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.shopping_bag_outlined,
+                  size: 30,
+                  color: buttonColor,
                 )),
-            _listTile(
-                'Đánh Giá Của Tôi',
-                () {},
+            _listTile('Đánh Giá Của Tôi', () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ListFeedbackScreen(),
+              ));
+            },
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.feedback_outlined,
+                  size: 30,
+                  color: buttonColor,
                 )),
             _listTile(
                 'Thông Báo',
                 () {},
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.notifications_none_outlined,
+                  size: 30,
+                  color: buttonColor,
                 )),
             _listTile('Cơ Sở Thanh Hóa', () {
               Navigator.pop(context);
@@ -136,8 +146,9 @@ class _SideBarState extends State<SideBar> {
               ));
             },
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.location_on,
+                  size: 30,
+                  color: buttonColor,
                 )),
             _listTile('Đăng Xuất', () {
               authBloc.send(LogoutEvent());
@@ -145,8 +156,9 @@ class _SideBarState extends State<SideBar> {
                   MaterialPageRoute(builder: (context) => const LoginPage()));
             },
                 const Icon(
-                  Icons.abc,
-                  size: 40,
+                  Icons.arrow_circle_left_outlined,
+                  size: 30,
+                  color: buttonColor,
                 )),
           ],
         ),
@@ -158,7 +170,7 @@ class _SideBarState extends State<SideBar> {
     return ListTile(
       leading: icon,
       title:
-          Text(title, style: const TextStyle(color: lightText, fontSize: 17)),
+          Text(title, style: const TextStyle(color: lightText, fontSize: 18)),
       onTap: onTap,
       trailing: title != 'Thông Báo'
           ? null

@@ -238,7 +238,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                 'Hoàn thành xác nhận đơn hàng', 'Đã xác nhận', buttonColor),
             //đóng gói
             _timeLineDone(order, getDate(order.packageDate),
-                'Hoàn thành đống gói', 'Chờ vận chuyễn', buttonColor),
+                'Hoàn thành đóng gói', 'Đã đóng gói', buttonColor),
             //vận chuyễn
             _timeLineDone(order, getDate(order.packageDate), 'Đang vận chuyển',
                 'Nhân Viên: ${order.showStaffModel!.fullName}', buttonColor),
@@ -257,7 +257,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                 'Hoàn thành xác nhận đơn hàng', 'Đã xác nhận', buttonColor),
             //đóng gói
             _timeLineDone(order, getDate(order.packageDate),
-                'Hoàn thành đống gói', 'Chờ vận chuyễn', buttonColor),
+                'Hoàn thành đóng gói', 'Chờ vận chuyễn', buttonColor),
             //vận chuyễn
             _timeLineDone(order, getDate(order.deliveryDate), 'Đang vận chuyển',
                 'Nhân Viên: ${order.showStaffModel!.fullName}', buttonColor),

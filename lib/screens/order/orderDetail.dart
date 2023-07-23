@@ -8,7 +8,9 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
+import 'package:thanhhoa_garden/screens/feedback/feedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/order/deliveryScreen.dart';
+import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   OrderObject order;
@@ -450,7 +452,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         ? Row(
             children: [
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const OrderHistoryScreen(),
+                  ));
+                },
                 child: Container(
                   alignment: Alignment.center,
                   width: 100,

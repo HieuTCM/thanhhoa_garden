@@ -21,9 +21,24 @@ class FeedbackBloc {
 
   void send(FeedbackEvent event) async {
     switch (event.runtimeType) {
+      case GetAllFeedbackEventByPlantID:
+        _feedbackStateController.add(FeedbackLoading());
+
+        await _feedbackProvider.getAllFeedbackByPlantID(event).then((value) {
+          if (value) {
+            final listFeedback = _feedbackProvider.listFeedback;
+            _feedbackStateController
+                .add(ListFeedbackSuccess(listFeedback: listFeedback));
+          } else {
+            _feedbackStateController
+                .add(FeedbackFailure(errorMessage: 'Get Feedback List Failed'));
+          }
+        });
+        break;
       case GetAllFeedbackEvent:
         _feedbackStateController.add(FeedbackLoading());
-        await _feedbackProvider.getAllFeedback().then((value) {
+
+        await _feedbackProvider.getAllFeedback(event).then((value) {
           if (value) {
             final listFeedback = _feedbackProvider.listFeedback;
             _feedbackStateController

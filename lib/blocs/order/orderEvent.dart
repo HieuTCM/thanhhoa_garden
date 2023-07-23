@@ -22,8 +22,14 @@ abstract class OrderEvent {
   bool? _sortAsc;
   bool? get sortAsc => _sortAsc;
 
+  bool? _isFeedback;
+  bool? get isFeedback => _isFeedback;
+
   List<OrderObject>? _listOrder;
   List<OrderObject>? get listOrder => _listOrder;
+
+  List<OrderDetail>? _listOrderDetial;
+  List<OrderDetail>? get listOrderDetial => _listOrderDetial;
 }
 
 class GetAllOrderEvent extends OrderEvent {
@@ -41,6 +47,25 @@ class GetAllOrderEvent extends OrderEvent {
       required this.sortBy,
       required this.sortAsc,
       required this.listOrder})
+      : super();
+}
+
+class GetAllOrderDetailEvent extends OrderEvent {
+  bool isFeedback;
+  int pageNo;
+  int pageSize;
+  String sortBy;
+  bool sortAsc;
+
+  List<OrderDetail> listOrderDetial;
+
+  GetAllOrderDetailEvent(
+      {required this.isFeedback,
+      required this.pageNo,
+      required this.pageSize,
+      required this.sortBy,
+      required this.sortAsc,
+      required this.listOrderDetial})
       : super();
 }
 

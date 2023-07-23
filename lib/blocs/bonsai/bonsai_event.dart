@@ -56,8 +56,6 @@ class GetAllBonsaiEvent extends BonsaiEvent {
       : super();
 }
 
-class SearchBonsaiEvent extends BonsaiEvent {}
-
 class GetByIDBonsaiEvent extends BonsaiEvent {
   @override
   String? id;
