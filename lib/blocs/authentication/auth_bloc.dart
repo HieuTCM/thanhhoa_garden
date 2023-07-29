@@ -32,7 +32,7 @@ class AuthBloc {
           Map<String, String?> params =
               ({'username': event.user, 'password': event.pass});
           await _authProvider.login(params).then((success) async {
-            if (success) {
+            if (success == '') {
               await _authProvider.getUserInfor().then((value) {
                 if (value) {
                   final user = _authProvider.loggedInUser;
@@ -43,8 +43,7 @@ class AuthBloc {
                 }
               });
             } else {
-              _authStateController.add(AuthFailure(
-                  errorMessage: 'Tài khoản hoặc mật khẩu không đúng'));
+              _authStateController.add(AuthFailure(errorMessage: success));
             }
           });
         }

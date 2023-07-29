@@ -91,7 +91,7 @@ String scoreFeedback(int score) {
   }
 }
 
-String converDate(OrderObject order) {
+String convertDate(OrderObject order) {
   String result = order.createdDate.toString().substring(0, 10);
   switch (order.progressStatus) {
     case "WAITING":
@@ -144,5 +144,30 @@ List<String> listReason() {
 
 String getDate(String date) {
   DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
-  return date = DateFormat('MM/dd/yyyy hh:mm a').format(parseDate);
+  return date = DateFormat('dd/MM/yyyy hh:mm a').format(parseDate);
+}
+
+String formatDate1(DateTime date) {
+  String result;
+  return result = DateFormat('dd/MM/yyyy').format(date);
+}
+
+String formatDateStartDateContact(String date) {
+  DateTime parseDate = DateFormat("dd/MM/yyyy").parse(date);
+  return date = DateFormat('yyyy-MM-dd').format(parseDate);
+}
+
+String formatDateShow(String date) {
+  DateTime parseDate = DateFormat("yyyy-MM-dd").parse(date);
+  return date = DateFormat('dd/MM/yyyy').format(parseDate);
+}
+
+var f = NumberFormat("###,###,###", "en_US");
+String setPriceService(double price, int type, int pack, int months) {
+  return f.format(price * months + (price * type / 100) - (price * pack / 100));
+}
+
+int countMonths(DateTime date1, DateTime date2) {
+  int months = (date2.difference(date1).inDays / 31).ceil();
+  return months;
 }

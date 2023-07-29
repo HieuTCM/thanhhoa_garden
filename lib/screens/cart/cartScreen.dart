@@ -9,12 +9,16 @@ import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 
 import 'package:thanhhoa_garden/components/appBar.dart';
+import 'package:thanhhoa_garden/components/cart/listServiceCart_component.dart';
 import 'package:thanhhoa_garden/components/cart/listcart_component.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
+import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
+import 'package:thanhhoa_garden/screens/contract/confirmContactScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderScreen.dart';
+import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -24,16 +28,30 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  int indexStack = 0;
+  bool isSelected = false;
+
   var f = NumberFormat("###,###,###", "en_US");
   Map<String, int> listCart = {};
+
   double totalPrice = 0;
+  double totalPriceService = 0;
+
   int totalPlant = 0;
+  int totalService = 0;
+
   CartProvider cartProvider = CartProvider();
   late CartBloc cartBloc;
+
   List<OrderCart> listPlant = [];
   List<OrderCart> litsPlantinCart = [];
+
+  List<int> indexService = [];
+  List<ContactDetail> listContactDetail = [];
+  List<ContactDetail> listContactDetailSelect = [];
   @override
   void initState() {
+    getListService();
     cartBloc = Provider.of<CartBloc>(context, listen: false);
     getCart();
     super.initState();
@@ -43,6 +61,57 @@ class _CartScreenState extends State<CartScreen> {
     await cartProvider.getCart().then((value) {
       listPlant = cartProvider.list!;
     });
+  }
+
+  getListService() {
+    var json = getListContactDetailFromSharedPrefs();
+    for (var data in json) {
+      setState(() {
+        listContactDetail.add(ContactDetail.fromJson(data));
+      });
+    }
+  }
+
+  updateServiceCart(
+    String type,
+    int index,
+  ) {
+    switch (type) {
+      case 'add':
+        {
+          setState(() {
+            listContactDetailSelect.clear();
+            indexService.add(index);
+            totalService++;
+            totalPriceService =
+                totalPriceService + listContactDetail[index].totalPrice;
+          });
+          for (var index in indexService) {
+            setState(() {
+              listContactDetailSelect.add(listContactDetail[index]);
+            });
+          }
+        }
+        ;
+        break;
+      case 'remove':
+        {
+          setState(() {
+            listContactDetailSelect.clear();
+            indexService.remove(index);
+            totalService--;
+            totalPriceService =
+                totalPriceService - listContactDetail[index].totalPrice;
+          });
+          for (var index in indexService) {
+            setState(() {
+              listContactDetailSelect.add(listContactDetail[index]);
+            });
+          }
+        }
+        ;
+        break;
+    }
   }
 
   updatecart(
@@ -121,6 +190,29 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
+  Color checkTextColor(bool bool) {
+    if (bool) {
+      return HintIcon;
+    }
+    return lightText;
+  }
+
+  Color checkbackColor(bool bool) {
+    if (bool) {
+      return barColor;
+    }
+    return buttonColor;
+  }
+
+  checkSelect(int index) {
+    switch (index == indexStack) {
+      case true:
+        setState(() {
+          isSelected = !isSelected;
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -137,18 +229,91 @@ class _CartScreenState extends State<CartScreen> {
                 AppBarWiget(
                   title: 'Giỏ Hàng Của Bạn',
                 ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (indexStack == 1) {
+                                setState(() {
+                                  indexStack = 0;
+                                  checkSelect(0);
+                                });
+                              }
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(10),
+                              width: 150,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: checkbackColor(isSelected)),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Cây cảnh',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: checkTextColor(isSelected)),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (indexStack == 0) {
+                                setState(() {
+                                  indexStack = 1;
+                                  checkSelect(1);
+                                });
+                              }
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(10),
+                              width: 150,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: checkbackColor(!isSelected)),
+                              alignment: Alignment.center,
+                              child: Text('Dịch vụ',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: checkTextColor(!isSelected))),
+                            ),
+                          ),
+                        ])),
                 Container(
                   height: 10,
                   decoration: const BoxDecoration(color: divince),
                 ),
-                Expanded(
-                  child: Consumer<CartProvider>(
-                    builder: (context, value, _) {
-                      return LitsCart(
-                        callback: updatecart,
-                      );
-                    },
-                  ),
+                IndexedStack(
+                  index: indexStack,
+                  alignment: Alignment.topCenter,
+                  children: [
+                    SingleChildScrollView(
+                      child: Container(
+                        height: size.height - 250,
+                        child: Consumer<CartProvider>(
+                          builder: (context, value, _) {
+                            return LitsCart(
+                              callback: updatecart,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      child: Container(
+                        height: size.height - 250,
+                        child: ListCartService(
+                          callback: updateServiceCart,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   height: 10,
@@ -159,12 +324,16 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ]),
             ),
-            Positioned(top: size.height - 65, child: _floatingBar()),
+            Positioned(
+                top: size.height - 65,
+                child: (indexStack == 0)
+                    ? _floatingBarPlant()
+                    : _floatingBarService()),
           ],
         ));
   }
 
-  Widget _floatingBar() {
+  Widget _floatingBarPlant() {
     var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.all(10),
@@ -235,6 +404,74 @@ class _CartScreenState extends State<CartScreen> {
                   color: buttonColor, borderRadius: BorderRadius.circular(50)),
               child: const Text(
                 'Mua hàng',
+                style: TextStyle(
+                    color: lightText,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _floatingBarService() {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 65,
+      width: size.width,
+      decoration: const BoxDecoration(color: barColor),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 20,
+          ),
+          // Checkbox(
+          //   value: true,
+          //   onChanged: (value) {
+          //     if (value!) {}
+          //   },
+          // ),
+          // const Text('Tất cả',
+          //     style: TextStyle(
+          //         color: darkText, fontSize: 16, fontWeight: FontWeight.w500)),
+          const Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('Số dịch vụ $totalService',
+                  style: const TextStyle(
+                      color: darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500)),
+              Text('${f.format(totalPriceService)} đ',
+                  style: const TextStyle(
+                      color: priceColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500)),
+            ],
+          ),
+
+          GestureDetector(
+            onTap: () async {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ConfirmContactScreen(
+                    listContact: listContactDetailSelect,
+                    callback: () {},
+                    totalPriceService: totalPriceService,
+                    totalService: totalService),
+              ));
+            },
+            child: Container(
+              margin: const EdgeInsets.only(left: 10, right: 10),
+              width: 130,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: buttonColor, borderRadius: BorderRadius.circular(50)),
+              child: const Text(
+                'Tạo hợp đồng',
                 style: TextStyle(
                     color: lightText,
                     fontSize: 18,

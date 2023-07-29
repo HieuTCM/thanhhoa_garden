@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/authentication/role.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
+import 'package:thanhhoa_garden/models/service/service.dart';
 
 String getTokenAuthenFromSharedPrefs() {
   if (sharedPreferences.getString('Token') == null) {
@@ -17,4 +18,17 @@ User getCuctomerIDFromSharedPrefs() {
       jsonDecode(sharedPreferences.getString('User')!) as Map<String, dynamic>,
       role);
   return user;
+}
+
+List<Map<String, dynamic>> getListContactDetailFromSharedPrefs() {
+  if (sharedPreferences.getString('ContactDetail') == null) {
+    return [];
+  } else {
+    List<Map<String, dynamic>> list = [];
+    var json = jsonDecode(sharedPreferences.getString('ContactDetail')!);
+    for (var data in json['detailModelList']) {
+      list.add(data);
+    }
+    return list;
+  }
 }

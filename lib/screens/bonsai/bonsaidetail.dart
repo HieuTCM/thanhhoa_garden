@@ -13,6 +13,7 @@ import 'package:thanhhoa_garden/blocs/feedback/feedback_event.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_state.dart';
 
 import 'package:thanhhoa_garden/components/appBar.dart';
+import 'package:thanhhoa_garden/components/cart/cartButton.dart';
 import 'package:thanhhoa_garden/components/feedback/listfeedback_component.dart';
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
@@ -77,6 +78,9 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: Builder(builder: (context) {
+        return const CartButton();
+      }),
       backgroundColor: background,
       body: Stack(
         children: [

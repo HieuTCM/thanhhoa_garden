@@ -62,5 +62,9 @@ const createFeedbackDURL = '/feedback/createOrderFB';
 
 //rating
 const getRatingURL = '/feedback/getRating';
+
+//contact
+const createContactURL = '/contract/createContractCustomer';
+
 //enum
 const orderStatus = '/enum/order';

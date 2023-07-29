@@ -113,7 +113,7 @@ class _ListFeedbackComponentState extends State<ListFeedbackComponent> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                converDate(order.showOrderModel!),
+                                convertDate(order.showOrderModel!),
                                 maxLines: 1,
                                 style: const TextStyle(
                                   fontSize: 16,

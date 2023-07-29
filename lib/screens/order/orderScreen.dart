@@ -50,9 +50,9 @@ class _OrderScreenState extends State<OrderScreen> {
   MapController _mapController = MapController();
   List<LatLng> _routePoints = [];
   double _distance = 0.0;
-  double lat = 10.81471;
-  double long = 106.6773817;
-  var oneDecimal = const Duration(milliseconds: 100);
+  // double lat = 10.81471;
+  // double long = 106.6773817;
+  // var oneDecimal = const Duration(milliseconds: 100);
 
   AuthenticationProvider _authenticationProvider = AuthenticationProvider();
   StoreProvider _storeProvider = StoreProvider();
@@ -62,7 +62,7 @@ class _OrderScreenState extends State<OrderScreen> {
   UserObj.User? user;
   Distance distancePrice = Distance();
 
-  Map<String, dynamic> listDistance = {};
+  Map<String, double> listDistance = {};
   Map<String, dynamic> distance = {};
 
   LatLng origin = LatLng(0, 0);
@@ -144,16 +144,16 @@ class _OrderScreenState extends State<OrderScreen> {
     });
   }
 
-  Future<Map<String, double>> getDistanceNearBy() async {
-    Map<String, double> Distance = {};
+  Future<Map<String, dynamic>> getDistanceNearBy() async {
+    Map<String, dynamic> Distance = {};
     for (var store in listStore) {
       await getCoordinatesFromAddress(store.address).then((value) async {
         await getDistance(origin, value).then((value) {
-          listDistance[store.id] = value;
+          listDistance[store.id] = value + .0;
         });
       });
     }
-    double thevalue = listDistance.values.first ?? 0;
+    double thevalue = listDistance.values.first;
     String thekey = '';
     listDistance.forEach((k, v) {
       if (v < thevalue) {
@@ -173,10 +173,10 @@ class _OrderScreenState extends State<OrderScreen> {
       if (res.statusCode == 200) {
         var jsondata = json.decode(res.body);
 
-        distance = jsondata['routes'][0]['distance'] ?? 0;
+        distance = jsondata['routes'][0]['distance'] ?? 0.0;
       }
     } on HttpException catch (e) {}
-    return distance;
+    return distance + .0;
   }
 
   @override

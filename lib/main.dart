@@ -14,6 +14,7 @@ import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
 import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/store/storeBloc.dart';
+import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/bonsai_provider.dart';
@@ -99,7 +100,8 @@ class MyApp extends StatelessWidget {
         title: 'Thanh Hoa Garden',
         navigatorKey: navigatorKey,
         theme: ThemeData(
-          primarySwatch: Colors.cyan,
+          primaryColor: buttonColor,
+          primarySwatch: Colors.blue,
         ),
         home: const LoginPage(),
       ),

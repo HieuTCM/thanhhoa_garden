@@ -33,21 +33,7 @@ class ServiceProvider extends ChangeNotifier {
         if (res.body.isNotEmpty) {
           var jsondata = json.decode(res.body);
           for (var data in jsondata) {
-            List<ImageURL> imglist = [];
-            List<TypeService> typeList = [];
-            var listImge = data['imgList'];
-            for (var listdata in listImge) {
-              imglist.add(ImageURL.fromJson(listdata));
-            }
-            var listType = data['typeList'];
-            for (var data in listType) {
-              typeList.add(TypeService.fromJson(data));
-            }
-            if (imglist.isEmpty) {
-              ImageURL img = ImageURL(url: NoIMG);
-              imglist.add(img);
-            }
-            _service = Service.fromJson(data, typeList, imglist);
+            _service = Service.fromJson(data);
             list.add(_service!);
           }
         }

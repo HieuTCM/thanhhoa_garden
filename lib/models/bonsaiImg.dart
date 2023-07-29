@@ -10,4 +10,10 @@ class ImageURL {
     id = json["id"];
     url = json["url"];
   }
+  Map<String, dynamic> toJson(ImageURL imageURL) {
+    Map<String, dynamic> json = {};
+    json["id"] = imageURL.id;
+    json["url"] = imageURL.url;
+    return json;
+  }
 }

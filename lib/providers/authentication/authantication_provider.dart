@@ -22,8 +22,8 @@ class AuthenticationProvider extends ChangeNotifier {
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<bool> login(Map<String, String?> param) async {
-    bool result = false;
+  Future<String> login(Map<String, String?> param) async {
+    String result = 'Tài khoản hoặc mật khẩu không đúng';
     var body = json.encode(param);
     // String queryString = Uri(queryParameters: param).query;
     try {
@@ -33,9 +33,22 @@ class AuthenticationProvider extends ChangeNotifier {
           body: body);
       if (res.statusCode == 200) {
         var jsondata = json.decode(res.body);
-        sharedPreferences.setString('Token', jsondata['token']);
-        notifyListeners();
-        result = true;
+        if (jsondata['role'] == 'Customer') {
+          sharedPreferences.clear();
+          sharedPreferences.setString('Token', jsondata['token']);
+          notifyListeners();
+          result = '';
+        } else {
+          Fluttertoast.showToast(
+              msg: "Tài khoản bạn dùng  không có quyền truy cập ứng dụng",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          result = 'Tài khoản không có quyền truy cập';
+        }
       } else {
         Fluttertoast.showToast(
             msg: "Đăng nhập thất bại",

@@ -331,7 +331,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                converDate(order),
+                                convertDate(order),
                                 maxLines: 1,
                                 style: const TextStyle(
                                   fontSize: 16,

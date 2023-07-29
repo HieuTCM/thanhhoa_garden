@@ -164,7 +164,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             Row(
               children: [
                 const Text('Thời gian: '),
-                Text(converDate(order)),
+                Text(convertDate(order)),
               ],
             ),
             const SizedBox(

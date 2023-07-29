@@ -15,28 +15,22 @@ import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
-class ServiceDetail extends StatefulWidget {
-  Service service;
-  ServiceDetail({super.key, required this.service});
+class ContacDetailScreen extends StatefulWidget {
+  ContactDetail detail;
+  ContacDetailScreen({super.key, required this.detail});
 
   @override
-  State<ServiceDetail> createState() => _ServiceDetailState();
+  State<ContacDetailScreen> createState() => _ContacDetailScreenState();
 }
 
-class _ServiceDetailState extends State<ServiceDetail> {
+class _ContacDetailScreenState extends State<ContacDetailScreen> {
   var f = NumberFormat("###,###,###", "en_US");
   Service service = Service();
 
-  List<ServicePack> listServicePack = [];
-
   ServicePack servicePackSelect = ServicePack();
-
-  List<String>? selectDate = [];
+  TypeService typeService = TypeService();
 
   String totalPrice = '0';
-
-  ServiceProvider serviceProvider = ServiceProvider();
-  TypeService typeService = TypeService();
 
   TextEditingController _inforController = TextEditingController();
   TextEditingController _StartDateController = TextEditingController();
@@ -49,29 +43,14 @@ class _ServiceDetailState extends State<ServiceDetail> {
   DateTime? startDate;
   DateTime? endDate;
   void initState() {
-    startDate = DateTime.now();
-    endDate = startDate!.add(Duration(days: 30));
-    service = widget.service;
-    typeService = service.typeList!.first;
-    _StartDateController.text = formatDate1(startDate!);
-    _endDateController.text = formatDate1(endDate!);
-    getServicePack();
+    service = widget.detail.serviceModel!;
+    servicePackSelect = widget.detail.servicePackModel!;
+    typeService = widget.detail.serviceTypeModel!;
+    _inforController.text = widget.detail.note!;
+    _StartDateController.text = formatDateShow(widget.detail.startDate!);
+    _endDateController.text = formatDateShow(widget.detail.endDate!);
+    totalPrice = f.format(widget.detail.totalPrice);
     super.initState();
-  }
-
-  getServicePack() {
-    serviceProvider.getAllServicePack().then((value) {
-      setState(() {
-        listServicePack = serviceProvider.listSeriverPack!;
-        servicePackSelect = listServicePack.first;
-
-        totalPrice = setPriceService(
-            widget.service.price,
-            typeService.percentage,
-            servicePackSelect.percentage,
-            countMonths(startDate!, endDate!));
-      });
-    });
   }
 
   @override
@@ -215,7 +194,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 height: 10,
               ),
               _textFormField('Tên cây (vườn) của bạn', 'Nhập tên cây (vườn)',
-                  false, () {}, _inforController, 100),
+                  true, () {}, _inforController, null),
               const SizedBox(
                 height: 10,
               ),
@@ -226,7 +205,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
               const SizedBox(
                 height: 10,
               ),
-              _listSize(widget.service),
+              _listSize(service),
             ],
           ),
         )
@@ -243,34 +222,11 @@ class _ServiceDetailState extends State<ServiceDetail> {
         border: Border.all(color: buttonColor, width: 2),
         borderRadius: BorderRadius.circular(25.0),
       ),
-      child: DropdownButton<TypeService>(
-        isExpanded: false,
-        value: typeService,
-        icon: const Icon(Icons.arrow_downward),
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        onChanged: (TypeService? value) {
-          setState(() {
-            typeService = value!;
-            totalPrice = setPriceService(
-                widget.service.price,
-                typeService.percentage,
-                servicePackSelect.percentage,
-                countMonths(startDate!, endDate!));
-          });
-        },
-        items: service.typeList!
-            .map<DropdownMenuItem<TypeService>>((TypeService value) {
-          return DropdownMenuItem<TypeService>(
-            value: value,
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width - 130,
-                child: AutoSizeText(
-                    'Chiều cao (diện tích) ${value.size} (tăng ${value.percentage}%)',
-                    style: const TextStyle(fontSize: 18, color: buttonColor))),
-          );
-        }).toList(),
-      ),
+      child: SizedBox(
+          width: MediaQuery.of(context).size.width - 130,
+          child: AutoSizeText(
+              'Chiều cao (diện tích) ${typeService.size} (tăng ${typeService.percentage}%)',
+              style: const TextStyle(fontSize: 18, color: buttonColor))),
     );
   }
 
@@ -324,38 +280,14 @@ class _ServiceDetailState extends State<ServiceDetail> {
         border: Border.all(color: buttonColor, width: 2),
         borderRadius: BorderRadius.circular(25.0),
       ),
-      child: DropdownButton<ServicePack>(
-        isExpanded: false,
-        value: servicePackSelect,
-        icon: const Icon(Icons.arrow_downward),
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        onChanged: (ServicePack? pack) {
-          setState(() {
-            servicePackSelect = pack!;
-            getEndDate(startDate!, servicePackSelect);
-            totalPrice = setPriceService(
-                widget.service.price,
-                typeService.percentage,
-                servicePackSelect.percentage,
-                countMonths(startDate!, endDate!));
-          });
-        },
-        items: listServicePack
-            .map<DropdownMenuItem<ServicePack>>((ServicePack value) {
-          return DropdownMenuItem<ServicePack>(
-            value: value,
-            child: Container(
-                alignment: Alignment.centerLeft,
-                width: MediaQuery.of(context).size.width - 130,
-                height: 58,
-                child: AutoSizeText(
-                    'Thời gian ${value.range}'
-                    '(${value.percentage == 0 ? '' : 'ưu đãi  ${value.percentage} %)'}',
-                    style: const TextStyle(fontSize: 18, color: buttonColor))),
-          );
-        }).toList(),
-      ),
+      child: Container(
+          alignment: Alignment.centerLeft,
+          width: MediaQuery.of(context).size.width - 130,
+          height: 58,
+          child: AutoSizeText(
+              'Thời gian ${servicePackSelect.range}'
+              '(${servicePackSelect.percentage == 0 ? '' : 'ưu đãi  ${servicePackSelect.percentage} %)'}',
+              style: const TextStyle(fontSize: 18, color: buttonColor))),
     );
   }
 
@@ -401,7 +333,10 @@ class _ServiceDetailState extends State<ServiceDetail> {
                         const SizedBox(
                           height: 10,
                         ),
-                        _selectWorkingDate(),
+                        Text(
+                          widget.detail.timeWorking,
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ],
                     ),
               const SizedBox(
@@ -488,7 +423,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
       _endDateController.text = formatDate1(endDate!);
       print('Start : ' + _StartDateController.text);
       print('End: ' + _endDateController.text);
-      totalPrice = setPriceService(widget.service.price, typeService.percentage,
+      totalPrice = setPriceService(service.price, typeService.percentage,
           servicePackSelect.percentage, countMonths(startDate, endDate!));
     });
   }
@@ -539,11 +474,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 onConfirm: (values) {
                   _multiSelectKey.currentState!.validate();
                 },
-                onSelectionChanged: (p0) {
-                  setState(() {
-                    selectDate = p0.cast<String>();
-                  });
-                },
+                onSelectionChanged: (p0) {},
                 maxChildSize: 0.5,
                 chipDisplay: MultiSelectChipDisplay(
                   chipColor: buttonColor,
@@ -555,15 +486,6 @@ class _ServiceDetailState extends State<ServiceDetail> {
                   },
                 ),
               ),
-              selectDate == null || selectDate!.isEmpty
-                  ? Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Bạn chưa chọn ngày làm việc",
-                        style: TextStyle(color: Colors.black54),
-                      ))
-                  : Container(),
             ],
           ),
         ),
@@ -592,61 +514,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
             style: const TextStyle(
                 fontSize: 20, color: priceColor, fontWeight: FontWeight.w500),
           ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {
-              // print('trước 123 : ' +
-              //     sharedPreferences.getString('ContactDetail')!);
-              addContactService();
-            },
-            child: Container(
-              height: 45,
-              width: 150,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: buttonColor, borderRadius: BorderRadius.circular(50)),
-              child: const Text(
-                'Thêm dịch vụ ',
-                style: TextStyle(
-                    color: lightText,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          )
         ],
       ),
     );
-  }
-
-  addContactService() {
-    List<Map<String, dynamic>> listContactDetail =
-        getListContactDetailFromSharedPrefs();
-
-    if (_formKey.currentState!.validate()) {
-      ContactDetail contactDetail = ContactDetail(
-          note: _inforController.text,
-          timeWorking: selectDate!.toString(),
-          servicePackID: servicePackSelect.id,
-          serviceTypeID: typeService.id,
-          startDate: formatDateStartDateContact(_StartDateController.text),
-          totalPrice: double.parse(totalPrice.replaceAll(',', '')),
-          endDate: formatDateStartDateContact(_endDateController.text),
-          serviceModel: service,
-          servicePackModel: servicePackSelect,
-          serviceTypeModel: typeService);
-      listContactDetail.add(contactDetail.toJson(contactDetail));
-      Map<String, dynamic> map = Map<String, dynamic>();
-      map['detailModelList'] = listContactDetail;
-      sharedPreferences.setString('ContactDetail', json.encode(map));
-      Fluttertoast.showToast(
-          msg: "Thêm dịch vụ vào giỏ",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
   }
 }
