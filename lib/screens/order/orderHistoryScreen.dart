@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
@@ -14,12 +15,14 @@ import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
+import 'package:thanhhoa_garden/screens/contract/contactHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/feedback/feedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderDetail.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
-  const OrderHistoryScreen({super.key});
+  Function callback;
+  OrderHistoryScreen({super.key, required this.callback});
 
   @override
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
@@ -144,19 +147,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       body: Container(
         height: size.height,
         child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 35,
           ),
-          AppBarWiget(
-            title: 'Lịch Sử Của Bạn',
-          ),
-          Center(
-            child: Container(
-              height: 1,
-              width: 250,
-              decoration: const BoxDecoration(color: buttonColor),
-            ),
-          ),
+          AppBarWiget(title: 'Đơn Hàng Của Bạn', tail: _tailButton()),
+
           const SizedBox(
             height: 20,
           ),
@@ -205,7 +200,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   color: (selectedTab == index) ? buttonColor : barColor,
                   borderRadius: BorderRadius.circular(50)),
               margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              child: AutoSizeText(convertStatus(enumStatus[index]),
+              child: AutoSizeText(convertStatusOrder(enumStatus[index]),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w800,
@@ -311,7 +306,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         height: 10,
                       ),
                       Text(
-                        convertStatus(order.progressStatus!),
+                        convertStatusOrder(order.progressStatus!),
                         style: const TextStyle(color: priceColor, fontSize: 16),
                       ),
                       const SizedBox(
@@ -454,5 +449,35 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               )
             ],
           );
+  }
+
+  Widget _tailButton() {
+    return GestureDetector(
+      onTap: () {
+        widget.callback();
+      },
+      child: Stack(
+        children: [
+          Center(
+              child: SizedBox(
+            height: 40,
+            width: 35,
+            child: FaIcon(
+              FontAwesomeIcons.fileContract,
+              color: Colors.cyan.shade700,
+              size: 30,
+            ),
+          )),
+          const Positioned(
+              bottom: -10,
+              right: -5,
+              child: Icon(
+                Icons.compare_arrows_sharp,
+                color: buttonColor,
+                size: 40,
+              ))
+        ],
+      ),
+    );
   }
 }

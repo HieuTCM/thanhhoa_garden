@@ -11,6 +11,7 @@ import 'package:thanhhoa_garden/blocs/order/orderEvent.dart';
 import 'package:thanhhoa_garden/components/note.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
+import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class CancelOrderButton extends StatefulWidget {
@@ -130,7 +131,7 @@ class _CancelOrderButtonState extends State<CancelOrderButton> {
             borderRadius: BorderRadius.circular(50)),
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: AutoSizeText(
-            (status == 'WAITING') ? 'Hủy đơn' : convertStatus(status),
+            (status == 'WAITING') ? 'Hủy đơn' : convertStatusOrder(status),
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontWeight: FontWeight.w800,
@@ -194,10 +195,11 @@ class _CancelOrderButtonState extends State<CancelOrderButton> {
                         if (value) {
                           OverlayLoadingProgress.stop();
                           Navigator.pop(context);
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const OrderHistoryScreen()));
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => HistoryScreen(
+                                        index: 0,
+                                      )));
                           Fluttertoast.showToast(
                               msg: "Hủy đơn thành công",
                               toastLength: Toast.LENGTH_SHORT,

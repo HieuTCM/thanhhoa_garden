@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/main.dart';
+import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 

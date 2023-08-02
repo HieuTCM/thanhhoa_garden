@@ -14,6 +14,7 @@ import 'package:thanhhoa_garden/components/cart/listcart_component.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
+import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/screens/contract/confirmContactScreen.dart';
@@ -49,6 +50,7 @@ class _CartScreenState extends State<CartScreen> {
   List<int> indexService = [];
   List<ContactDetail> listContactDetail = [];
   List<ContactDetail> listContactDetailSelect = [];
+  List<int> listIndex = [];
   @override
   void initState() {
     getListService();
@@ -81,6 +83,7 @@ class _CartScreenState extends State<CartScreen> {
         {
           setState(() {
             listContactDetailSelect.clear();
+            listIndex.clear();
             indexService.add(index);
             totalService++;
             totalPriceService =
@@ -89,6 +92,7 @@ class _CartScreenState extends State<CartScreen> {
           for (var index in indexService) {
             setState(() {
               listContactDetailSelect.add(listContactDetail[index]);
+              listIndex.add(index);
             });
           }
         }
@@ -98,6 +102,7 @@ class _CartScreenState extends State<CartScreen> {
         {
           setState(() {
             listContactDetailSelect.clear();
+            listIndex.clear();
             indexService.remove(index);
             totalService--;
             totalPriceService =
@@ -106,6 +111,7 @@ class _CartScreenState extends State<CartScreen> {
           for (var index in indexService) {
             setState(() {
               listContactDetailSelect.add(listContactDetail[index]);
+              listIndex.add(index);
             });
           }
         }
@@ -459,6 +465,7 @@ class _CartScreenState extends State<CartScreen> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ConfirmContactScreen(
                     listContact: listContactDetailSelect,
+                    listIndex: listIndex,
                     callback: () {},
                     totalPriceService: totalPriceService,
                     totalService: totalService),

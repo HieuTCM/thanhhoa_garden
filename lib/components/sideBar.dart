@@ -11,6 +11,7 @@ import 'package:thanhhoa_garden/providers/authentication/authantication_provider
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
+import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
@@ -109,10 +110,10 @@ class _SideBarState extends State<SideBar> {
                   size: 30,
                   color: buttonColor,
                 )),
-            _listTile('Lịch Sử Mua Hàng', () {
+            _listTile('Lịch Sử Của Bạn', () {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const OrderHistoryScreen(),
+                builder: (context) => HistoryScreen(index: 0),
               ));
             },
                 const Icon(

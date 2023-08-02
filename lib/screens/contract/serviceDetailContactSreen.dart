@@ -11,19 +11,20 @@ import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/main.dart';
+import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
-class ContacDetailScreen extends StatefulWidget {
+class ServiceDetailContact extends StatefulWidget {
   ContactDetail detail;
-  ContacDetailScreen({super.key, required this.detail});
+  ServiceDetailContact({super.key, required this.detail});
 
   @override
-  State<ContacDetailScreen> createState() => _ContacDetailScreenState();
+  State<ServiceDetailContact> createState() => _ServiceDetailContactState();
 }
 
-class _ContacDetailScreenState extends State<ContacDetailScreen> {
+class _ServiceDetailContactState extends State<ServiceDetailContact> {
   var f = NumberFormat("###,###,###", "en_US");
   Service service = Service();
 
@@ -62,7 +63,6 @@ class _ContacDetailScreenState extends State<ContacDetailScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -295,24 +295,6 @@ class _ContacDetailScreenState extends State<ContacDetailScreen> {
     return Container(
       padding: const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 10,
-              width: 10,
-              decoration: BoxDecoration(
-                  color: buttonColor, borderRadius: BorderRadius.circular(50)),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            const Text(
-              'Chọn dịch vụ',
-              style: TextStyle(fontSize: 18),
-            )
-          ],
-        ),
         Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -327,7 +309,7 @@ class _ContacDetailScreenState extends State<ContacDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Chọn thời gian làm việc',
+                          'Thời gian làm việc',
                           style: TextStyle(fontSize: 18),
                         ),
                         const SizedBox(
@@ -343,7 +325,7 @@ class _ContacDetailScreenState extends State<ContacDetailScreen> {
                 height: 10,
               ),
               const Text(
-                'Chọn gói dịch vụ ',
+                'Gói dịch vụ ',
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(
@@ -354,16 +336,14 @@ class _ContacDetailScreenState extends State<ContacDetailScreen> {
                 height: 10,
               ),
               const Text(
-                'Chọn Ngày bắt đầu hợp đồng',
+                'Ngày bắt đầu hợp đồng',
                 style: TextStyle(fontSize: 18),
               ),
               const SizedBox(
                 height: 10,
               ),
               _textFormField('Ngày bắt đầu hợp đồng', 'Chọn ngày bắt đầu', true,
-                  () {
-                getStartDate();
-              }, _StartDateController, null),
+                  () {}, _StartDateController, null),
               const SizedBox(
                 height: 10,
               ),

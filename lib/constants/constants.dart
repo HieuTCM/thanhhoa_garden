@@ -42,7 +42,7 @@ const ErorText = Color(0xFFFD6B6B);
 const HintIcon = Color(0xFFA0A0A0);
 const priceColor = Color(0xFFBD5864);
 
-String convertStatus(String value) {
+String convertStatusOrder(String value) {
   String result = value;
   switch (value) {
     case "ALL":
@@ -71,6 +71,37 @@ String convertStatus(String value) {
       break;
     case "CUSTOMERCANCELED":
       result = 'Đã huỷ';
+      break;
+  }
+  return result;
+}
+
+String convertStatusContact(String value) {
+  String result = value;
+  switch (value) {
+    case "ALL":
+      result = 'Tất cả';
+      break;
+    case "WAITING":
+      result = 'Chờ xác nhận';
+      break;
+    case "CUSTOMERCANCELED":
+      result = 'Đã huỷ';
+      break;
+    case "DENIED":
+      result = 'Bị từ chối';
+      break;
+    case "WORKING":
+      result = 'Đang hoạt động';
+      break;
+    case "DONE":
+      result = 'Hoàn thành';
+      break;
+    case "APPROVED":
+      result = 'Đã xác nhận';
+      break;
+    case "SIGNED":
+      result = 'Đã ký';
       break;
   }
   return result;

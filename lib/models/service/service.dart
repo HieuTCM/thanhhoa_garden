@@ -9,6 +9,8 @@ class Service {
   late final name;
   late final price;
   late final status;
+  late final atHome;
+  late final priceID;
   List<ImageURL>? imgList;
   List<TypeService>? typeList;
 
@@ -19,6 +21,8 @@ class Service {
       this.price,
       this.status,
       this.imgList,
+      this.atHome,
+      this.priceID,
       this.typeList});
 
   Service.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,8 @@ class Service {
     name = json['name'];
     price = json['price'];
     status = json['status'];
+    atHome = json['atHome'];
+    priceID = json['priceID'];
     for (var data in json['imgList']) {
       Img.add(ImageURL.fromJson(data));
     }
@@ -41,6 +47,14 @@ class Service {
     }
     typeList = Type;
   }
+  Service.fromJson2(Map<String, dynamic> json) {
+    serviceID = json['id'];
+    name = json['name'];
+    description = json['description'];
+    priceID = json['priceID'];
+    price = json['price'];
+    atHome = json['atHome'];
+  }
   Map<String, dynamic> toJson(Service service) {
     Map<String, dynamic> json = {};
     List<Map<String, dynamic>> listImg = [];
@@ -50,6 +64,8 @@ class Service {
     json["name"] = service.name;
     json["price"] = service.price;
     json["status"] = service.status;
+    json["atHome"] = service.atHome;
+    json["priceID"] = service.priceID;
     for (var data in service.imgList!) {
       listImg.add(ImageURL().toJson(data));
     }
@@ -66,6 +82,7 @@ class TypeService {
   late final id;
   late final name;
   late final size;
+  late final unit;
   late final percentage;
   late final applyDate;
   late final serviceID;
@@ -73,6 +90,7 @@ class TypeService {
       {this.id,
       this.name,
       this.size,
+      this.unit,
       this.applyDate,
       this.serviceID,
       this.percentage});
@@ -81,15 +99,25 @@ class TypeService {
     id = json['id'];
     name = json['name'];
     size = json['size'];
+    unit = json['unit'];
     percentage = json['percentage'];
     applyDate = json['applyDate'];
     serviceID = json['serviceID'];
+  }
+  TypeService.fromJson2(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['typeName'];
+    size = json['typeSize'];
+    unit = json['typeUnit'];
+    percentage = json['typePercentage'];
+    applyDate = json['typeApplyDate'];
   }
   Map<String, dynamic> toJson(TypeService typeService) {
     Map<String, dynamic> json = {};
     json['id'] = typeService.id;
     json['name'] = typeService.name;
     json['size'] = typeService.size;
+    json['unit'] = typeService.unit;
     json['percentage'] = typeService.percentage;
     json['applyDate'] = typeService.applyDate;
     json['serviceID'] = typeService.serviceID;
@@ -100,94 +128,42 @@ class TypeService {
 class ServicePack {
   late final id;
   late final range;
+  late final unit;
   late final percentage;
   late final applyDate;
   late final status;
 
   ServicePack(
-      {this.id, this.status, this.range, this.percentage, this.applyDate});
+      {this.id,
+      this.status,
+      this.range,
+      this.unit,
+      this.percentage,
+      this.applyDate});
 
   ServicePack.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     range = json['range'];
+    unit = json['unit'];
     percentage = json['percentage'];
     applyDate = json['applyDate'];
     status = json['status'];
+  }
+  ServicePack.fromJsonModel(Map<String, dynamic> json) {
+    id = json['id'];
+    range = json['packRange'];
+    unit = json['packUnit'];
+    percentage = json['packPercentage'];
+    applyDate = json['packApplyDate'];
   }
   Map<String, dynamic> toJson(ServicePack servicePack) {
     Map<String, dynamic> json = {};
     json['id'] = servicePack.id;
     json['range'] = servicePack.range;
+    json['unit'] = servicePack.unit;
     json['percentage'] = servicePack.percentage;
     json['applyDate'] = servicePack.applyDate;
     json['status'] = servicePack.status;
-    return json;
-  }
-}
-
-class ContactDetail {
-  late final note;
-  late final timeWorking;
-  late final totalPrice;
-  late final servicePackID;
-  late final serviceTypeID;
-  late final startDate;
-  late final endDate;
-  late Service? serviceModel;
-  late TypeService? serviceTypeModel;
-  late ServicePack? servicePackModel;
-
-  ContactDetail(
-      {this.endDate,
-      this.startDate,
-      this.note,
-      this.servicePackID,
-      this.serviceTypeID,
-      this.timeWorking,
-      this.totalPrice,
-      this.serviceModel,
-      this.serviceTypeModel,
-      this.servicePackModel});
-
-  ContactDetail.fromJson(Map<String, dynamic> json) {
-    note = json['note'];
-    timeWorking = json['timeWorking'];
-    totalPrice = json['totalPrice'];
-    servicePackID = json['servicePackID'];
-    serviceTypeID = json['serviceTypeID'];
-    startDate = json['startDate'];
-    endDate = json['endDate'];
-    serviceModel = Service.fromJson(json['serviceModel']);
-    serviceTypeModel = TypeService.fromJson(json['serviceTypeModel']);
-    servicePackModel = ServicePack.fromJson(json['servicePackModel']);
-  }
-
-  Map<String, dynamic> toJson(ContactDetail contactDetail) {
-    Map<String, dynamic> json = {};
-    json['note'] = contactDetail.note;
-    json['timeWorking'] = contactDetail.timeWorking;
-    json['totalPrice'] = contactDetail.totalPrice;
-    json['servicePackID'] = contactDetail.servicePackID;
-    json['serviceTypeID'] = contactDetail.serviceTypeID;
-    json['startDate'] = contactDetail.startDate;
-    json['endDate'] = contactDetail.endDate;
-    json['serviceModel'] = Service().toJson(contactDetail.serviceModel!);
-    json['serviceTypeModel'] =
-        TypeService().toJson(contactDetail.serviceTypeModel!);
-    json['servicePackModel'] =
-        ServicePack().toJson(contactDetail.servicePackModel!);
-    return json;
-  }
-
-  Map<String, dynamic> toJsonRequest(ContactDetail contactDetail) {
-    Map<String, dynamic> json = {};
-    json['note'] = contactDetail.note;
-    json['timeWorking'] = contactDetail.timeWorking;
-    json['totalPrice'] = contactDetail.totalPrice;
-    json['servicePackID'] = contactDetail.servicePackID;
-    json['serviceTypeID'] = contactDetail.serviceTypeID;
-    json['startDate'] = contactDetail.startDate;
-    json['endDate'] = contactDetail.endDate;
     return json;
   }
 }

@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,16 +15,17 @@ import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
-import 'package:thanhhoa_garden/providers/contract/contact_provider.dart';
+import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
-import 'package:thanhhoa_garden/screens/contract/contractdetail.dart';
-import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
+import 'package:thanhhoa_garden/screens/contract/serviceDetailContactSreen.dart';
+import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ConfirmContactScreen extends StatefulWidget {
   Function callback;
   List<ContactDetail> listContact;
+  List<int> listIndex;
   int totalService;
   double totalPriceService;
   ConfirmContactScreen(
@@ -35,6 +33,7 @@ class ConfirmContactScreen extends StatefulWidget {
       required this.listContact,
       required this.callback,
       required this.totalPriceService,
+      required this.listIndex,
       required this.totalService});
 
   @override
@@ -238,12 +237,8 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
           _textFormField("Số điện thoại khách hàng", 'Nhập số điện thoại',
               false, null, _phoneController),
           //address
-          _textFormField(
-              "Địa chỉ giao hàng", 'Bấm vào đây để chọn địa chỉ !!!', true, () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => MapScreen(callback: setAdress),
-            ));
-          }, _addressController),
+          _textFormField("Địa chỉ giao hàng", 'Bấm vào đây để chọn địa chỉ !!!',
+              false, null, _addressController),
         ]);
   }
 
@@ -299,7 +294,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ContacDetailScreen(detail: detail),
+          builder: (context) => ServiceDetailContact(detail: detail),
         ));
       },
       child: Column(children: [
@@ -406,15 +401,6 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
           const SizedBox(
             width: 20,
           ),
-          // Checkbox(
-          //   value: true,
-          //   onChanged: (value) {
-          //     if (value!) {}
-          //   },
-          // ),
-          // const Text('Tất cả',
-          //     style: TextStyle(
-          //         color: darkText, fontSize: 16, fontWeight: FontWeight.w500)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -459,13 +445,17 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                             fontSize: 16.0);
                         List<Map<String, dynamic>> listContactDetail =
                             getListContactDetailFromSharedPrefs();
-                        for (var data in widget.listContact) {
-                          listContactDetail.remove(data);
+                        for (var data in widget.listIndex) {
+                          listContactDetail.removeAt(data);
                         }
                         Map<String, dynamic> map = Map<String, dynamic>();
                         map['detailModelList'] = listContactDetail;
                         sharedPreferences.setString(
                             'ContactDetail', json.encode(map));
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => HistoryScreen(index: 1),
+                        ));
                       } else {
                         Fluttertoast.showToast(
                             msg: "Tạo hợp đồng thất bại",

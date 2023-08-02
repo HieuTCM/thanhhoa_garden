@@ -11,6 +11,7 @@ import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/main.dart';
+import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
@@ -350,7 +351,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 width: MediaQuery.of(context).size.width - 130,
                 height: 58,
                 child: AutoSizeText(
-                    'Thời gian ${value.range}'
+                    'Thời gian ${value.range} ${value.unit}'
                     '(${value.percentage == 0 ? '' : 'ưu đãi  ${value.percentage} %)'}',
                     style: const TextStyle(fontSize: 18, color: buttonColor))),
           );
@@ -463,19 +464,38 @@ class _ServiceDetailState extends State<ServiceDetail> {
   }
 
   getEndDate(DateTime startDate, ServicePack servicePack) async {
-    switch (servicePack.range) {
-      case '1 tháng':
-        endDate = startDate.add(const Duration(days: 30));
-        break;
-      case '3 tháng':
-        endDate = startDate.add(const Duration(days: 90));
-        break;
-      case '6 tháng':
-        endDate = startDate.add(const Duration(days: 180));
-        break;
-      case '1 năm':
-        endDate = startDate.add(const Duration(days: 365));
-        break;
+    switch (servicePack.unit) {
+      case 'tháng':
+        {
+          switch (servicePack.range) {
+            case '1':
+              endDate = startDate.add(const Duration(days: 30));
+              break;
+            case '3':
+              endDate = startDate.add(const Duration(days: 90));
+              break;
+            case '6':
+              endDate = startDate.add(const Duration(days: 180));
+              break;
+          }
+          break;
+        }
+      case 'năm':
+        {
+          switch (servicePack.range) {
+            case '1':
+              endDate = startDate.add(const Duration(days: 365));
+              break;
+            default:
+              endDate = await showDatePicker(
+                  helpText: 'Chọn ngày kết thúc hợp đồng',
+                  context: context,
+                  initialDate: startDate.add(const Duration(days: 366)),
+                  firstDate: startDate.add(const Duration(days: 366)),
+                  lastDate: DateTime(2101));
+          }
+          break;
+        }
       default:
         endDate = await showDatePicker(
             helpText: 'Chọn ngày kết thúc hợp đồng',
@@ -626,7 +646,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
     if (_formKey.currentState!.validate()) {
       ContactDetail contactDetail = ContactDetail(
           note: _inforController.text,
-          timeWorking: selectDate!.toString(),
+          timeWorking:
+              selectDate!.toString().replaceAll(RegExp(r'[\[*\]]'), ''),
           servicePackID: servicePackSelect.id,
           serviceTypeID: typeService.id,
           startDate: formatDateStartDateContact(_StartDateController.text),
@@ -647,6 +668,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
+      _inforController.clear();
     }
   }
 }

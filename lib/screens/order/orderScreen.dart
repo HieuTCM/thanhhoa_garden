@@ -25,6 +25,7 @@ import 'package:thanhhoa_garden/models/store/store.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
+import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
@@ -512,7 +513,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                         Navigator.of(context)
                                             .pushReplacement(MaterialPageRoute(
                                           builder: (context) =>
-                                              const OrderHistoryScreen(),
+                                              HistoryScreen(index: 0),
                                         ));
                                       } else {
                                         Fluttertoast.showToast(

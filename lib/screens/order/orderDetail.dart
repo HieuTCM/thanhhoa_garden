@@ -9,6 +9,7 @@ import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/screens/feedback/feedbackScreen.dart';
+import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/order/deliveryScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
@@ -155,7 +156,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             Row(
               children: [
                 const Text('Trạng Thái :'),
-                Text(convertStatus(order.progressStatus)),
+                Text(convertStatusOrder(order.progressStatus)),
               ],
             ),
             const SizedBox(
@@ -454,7 +455,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const OrderHistoryScreen(),
+                    builder: (context) => HistoryScreen(index: 0),
                   ));
                 },
                 child: Container(

@@ -3,6 +3,7 @@ class OrderCart {
   late final plantID;
   late int? quantity;
   late final plantName;
+  late final plantPriceID;
   late double? plantPrice;
   late final image;
   late double? shipPrice;
@@ -14,6 +15,7 @@ class OrderCart {
       this.image,
       this.shipPrice,
       this.plantName,
+      this.plantPriceID,
       this.plantPrice});
 
   OrderCart.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,7 @@ class OrderCart {
     plantID = json["plantID"];
     quantity = json["quantity"];
     plantName = json["plantName"];
+    plantPriceID = json["plantPriceID"];
     plantPrice = json["plantPrice"];
     shipPrice = json["shipPrice"];
     image = json["image"];

@@ -31,7 +31,7 @@ class FeedbackBloc {
                 .add(ListFeedbackSuccess(listFeedback: listFeedback));
           } else {
             _feedbackStateController
-                .add(FeedbackFailure(errorMessage: 'Get Feedback List Failed'));
+                .add(FeedbackFailure(errorMessage: 'Không tìm thấy đánh giá'));
           }
         });
         break;
@@ -45,7 +45,7 @@ class FeedbackBloc {
                 .add(ListFeedbackSuccess(listFeedback: listFeedback));
           } else {
             _feedbackStateController
-                .add(FeedbackFailure(errorMessage: 'Get Feedback List Failed'));
+                .add(FeedbackFailure(errorMessage: 'Không tìm thấy đánh giá'));
           }
         });
         break;

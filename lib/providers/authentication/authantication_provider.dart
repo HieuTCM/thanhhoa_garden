@@ -40,7 +40,7 @@ class AuthenticationProvider extends ChangeNotifier {
           result = '';
         } else {
           Fluttertoast.showToast(
-              msg: "Tài khoản bạn dùng  không có quyền truy cập ứng dụng",
+              msg: "Tài khoản bạn dùng không có quyền truy cập ứng dụng",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,

@@ -65,6 +65,9 @@ const getRatingURL = '/feedback/getRating';
 
 //contact
 const createContactURL = '/contract/createContractCustomer';
+const getContactURL = '/contract/byCustomerTokenAndStatus?';
+const getContactDetailURL = '/contract/contractDetail/';
 
 //enum
 const orderStatus = '/enum/order';
+const contactStatus = '/enum/contract';

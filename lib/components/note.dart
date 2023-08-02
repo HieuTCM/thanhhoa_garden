@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Future<void> _makePhoneCall(String phoneNumber) async {
+Future<void> makePhoneCall(String phoneNumber) async {
   final Uri launchUri = Uri(
     scheme: 'tel',
     path: phoneNumber,
@@ -121,7 +121,7 @@ class _NoteOrderState extends State<NoteOrder> {
                     children: [
                       TextSpan(
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => _makePhoneCall(phone!),
+                          ..onTap = () => makePhoneCall(phone!),
                         text: ' chúng tôi ',
                         style: const TextStyle(
                             color: Colors.blue,
@@ -289,7 +289,7 @@ class _NoteCancelOrderState extends State<NoteCancelOrder> {
                               ' vẫn chưa được liên hệ gửi lại tiền, vui lòng  '),
                       TextSpan(
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => _makePhoneCall(phone!),
+                            ..onTap = () => makePhoneCall(phone!),
                           text: 'liên hệ chúng tôi',
                           style: const TextStyle(
                               color: Colors.blue,

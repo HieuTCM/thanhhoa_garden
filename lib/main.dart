@@ -10,6 +10,7 @@ import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
 
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_bloc.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
+import 'package:thanhhoa_garden/blocs/contract/contactBloc.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
 import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
@@ -20,6 +21,7 @@ import 'package:thanhhoa_garden/providers/authentication/authantication_provider
 import 'package:thanhhoa_garden/providers/bonsai/bonsai_provider.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/category_provider.dart';
+import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
@@ -71,6 +73,7 @@ class MyApp extends StatelessWidget {
         ListenableProvider<FeedbackProvider>(create: (_) => FeedbackProvider()),
         ListenableProvider<StoreProvider>(create: (_) => StoreProvider()),
         ListenableProvider<OrderProvider>(create: (_) => OrderProvider()),
+        ListenableProvider<ContactProvider>(create: (_) => ContactProvider()),
         ProxyProvider<AuthenticationProvider, AuthBloc>(
           update: (_, authProvider, __) => AuthBloc(authProvider: authProvider),
         ),
@@ -95,6 +98,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<OrderProvider, OrderBloc>(
             update: (_, orderProvider, __) =>
                 OrderBloc(OrderProvider: orderProvider)),
+        ProxyProvider<ContactProvider, ContactBloc>(
+            update: (_, contactProvider, __) =>
+                ContactBloc(ContactProvider: contactProvider)),
       ],
       child: MaterialApp(
         title: 'Thanh Hoa Garden',

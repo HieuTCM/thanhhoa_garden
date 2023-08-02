@@ -179,7 +179,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                 order,
                 getDate(order.createdDate),
                 'Hoàn thành đặt mua đơn hàng',
-                convertStatus(order.progressStatus),
+                convertStatusOrder(order.progressStatus),
                 priceColor),
             //đã xác nhận
             _timeLine(order, 'Hoàn thành xác nhận đơn hàng', 'Chờ xác nhận'),

@@ -93,7 +93,8 @@ class _ListFeedbackComponentState extends State<ListFeedbackComponent> {
                         height: 10,
                       ),
                       Text(
-                        convertStatus(order.showOrderModel!.progressStatus!),
+                        convertStatusOrder(
+                            order.showOrderModel!.progressStatus!),
                         style: const TextStyle(color: priceColor, fontSize: 16),
                       ),
                       const SizedBox(
