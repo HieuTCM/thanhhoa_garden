@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
@@ -17,6 +21,7 @@ import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
+import 'package:thanhhoa_garden/providers/img_provider.dart';
 import 'package:thanhhoa_garden/screens/contract/confirmContactScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderScreen.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
@@ -224,7 +229,8 @@ class _CartScreenState extends State<CartScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: background,
-        body: Stack(
+        body: SingleChildScrollView(
+            child: Stack(
           children: [
             Container(
               height: size.height,
@@ -299,16 +305,14 @@ class _CartScreenState extends State<CartScreen> {
                   index: indexStack,
                   alignment: Alignment.topCenter,
                   children: [
-                    SingleChildScrollView(
-                      child: Container(
-                        height: size.height - 250,
-                        child: Consumer<CartProvider>(
-                          builder: (context, value, _) {
-                            return LitsCart(
-                              callback: updatecart,
-                            );
-                          },
-                        ),
+                    Container(
+                      height: size.height - 250,
+                      child: Consumer<CartProvider>(
+                        builder: (context, value, _) {
+                          return LitsCart(
+                            callback: updatecart,
+                          );
+                        },
                       ),
                     ),
                     SingleChildScrollView(
@@ -336,7 +340,7 @@ class _CartScreenState extends State<CartScreen> {
                     ? _floatingBarPlant()
                     : _floatingBarService()),
           ],
-        ));
+        )));
   }
 
   Widget _floatingBarPlant() {

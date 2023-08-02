@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:popup_banner/popup_banner.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/button.dart';
 import 'package:thanhhoa_garden/components/note.dart';
@@ -124,6 +125,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 height: 10,
                 decoration: const BoxDecoration(color: divince),
               ),
+              (widget.order.receiptIMG != null)
+                  ? _tranferTab()
+                  : const SizedBox(),
               const SizedBox(
                 height: 10,
               ),
@@ -410,6 +414,58 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             widget.order.showStoreModel!.address,
             style: const TextStyle(color: darkText, fontSize: 16),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _tranferTab() {
+    var size = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: const Text(
+                'Xác nhận thanh toán : ',
+                style: TextStyle(
+                    color: darkText, fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                PopupBanner(
+                  fit: BoxFit.contain,
+                  // height: size.height * 0.7,
+                  context: context,
+                  images: [widget.order.receiptIMG],
+                  autoSlide: false,
+                  dotsAlignment: Alignment.bottomCenter,
+                  dotsColorActive: buttonColor,
+                  dotsColorInactive: Colors.grey.withOpacity(0.5),
+                  onClick: (index) {
+                    debugPrint("CLICKED $index");
+                  },
+                ).show();
+              },
+              child: Container(
+                  margin: const EdgeInsets.all(5),
+                  height: (size.width / 5) - 20,
+                  width: (size.width / 5) - 20,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: NetworkImage(widget.order.receiptIMG)),
+                  )),
+            ),
+          ],
+        ),
+        Container(
+          height: 10,
+          decoration: const BoxDecoration(color: divince),
         ),
       ],
     );

@@ -273,6 +273,7 @@ class _LitsCartState extends State<LitsCart> {
                                                           int.parse(
                                                               _amountController
                                                                   .text)));
+                                                      ;
                                                     }
                                                   },
                                                 ),
