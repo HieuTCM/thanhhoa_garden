@@ -12,7 +12,6 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
-import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
@@ -23,11 +22,11 @@ import 'package:http/http.dart' as http;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ConfirmContactScreen extends StatefulWidget {
-  Function callback;
-  List<ContactDetail> listContact;
-  List<int> listIndex;
-  int totalService;
-  double totalPriceService;
+  final Function callback;
+  final List<ContactDetail> listContact;
+  final List<int> listIndex;
+  final int totalService;
+  final double totalPriceService;
   ConfirmContactScreen(
       {super.key,
       required this.listContact,
@@ -51,7 +50,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
   AuthenticationProvider _authenticationProvider = AuthenticationProvider();
 
   LatLng origin = LatLng(0, 0);
-  double _distance = 0.0;
+  // double _distance = 0.0;
 
   List<Store> listStore = [];
 
@@ -152,7 +151,9 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
 
         distance = jsondata['routes'][0]['distance'] ?? 0.0;
       }
-    } on HttpException catch (e) {}
+    } on HttpException catch (e) {
+      print(e.message);
+    }
     return distance + .0;
   }
 

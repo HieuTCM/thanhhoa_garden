@@ -6,9 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 
 class AppBarWiget extends StatefulWidget {
-  Widget? midle;
-  Widget? tail;
-  String? title;
+  final Widget? midle;
+  final Widget? tail;
+  final String? title;
   AppBarWiget({super.key, this.midle, this.tail, this.title});
 
   @override

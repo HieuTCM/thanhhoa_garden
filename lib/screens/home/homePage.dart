@@ -20,8 +20,6 @@ import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/components/cart/cartButton.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/main.dart';
-import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
@@ -354,7 +352,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _listService(List<Service>? listService) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     return Container(
         padding: const EdgeInsets.all(10),
         child: ListView.builder(

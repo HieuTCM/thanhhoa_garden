@@ -1,17 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
-import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ListCartService extends StatefulWidget {
-  Function callback;
+  final Function callback;
   ListCartService({super.key, required this.callback});
 
   @override

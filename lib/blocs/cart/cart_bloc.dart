@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
 
-import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 
 class CartBloc {

@@ -1,23 +1,18 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/main.dart';
+
 import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
-import 'package:thanhhoa_garden/providers/service/service_provider.dart';
-import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ServiceDetailContact extends StatefulWidget {
-  ContactDetail detail;
+  final ContactDetail detail;
   ServiceDetailContact({super.key, required this.detail});
 
   @override
@@ -247,6 +242,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
                 if (value!.isEmpty) {
                   return 'Vui lòng đủ thông tin';
                 }
+                return null;
               },
               decoration: InputDecoration(
                 labelText: label,
@@ -450,6 +446,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
                   if (value.length == 0) {
                     return "Bạn chưa chọn ngày làm việc";
                   }
+                  return null;
                 },
                 onConfirm: (values) {
                   _multiSelectKey.currentState!.validate();

@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_event.dart';
@@ -14,7 +12,6 @@ import 'package:thanhhoa_garden/blocs/bonsai/category/cate_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_event.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/category/cate_state.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
-import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/bonsai/listBonsai_Component.dart';
 import 'package:thanhhoa_garden/components/cart/cartButton.dart';
@@ -22,7 +19,6 @@ import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
-import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 
 class SearchScreen extends StatefulWidget {
   // StreamSubscription<CartState>? cartStateSubscription;

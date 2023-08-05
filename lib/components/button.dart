@@ -5,20 +5,17 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
-import 'package:provider/provider.dart';
-import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
 import 'package:thanhhoa_garden/blocs/order/orderEvent.dart';
 import 'package:thanhhoa_garden/components/note.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
-import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class CancelOrderButton extends StatefulWidget {
-  String status;
-  String phone;
-  String orderid;
-  String totalPrice;
+  final String status;
+  final String phone;
+  final String orderid;
+  final String totalPrice;
   CancelOrderButton(
       {super.key,
       required this.status,
@@ -141,7 +138,7 @@ class _CancelOrderButtonState extends State<CancelOrderButton> {
   }
 
   dynamic showdialogConfirm() {
-    var phone = widget.phone;
+    // var phone = widget.phone;
     var size = MediaQuery.of(context).size;
     return showDialog(
         context: context,

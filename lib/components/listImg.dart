@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 
 class ListImg extends StatefulWidget {
-  List<ImageURL> listImage;
+  final List<ImageURL> listImage;
   ListImg({super.key, required this.listImage});
 
   @override

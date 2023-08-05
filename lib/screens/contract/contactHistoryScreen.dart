@@ -12,13 +12,11 @@ import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
-import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/screens/contract/contactDetail.dart';
-import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class ContactHistorySreen extends StatefulWidget {
-  Function callBack;
+  final Function callBack;
   ContactHistorySreen({super.key, required this.callBack});
 
   @override

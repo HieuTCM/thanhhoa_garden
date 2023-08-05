@@ -8,7 +8,6 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder2/geocoder2.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +16,6 @@ import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:thanhhoa_garden/models/order/distance.dart';
@@ -28,14 +26,12 @@ import 'package:thanhhoa_garden/providers/img_provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
-import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
-import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 class OrderScreen extends StatefulWidget {
-  List<OrderCart> listPlant;
+  final List<OrderCart> listPlant;
   OrderScreen({super.key, required this.listPlant});
 
   @override
@@ -50,9 +46,9 @@ class _OrderScreenState extends State<OrderScreen> {
   TextEditingController _addressController = TextEditingController();
   late CartBloc cartBloc;
 
-  MapController _mapController = MapController();
-  List<LatLng> _routePoints = [];
-  double _distance = 0.0;
+  // MapController _mapController = MapController();
+  // List<LatLng> _routePoints = [];
+  // double _distance = 0.0;
   // double lat = 10.81471;
   // double long = 106.6773817;
   // var oneDecimal = const Duration(milliseconds: 100);
@@ -178,7 +174,9 @@ class _OrderScreenState extends State<OrderScreen> {
 
         distance = jsondata['routes'][0]['distance'] ?? 0.0;
       }
-    } on HttpException catch (e) {}
+    } on HttpException catch (e) {
+      print(e.message);
+    }
     return distance + .0;
   }
 
@@ -190,7 +188,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: background,
       body: Stack(
@@ -303,17 +301,19 @@ class _OrderScreenState extends State<OrderScreen> {
                           fontSize: 16.0);
                     } else {
                       List<Map<String, dynamic>> plant = [];
+
                       String method = COD ? 'Offline' : 'Online';
+                      String Img = COD ? '' : imgURL[0];
                       double dis = distance.values.first;
+
                       OrderObject order = OrderObject(
                           fullName: _nameController.text,
                           email: _emailController.text,
                           phone: _phoneController.text,
                           address: _addressController.text,
                           paymentMethod: method,
-                          receiptIMG: imgURL[0],
+                          receiptIMG: Img,
                           distance: dis);
-
                       for (var data in widget.listPlant) {
                         plant.add(data.toJson());
                       }

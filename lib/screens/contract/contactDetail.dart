@@ -17,10 +17,9 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
-import 'package:thanhhoa_garden/screens/contract/serviceDetailContactSreen.dart';
 
 class ContactDetailScreen extends StatefulWidget {
-  Contact? contact;
+  final Contact? contact;
   ContactDetailScreen({super.key, required this.contact});
 
   @override
@@ -349,7 +348,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   Widget _customerTab(User customer) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(

@@ -110,6 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (value.isEmpty) {
       return 'Nhập Username';
     }
+    return null;
   }
 
   String? errorAddress;
@@ -117,6 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (value.isEmpty) {
       return 'Nhập địa chỉ của bạn';
     }
+    return null;
   }
 
   String? errorPassword;
@@ -126,6 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } else if (value.length < 8) {
       return 'Mật khậu phải từ 8 kí tự trở lên';
     }
+    return null;
   }
 
   String? errorConformPass;
@@ -135,6 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } else if (value != _passwordController.text) {
       return 'Mật khẩu không trùng khớp';
     }
+    return null;
   }
 
   String? errorName;

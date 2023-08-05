@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:thanhhoa_garden/screens/contract/contactHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class HistoryScreen extends StatefulWidget {
-  int index;
+  final int index;
   HistoryScreen({super.key, required this.index});
 
   @override

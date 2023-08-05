@@ -1,4 +1,4 @@
-// ignore_for_file: library_prefixes
+// ignore_for_file: library_prefixes, body_might_complete_normally_catch_error
 
 import 'dart:convert';
 import 'dart:io';
@@ -133,13 +133,14 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<String?> loginWithGG() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn
-        .disconnect()
-        .catchError((e) {})
-        .onError((error, stackTrace) => null);
+    await googleSignIn.disconnect().catchError((e) {
+      print(e);
+    }).onError((error, stackTrace) => null);
     googleSignIn.isSignedIn().then((value) async {
       if (value) {
-        await googleSignIn.signOut().onError((error, stackTrace) {});
+        await googleSignIn.signOut().onError((error, stackTrace) {
+          return null;
+        });
 
         await FirebaseAuth.instance.signOut();
       }

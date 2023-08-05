@@ -1,18 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
-import 'package:thanhhoa_garden/blocs/order/orderState.dart';
 import 'package:thanhhoa_garden/components/button.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/screens/feedback/feedbackScreen.dart';
 
 class ListFeedbackComponent extends StatefulWidget {
-  List<OrderDetail> listDetail;
-  ScrollController? scrollController;
+  final List<OrderDetail> listDetail;
+  final ScrollController? scrollController;
   ListFeedbackComponent({
     super.key,
     required this.listDetail,

@@ -9,13 +9,11 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
-import 'package:thanhhoa_garden/screens/feedback/feedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/order/deliveryScreen.dart';
-import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
-  OrderObject order;
+  final OrderObject order;
   OrderDetailScreen({super.key, required this.order});
 
   @override

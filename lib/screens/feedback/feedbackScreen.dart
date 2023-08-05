@@ -13,8 +13,8 @@ import 'package:thanhhoa_garden/providers/img_provider.dart';
 import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 
 class FeedbackScreen extends StatefulWidget {
-  String orderrDetailID;
-  String plantID;
+  final String orderrDetailID;
+  final String plantID;
   FeedbackScreen(
       {super.key, required this.orderrDetailID, required this.plantID});
 

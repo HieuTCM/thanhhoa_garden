@@ -11,7 +11,7 @@ import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 import 'package:geocoder2/geocoder2.dart';
 
 class MapScreen extends StatefulWidget {
-  Function callback;
+  final Function callback;
   MapScreen({super.key, required this.callback});
 
   @override
@@ -28,7 +28,7 @@ class _MapScreenState extends State<MapScreen> {
 
   Marker? selectMarker;
 
-  double _distance = 0.0;
+  // double _distance = 0.0;
   double? lat;
   double? long;
 

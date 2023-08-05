@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:thanhhoa_garden/main.dart';
-import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/utils/connection/utilsConnection.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';

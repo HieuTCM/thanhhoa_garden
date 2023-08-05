@@ -1,18 +1,15 @@
-import 'dart:ffi';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:popup_banner/popup_banner.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/feedback/feedback.dart';
-import 'package:thanhhoa_garden/models/order/order.dart';
 import 'package:thanhhoa_garden/screens/bonsai/bonsaidetail.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ListFeebback extends StatefulWidget {
-  List<FeedbackModel>? listData;
-  String? wherecall;
+  final List<FeedbackModel>? listData;
+  final String? wherecall;
   ListFeebback({super.key, this.listData, this.wherecall});
 
   @override

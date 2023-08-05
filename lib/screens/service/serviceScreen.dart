@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -17,7 +16,7 @@ import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 class ServiceDetail extends StatefulWidget {
-  Service service;
+  final Service service;
   ServiceDetail({super.key, required this.service});
 
   @override
@@ -292,6 +291,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 if (value!.isEmpty) {
                   return 'Vui lòng đủ thông tin';
                 }
+                return null;
               },
               decoration: InputDecoration(
                 labelText: label,
@@ -555,6 +555,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                   if (value.length == 0) {
                     return "Bạn chưa chọn ngày làm việc";
                   }
+                  return null;
                 },
                 onConfirm: (values) {
                   _multiSelectKey.currentState!.validate();

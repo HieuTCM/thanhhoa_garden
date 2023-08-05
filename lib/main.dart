@@ -2,9 +2,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:thanhhoa_garden/blocs/AppBlocObserver%20.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
 
@@ -29,8 +27,6 @@ import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 // import 'package:thanhhoa_garden/screens/MyHomePage.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thanhhoa_garden/screens/home/homePage.dart';
-import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
 late SharedPreferences sharedPreferences;
 // late AuthBloc authBloc;
@@ -60,8 +56,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var token = getTokenAuthenFromSharedPrefs();
-
     return MultiProvider(
       providers: [
         ListenableProvider<AuthenticationProvider>(

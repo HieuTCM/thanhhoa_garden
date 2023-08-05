@@ -179,8 +179,8 @@ String getDate(String date) {
 }
 
 String formatDate1(DateTime date) {
-  String result;
-  return result = DateFormat('dd/MM/yyyy').format(date);
+  String result = DateFormat('dd/MM/yyyy').format(date);
+  return result;
 }
 
 String formatDateStartDateContact(String date) {

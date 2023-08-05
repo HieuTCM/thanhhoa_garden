@@ -10,7 +10,7 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/order/order.dart';
 
 class DeliveryScreen extends StatefulWidget {
-  OrderObject order;
+  final OrderObject order;
   DeliveryScreen({super.key, required this.order});
 
   @override
@@ -25,7 +25,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     var order = widget.order;
 
     return Scaffold(
@@ -61,7 +61,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   Widget _timeLineDone(OrderObject order, String date, String title,
       String status, Color? colors) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.only(left: 10),
@@ -117,7 +117,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
   }
 
   Widget _timeLine(OrderObject order, String title, String status) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.only(left: 10),

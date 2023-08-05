@@ -1,4 +1,3 @@
-import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 
 abstract class CartState {}

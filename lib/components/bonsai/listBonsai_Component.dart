@@ -1,15 +1,11 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable, prefer_interpolation_to_compose_strings, file_names
 
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
-import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
 
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';

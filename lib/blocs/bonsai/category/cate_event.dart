@@ -7,7 +7,6 @@ abstract class CategoryEvent {
 class GetAllCategoryEvent extends CategoryEvent {}
 
 class GetByIDCategoryEvent extends CategoryEvent {
-  @override
   String? id;
   GetByIDCategoryEvent({this.id}) : super();
 }

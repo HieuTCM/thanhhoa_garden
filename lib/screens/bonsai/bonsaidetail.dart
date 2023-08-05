@@ -20,11 +20,10 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
-import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
 
 class BonsaiDetail extends StatefulWidget {
-  String bonsaiID;
-  String name;
+  final String bonsaiID;
+  final String name;
   BonsaiDetail({super.key, required this.bonsaiID, required this.name});
 
   @override

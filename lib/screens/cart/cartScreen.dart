@@ -1,27 +1,16 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
-import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/cart/listServiceCart_component.dart';
 import 'package:thanhhoa_garden/components/cart/listcart_component.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
-import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
-import 'package:thanhhoa_garden/providers/img_provider.dart';
 import 'package:thanhhoa_garden/screens/contract/confirmContactScreen.dart';
 import 'package:thanhhoa_garden/screens/order/orderScreen.dart';
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';

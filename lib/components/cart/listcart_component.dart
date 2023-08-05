@@ -1,8 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +12,7 @@ import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/screens/bonsai/bonsaidetail.dart';
 
 class LitsCart extends StatefulWidget {
-  Function callback;
+  final Function callback;
   LitsCart({super.key, required this.callback});
 
   @override

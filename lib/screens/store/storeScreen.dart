@@ -10,7 +10,6 @@ import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/store/store.dart';
-import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 
 class StoreScreen extends StatefulWidget {
   const StoreScreen({super.key});
@@ -69,9 +68,9 @@ class _StoreScreenState extends State<StoreScreen> {
               if (state is StoreLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is StoreSuccess) {
-                return state.list == null
+                return state.list == []
                     ? Container()
-                    : Container(
+                    : SizedBox(
                         height: MediaQuery.of(context).size.height - 100,
                         child: _ListStore(state.list));
               } else if (state is StoreFailure) {

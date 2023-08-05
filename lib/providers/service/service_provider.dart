@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/models/bonsaiImg.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
 import 'package:http/http.dart' as http;
 import 'package:thanhhoa_garden/utils/connection/utilsConnection.dart';

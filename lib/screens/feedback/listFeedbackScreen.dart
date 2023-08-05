@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_event.dart';
@@ -24,7 +22,7 @@ class ListFeedbackScreen extends StatefulWidget {
 }
 
 class _ListFeedbackScreenState extends State<ListFeedbackScreen> {
-  final _scrollControllerFeedback = ScrollController();
+  // final _scrollControllerFeedback = ScrollController();
   final _scrollControllerNotFeedback = ScrollController();
 
   int indexStack = 0;

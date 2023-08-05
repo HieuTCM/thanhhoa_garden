@@ -5,17 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_bloc.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_event.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/main.dart';
-import 'package:thanhhoa_garden/models/authentication/user.dart';
-import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
-import 'package:thanhhoa_garden/screens/order/orderHistoryScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
-import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
@@ -31,7 +26,7 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  AuthenticationProvider _authenticationProvider = AuthenticationProvider();
+  // final AuthenticationProvider _authenticationProvider = AuthenticationProvider();
   UserObj.User user = getCuctomerIDFromSharedPrefs();
 
   @override

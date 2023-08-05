@@ -80,7 +80,6 @@ class CancelOrderEvent extends OrderEvent {
 }
 
 class GetByIDOrderEvent extends OrderEvent {
-  @override
   String? id;
   GetByIDOrderEvent({this.id}) : super();
 }

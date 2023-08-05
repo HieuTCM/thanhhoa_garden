@@ -1,5 +1,3 @@
-import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
-
 abstract class CartEvent {
   String? _plantID;
   String? get plantID => _plantID;

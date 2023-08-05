@@ -18,7 +18,7 @@ Future<void> makePhoneCall(String phoneNumber) async {
 
 //Note Orderr
 class NoteOrder extends StatefulWidget {
-  String? Phone;
+  final String? Phone;
   NoteOrder({super.key, this.Phone});
 
   @override
@@ -141,9 +141,9 @@ class _NoteOrderState extends State<NoteOrder> {
 
 // Note Cancel Order
 class NoteCancelOrder extends StatefulWidget {
-  String phone;
-  String orderid;
-  String totalPrice;
+  final String phone;
+  final String orderid;
+  final String totalPrice;
   NoteCancelOrder(
       {super.key,
       required this.phone,
@@ -316,8 +316,8 @@ class _NoteCancelOrderState extends State<NoteCancelOrder> {
 
 //Note Confirm Cancel Order
 class ConfirmCancelOrder extends StatefulWidget {
-  String orrderID;
-  Function callback;
+  final String orrderID;
+  final Function callback;
   ConfirmCancelOrder(
       {super.key, required this.orrderID, required this.callback});
 
@@ -329,7 +329,7 @@ class _ConfirmCancelOrderState extends State<ConfirmCancelOrder> {
   TextEditingController _reasonController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     List<String> listRea = listReason();
     String dropdownValue = listRea.last;
     return StatefulBuilder(
