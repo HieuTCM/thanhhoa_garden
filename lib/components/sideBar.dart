@@ -11,6 +11,7 @@ import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
+import 'package:thanhhoa_garden/screens/schedule/schedulePage.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 
@@ -86,6 +87,14 @@ class _SideBarState extends State<SideBar> {
                   size: 30,
                   color: buttonColor,
                 )),
+            _listTile(
+                'Thông Báo',
+                () {},
+                const Icon(
+                  Icons.notifications_none_outlined,
+                  size: 30,
+                  color: buttonColor,
+                )),
             _listTile('Xem cây cảnh', () {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
@@ -116,6 +125,17 @@ class _SideBarState extends State<SideBar> {
                   size: 30,
                   color: buttonColor,
                 )),
+            _listTile('Lịch Chăm sóc', () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => SchedulePage(),
+              ));
+            },
+                const Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 30,
+                  color: buttonColor,
+                )),
             _listTile('Đánh Giá Của Tôi', () {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
@@ -124,14 +144,6 @@ class _SideBarState extends State<SideBar> {
             },
                 const Icon(
                   Icons.feedback_outlined,
-                  size: 30,
-                  color: buttonColor,
-                )),
-            _listTile(
-                'Thông Báo',
-                () {},
-                const Icon(
-                  Icons.notifications_none_outlined,
                   size: 30,
                   color: buttonColor,
                 )),

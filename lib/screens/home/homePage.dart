@@ -186,8 +186,8 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 child: Column(
                   children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         SizedBox(
                           width: 15,
                         ),
@@ -262,8 +262,8 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => SearchScreen(),
                                 ));
                               },
-                              child: Row(
-                                children: const [
+                              child: const Row(
+                                children: [
                                   Text('Xem thêm',
                                       style: TextStyle(
                                           fontSize: 25,
@@ -291,8 +291,11 @@ class _HomePageState extends State<HomePage> {
 
                 Column(
                   children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
                         Text('Cây Cảnh Bán Chạy',
                             style: TextStyle(
                                 fontSize: 35,

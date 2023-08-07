@@ -352,7 +352,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 height: 58,
                 child: AutoSizeText(
                     'Thời gian ${value.range} ${value.unit}'
-                    '(${value.percentage == 0 ? '' : 'ưu đãi  ${value.percentage} %)'}',
+                    '${value.percentage == 0 ? '' : ' ( Ưu đãi  ${value.percentage}% )'}',
                     style: const TextStyle(fontSize: 18, color: buttonColor))),
           );
         }).toList(),

@@ -159,6 +159,7 @@ class PaymentType {
 }
 
 class ContactDetail {
+  late final id;
   late final note;
   late final timeWorking;
   late final totalPrice;
@@ -170,9 +171,11 @@ class ContactDetail {
   late Service? serviceModel;
   late TypeService? serviceTypeModel;
   late ServicePack? servicePackModel;
+  late Contact? contactModel;
 
   ContactDetail(
-      {this.endDate,
+      {this.id,
+      this.endDate,
       this.startDate,
       this.note,
       this.servicePackID,
@@ -182,10 +185,12 @@ class ContactDetail {
       this.totalPage,
       this.serviceModel,
       this.serviceTypeModel,
+      this.contactModel,
       this.servicePackModel});
 
   ContactDetail.fromJson(Map<String, dynamic> json) {
     note = json['note'];
+    id = json['id'];
     timeWorking = json['timeWorking'];
     totalPrice = json['totalPrice'];
     servicePackID = json['servicePackID'];
@@ -198,6 +203,7 @@ class ContactDetail {
     servicePackModel = ServicePack.fromJson(json['servicePackModel']);
   }
   ContactDetail.fromJson2(Map<String, dynamic> json) {
+    id = json['id'];
     note = json['note'];
     timeWorking = json['timeWorking'];
     totalPrice = json['totalPrice'];
@@ -207,6 +213,7 @@ class ContactDetail {
     serviceModel = Service.fromJson2(json['showServiceModel']);
     serviceTypeModel = TypeService.fromJson2(json['showServiceTypeModel']);
     servicePackModel = ServicePack.fromJsonModel(json['showServicePackModel']);
+    contactModel = Contact.fromJson(json['showContractModel']);
   }
 
   Map<String, dynamic> toJson(ContactDetail contactDetail) {

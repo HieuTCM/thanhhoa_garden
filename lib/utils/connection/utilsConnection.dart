@@ -68,6 +68,14 @@ const createContactURL = '/contract/createContractCustomer';
 const getContactURL = '/contract/byCustomerTokenAndStatus?';
 const getContactDetailURL = '/contract/contractDetail/';
 
+//Schedule
+const getScheduleURL = '/workingDate/getByStaffToken';
+const getScheduleInWeekURL = '/contract/getContractDetailByStaffTokenAndDate?';
+
+//ScheduleDetail
+const getScheduleDetailURL = '/workingDate/getByWorkingDate?';
+const confirmWorkingURL = '/workingDate/addWorkingDate?contractDetailID=';
+
 //enum
 const orderStatus = '/enum/order';
 const contactStatus = '/enum/contract';

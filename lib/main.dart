@@ -2,6 +2,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_bloc.dart';
 import 'package:thanhhoa_garden/blocs/bonsai/bonsai_bloc.dart';
@@ -27,6 +28,7 @@ import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 // import 'package:thanhhoa_garden/screens/MyHomePage.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 late SharedPreferences sharedPreferences;
 // late AuthBloc authBloc;
@@ -36,17 +38,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print(fcmToken);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
 
-  // Bloc.observer = AppBlocObserver();
-  // authBloc = AuthBloc(authProvider: AuthenticationProvider());
-  // await FirebaseAuth.instance.authStateChanges().listen((User? user) {
-  //   if (user == null) {
-  //     print('User is currently signed out!');
-  //   } else {
-  //     print('User is signed in!');
-  //   }
-  // });
-
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+  initializeDateFormatting('vi_VN');
   runApp(const MyApp());
 }
 

@@ -73,6 +73,9 @@ dependencies:
   multi_select_flutter: ^4.1.3
   flutter_rounded_date_picker: ^3.0.4
 
+  #calendar
+  table_calendar: ^3.0.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

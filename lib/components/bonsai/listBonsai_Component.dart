@@ -71,7 +71,6 @@ class _ListBonsaiState extends State<ListBonsai> {
 
   Widget _BonsaiTab(Bonsai bonsai) {
     var f = NumberFormat("###,###,###", "en_US");
-    var cm = NumberFormat("###", "en_US");
 
     return GestureDetector(
       onTap: () {
@@ -143,7 +142,7 @@ class _ListBonsaiState extends State<ListBonsai> {
                     width: MediaQuery.of(context).size.width - 20 - 150 - 36,
                     child: AutoSizeText(
                       maxLines: 1,
-                      '${'Tổng chiều cao: ~ ' + cm.format(bonsai.height)} Cm',
+                      'Tổng chiều cao: ' + bonsai.height,
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
