@@ -1,19 +1,16 @@
-// ignore_for_file: must_be_immutable, file_names, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: must_be_immutable, file_names, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unnecessary_null_comparison
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
 import '../../components/circular.dart';
 import 'package:thanhhoa_garden/models/workingDate/working_date.dart';
 import '../../components/appBar.dart';
-import '../../components/button/dialog_button.dart';
 import '../../components/schedule/calender_componenet2.dart';
 import '../../constants/constants.dart';
 import '../../providers/schedule/schedule_provider.dart';
 import '../../utils/format/date.dart';
-import '../../utils/showDialog/show_dialog.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -110,7 +107,6 @@ class _SchedulePageState extends State<SchedulePage> {
               ),
             );
           } else {
-            int length = date.length;
             return ListView.builder(
                 controller: _scrollController,
                 shrinkWrap: true,
@@ -365,8 +361,6 @@ class _SchedulePageState extends State<SchedulePage> {
 
   //List Working Today
   Widget _listJobToday() {
-    bool ischeck = false;
-    bool check = false;
     DateTime now = DateTime.now();
     String weekday = getWeekday(now.weekday);
     String fweekday = now.year.toString() +
@@ -404,7 +398,6 @@ class _SchedulePageState extends State<SchedulePage> {
                   if (((selectedTabToday == 0) || (selectedTabToday == 1))) {
                     for (int i = 0; i < days_list.length; i++) {
                       if (days_list[i] == weekday) {
-                        bool checkOk = false;
                         return GestureDetector(
                           onTap: () async {
                             print("need to fix ... sai logic roi");
@@ -455,14 +448,15 @@ class _SchedulePageState extends State<SchedulePage> {
                                                 const SizedBox(
                                                   height: 10,
                                                 ),
-                                                _contractFiled('Mã công việc',
-                                                    cD[index].id.toString()),
+                                                // _contractFiled('Mã công việc',
+                                                //     cD[index].id.toString()),
                                                 _contractFiled(
                                                     'Mã hợp đồng',
                                                     cD[index]
                                                         .contactModel!
                                                         .id
-                                                        .toString()),
+                                                        .toString()
+                                                        .substring(2)),
                                                 _contractFiled(
                                                     'Dịch vụ',
                                                     cD[index]
@@ -503,97 +497,30 @@ class _SchedulePageState extends State<SchedulePage> {
                                         )
                                       ],
                                     ),
-                                    Positioned(
-                                      bottom: 5,
-                                      right: 5,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          showDialog<String>(
-                                            context: context,
-                                            builder: (context) => SystemPadding(
-                                              child: AlertDialog(
-                                                  contentPadding:
-                                                      const EdgeInsets.all(
-                                                          16.0),
-                                                  content: Row(
-                                                    children: const <Widget>[
-                                                      Text(
-                                                          'Đã hoàn thành lịch chăm sóc này?'),
-                                                    ],
-                                                  ),
-                                                  actions: <Widget>[
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        check =
-                                                            (await checkWorkingDate(
-                                                                cD[index].id,
-                                                                fweekday))!;
-                                                        if (check == true) {
-                                                          Navigator.pop(
-                                                              context);
-                                                          Fluttertoast.showToast(
-                                                              msg:
-                                                                  "Bạn đã đánh dấu công việc này rồi",
-                                                              toastLength: Toast
-                                                                  .LENGTH_SHORT,
-                                                              gravity:
-                                                                  ToastGravity
-                                                                      .BOTTOM,
-                                                              timeInSecForIosWeb:
-                                                                  1,
-                                                              backgroundColor:
-                                                                  highLightText,
-                                                              textColor:
-                                                                  Colors.white,
-                                                              fontSize: 16.0);
-                                                        } else {
-                                                          ConfirmWorkingDate(
-                                                              cD[index].id);
-                                                          print("cD[index].id: " +
-                                                              cD[index]
-                                                                  .id
-                                                                  .toString());
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                      },
-                                                      child:
-                                                          const ConfirmButton(
-                                                              title: 'Xác nhận',
-                                                              width: 70.0),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child:
-                                                          const ConfirmButton(
-                                                        title: 'Quay Lại',
-                                                        width: 70.0,
-                                                      ),
-                                                    ),
-                                                  ]),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          height: 35,
-                                          width: 70,
-                                          decoration: BoxDecoration(
-                                              color: buttonColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(45)),
-                                          child: const Center(
-                                              child: Text(
-                                            'Xác nhận',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 12),
-                                          )),
-                                        ),
-                                      ),
-                                    ),
+                                    // Positioned(
+                                    //   bottom: 5,
+                                    //   right: 5,
+                                    //   child: GestureDetector(
+                                    //     onTap: () {
+                                    //   },
+                                    //     child: Container(
+                                    //       height: 35,
+                                    //       width: 70,
+                                    //       decoration: BoxDecoration(
+                                    //           color: buttonColor,
+                                    //           borderRadius:
+                                    //               BorderRadius.circular(45)),
+                                    //       child: const Center(
+                                    //           child: Text(
+                                    //         ,
+                                    //         style: TextStyle(
+                                    //             color: Colors.white,
+                                    //             fontWeight: FontWeight.w600,
+                                    //             fontSize: 12),
+                                    //       )),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -674,7 +601,7 @@ class _SchedulePageState extends State<SchedulePage> {
         '-' +
         now.year.toString();
     print(titleTime);
-    var size = MediaQuery.of(context).size;
+
     return CanlenderComponent();
   }
 

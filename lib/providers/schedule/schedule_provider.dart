@@ -11,7 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 Future<List<WorkingDate>> fetchSchedule() async {
   var header = getheader(getTokenAuthenFromSharedPrefs());
-  var token = getTokenAuthenFromSharedPrefs();
+
   String url = mainURL + getScheduleURL;
 
   final response = await http.get(
@@ -107,4 +107,5 @@ Future<bool?> checkWorkingDate(contractDetailID, date) async {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+  return null;
 }
