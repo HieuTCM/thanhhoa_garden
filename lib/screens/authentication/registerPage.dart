@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -40,6 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String? pin6;
   bool verifyOTP = false;
   bool register = false;
+
   int _start = 0;
   String _verificationId = '';
   loginByPhoneNumber(String phone) async {
@@ -83,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _timer.cancel();
+    verifyOTP ? _timer.cancel() : null;
     _usernameController.clear();
     _passwordController.clear();
     _phonedController.clear();
@@ -207,12 +209,17 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
                 decoration: const BoxDecoration(gradient: tabBackground),
                 child: Stack(children: [
-                  Image(
+                  SvgPicture.asset(
+                    'assets/Logo2.svg',
                     height: size.height * 0.57,
                     width: size.width,
-                    image: const AssetImage('assets/Logo.png'),
-                    fit: BoxFit.cover,
                   ),
+                  // Image(
+                  //   height: size.height * 0.57,
+                  //   width: size.width,
+                  //   image: const AssetImage('assets/Logo.png'),
+                  //   fit: BoxFit.cover,
+                  // ),
                   Container(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       constraints: BoxConstraints(minHeight: size.height),
@@ -591,6 +598,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                                   case "Success":
                                     {
+                                      Navigator.pop(context);
                                       Fluttertoast.showToast(
                                           msg: "Đăng kí thành công",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -830,6 +838,7 @@ class _RegisterPageState extends State<RegisterPage> {
             await auth.signInWithCredential(credential).then((valueSignIn) {
               setState(() {
                 register = true;
+                _timer.cancel();
               });
             }).catchError((e) {
               Fluttertoast.showToast(
@@ -846,7 +855,7 @@ class _RegisterPageState extends State<RegisterPage> {
             //     .substring(1, _phonedController.text.length));
           },
           child: const Text(
-            'Xác nhận OPT',
+            'Xác nhận OTP',
             style: TextStyle(
                 color: lightText, fontSize: 20, fontWeight: FontWeight.w600),
           ),

@@ -30,7 +30,7 @@ class User {
       this.role});
 
   User.login(Map<String, dynamic> json, Role role) {
-    id = json['id'];
+    id = json['userID'];
     address = json['address'];
     avatar = json['avatar'];
     email = json['email'];
@@ -43,7 +43,7 @@ class User {
     role = role;
   }
   User.fetchInfo(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['userID'];
     address = json['address'];
     email = json['email'];
     fullName = json['fullName'];
@@ -53,7 +53,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    data['userID'] = id;
     data['phone'] = phone;
     data['password'] = password;
     data['username'] = username;

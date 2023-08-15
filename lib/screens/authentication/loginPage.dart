@@ -14,6 +14,7 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/screens/authentication/registerPage.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -29,23 +30,20 @@ var _btnController = RoundedLoadingButtonController();
 class _LoginPageState extends State<LoginPage> {
   late User? _user = User();
   late AuthBloc authBloc;
+  late Stream<AuthState> authStream;
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
     authBloc = Provider.of<AuthBloc>(context, listen: false);
+    authStream = authBloc.authStateStream;
   }
 
   @override
   void dispose() {
-    super.dispose();
+    authBloc.dispose();
     _usernameController.clear();
     _passwordController.clear();
-    authBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,11 +58,16 @@ class _LoginPageState extends State<LoginPage> {
           decoration: const BoxDecoration(gradient: tabBackground),
           child: Stack(
             children: [
-              Image(
+              // Image(
+              //   height: size.height * 0.57,
+              //   width: size.width,
+              //   image: const AssetImage('assets/Logo.png'),
+              //   fit: BoxFit.cover,
+              // ),
+              SvgPicture.asset(
+                'assets/Logo2.svg',
                 height: size.height * 0.57,
                 width: size.width,
-                image: const AssetImage('assets/Logo.png'),
-                fit: BoxFit.cover,
               ),
               Container(
                 padding: const EdgeInsets.only(left: 5, right: 5),
@@ -80,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 7,
                     ),
                     StreamBuilder<AuthState>(
-                        stream: authBloc.authStateStream,
+                        stream: authStream,
                         initialData: AuthInitial(),
                         builder: (context, snapshot) {
                           final state = snapshot.data;

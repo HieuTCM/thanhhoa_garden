@@ -15,7 +15,9 @@ import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/store/storeBloc.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/firebase_options.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+import 'package:thanhhoa_garden/notification.dart';
 import 'package:thanhhoa_garden/providers/authentication/authantication_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/bonsai_provider.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
@@ -37,17 +39,20 @@ List<Bonsai> Listincart = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
-  await Firebase.initializeApp();
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print(fcmToken);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
 
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-    }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupFlutterNotifications();
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+    AuthenticationProvider().setfcmToken(fcmToken);
+  }).onError((err) {
+    // Error getting token.
   });
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
   initializeDateFormatting('vi_VN');
   runApp(const MyApp());
 }
@@ -56,6 +61,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -100,6 +106,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Thanh Hoa Garden',
+        debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,
         theme: ThemeData(
           primaryColor: buttonColor,

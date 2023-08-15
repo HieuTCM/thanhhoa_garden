@@ -111,9 +111,9 @@ class _LitsCartState extends State<LitsCart> {
                       value: values[cart.plantID] ?? true,
                       onChanged: (value) {
                         if (value!) {
-                          widget.callback('checkBox', 'add', cart);
+                          widget.callback('checkBox', 'add', cart, 1);
                         } else {
-                          widget.callback('checkBox', 'remove', cart);
+                          widget.callback('checkBox', 'remove', cart, 1);
                         }
                         setState(() {
                           values[cart.plantID] = value;
@@ -176,7 +176,7 @@ class _LitsCartState extends State<LitsCart> {
                                       onTap: () {
                                         if (values[cart.plantID]!) {
                                           widget.callback(
-                                              'minus', 'remove', cart);
+                                              'minus', 'remove', cart, 1);
                                         }
                                         cartBloc.send(MinusToCart(
                                             cart.id, cart.quantity! - 1));
@@ -265,6 +265,17 @@ class _LitsCartState extends State<LitsCart> {
                                                               Colors.white,
                                                           fontSize: 16.0);
                                                     } else {
+                                                      if (values[
+                                                          cart.plantID]!) {
+                                                        widget.callback(
+                                                            'add',
+                                                            'add',
+                                                            cart,
+                                                            int.parse(
+                                                                    _amountController
+                                                                        .text) -
+                                                                cart.quantity!);
+                                                      }
                                                       cartBloc.send(MinusToCart(
                                                           cart.id,
                                                           int.parse(
@@ -291,7 +302,8 @@ class _LitsCartState extends State<LitsCart> {
                                     GestureDetector(
                                       onTap: () {
                                         if (values[cart.plantID]!) {
-                                          widget.callback('add', 'add', cart);
+                                          widget.callback(
+                                              'add', 'add', cart, 1);
                                         }
                                         cartBloc
                                             .send(AddToCart(cart.plantID, 1));

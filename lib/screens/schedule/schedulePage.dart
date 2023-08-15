@@ -62,19 +62,13 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 10,
             decoration: const BoxDecoration(color: divince),
           ),
-          //Use when choose Today (selectedTab == 0)
-          /*selectedTab == 0 ? Container(
-            height: 50,
-            width: size.width,
-            child: _listCategoryToday(),
-          ) : const SizedBox(),*/
-          (selectedTab == 0 || selectedTab == 1)
-              ? Container(
-                  height: 1,
-                  width: size.width,
-                  decoration: const BoxDecoration(color: buttonColor),
-                )
-              : const SizedBox(),
+          // (selectedTab == 0 || selectedTab == 1)
+          //     ? Container(
+          //         height: 1,
+          //         width: size.width,
+          //         decoration: const BoxDecoration(color: buttonColor),
+          //       )
+          //     : const SizedBox(),
           //Working List
           Expanded(
             child: selectedTab == 2
@@ -279,45 +273,45 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  Widget _listCategoryInWeek() {
-    DateTime now = DateTime.now();
-    String weekday = getWeekday(now.weekday);
-    int seletedDay = formatNumDay(weekday);
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.zero,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedTabInWeek = index;
-                });
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width / 7,
-                height: 30,
-                // padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: seletedDay == index
-                        ? Border.all(width: 1, color: Colors.black)
-                        : Border.all(width: 0, color: background),
-                    color: (selectedTabInWeek == index)
-                        ? buttonColor
-                        : Colors.white),
-                //margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                child: AutoSizeText(
-                  dayOfWeek[index],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      color:
-                          (selectedTabInWeek == index) ? lightText : HintIcon),
-                ),
-              ));
-        },
-        itemCount: 7);
-  }
+  // Widget _listCategoryInWeek() {
+  //   DateTime now = DateTime.now();
+  //   String weekday = getWeekday(now.weekday);
+  //   int seletedDay = formatNumDay(weekday);
+  //   return ListView.builder(
+  //       scrollDirection: Axis.horizontal,
+  //       padding: EdgeInsets.zero,
+  //       itemBuilder: (context, index) {
+  //         return GestureDetector(
+  //             onTap: () {
+  //               setState(() {
+  //                 selectedTabInWeek = index;
+  //               });
+  //             },
+  //             child: Container(
+  //               alignment: Alignment.center,
+  //               width: MediaQuery.of(context).size.width / 7,
+  //               height: 30,
+  //               // padding: const EdgeInsets.all(5),
+  //               decoration: BoxDecoration(
+  //                   border: seletedDay == index
+  //                       ? Border.all(width: 1, color: Colors.black)
+  //                       : Border.all(width: 0, color: background),
+  //                   color: (selectedTabInWeek == index)
+  //                       ? buttonColor
+  //                       : Colors.white),
+  //               //margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+  //               child: AutoSizeText(
+  //                 dayOfWeek[index],
+  //                 textAlign: TextAlign.center,
+  //                 style: TextStyle(
+  //                     fontWeight: FontWeight.w800,
+  //                     color:
+  //                         (selectedTabInWeek == index) ? lightText : HintIcon),
+  //               ),
+  //             ));
+  //       },
+  //       itemCount: 7);
+  // }
 
   //UI Main Category
   Widget _listCategory() {
@@ -356,7 +350,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 ),
               ));
         },
-        itemCount: 3);
+        itemCount: tab.length);
   }
 
   //List Working Today
@@ -497,30 +491,6 @@ class _SchedulePageState extends State<SchedulePage> {
                                         )
                                       ],
                                     ),
-                                    // Positioned(
-                                    //   bottom: 5,
-                                    //   right: 5,
-                                    //   child: GestureDetector(
-                                    //     onTap: () {
-                                    //   },
-                                    //     child: Container(
-                                    //       height: 35,
-                                    //       width: 70,
-                                    //       decoration: BoxDecoration(
-                                    //           color: buttonColor,
-                                    //           borderRadius:
-                                    //               BorderRadius.circular(45)),
-                                    //       child: const Center(
-                                    //           child: Text(
-                                    //         ,
-                                    //         style: TextStyle(
-                                    //             color: Colors.white,
-                                    //             fontWeight: FontWeight.w600,
-                                    //             fontSize: 12),
-                                    //       )),
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -568,26 +538,26 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  Widget _contractFiled2(String title, String des) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(title + ': ',
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-            Text(
-              des,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-      ],
-    );
-  }
+  // Widget _contractFiled2(String title, String des) {
+  //   return Column(
+  //     children: [
+  //       Row(
+  //         children: [
+  //           Text(title + ': ',
+  //               style:
+  //                   const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+  //           Text(
+  //             des,
+  //             style: const TextStyle(fontSize: 14),
+  //           ),
+  //         ],
+  //       ),
+  //       const SizedBox(
+  //         height: 5,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   //List Working follow weekday
   Widget _ScheduleFollowWeek() {
@@ -606,21 +576,21 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   //List main category
-  List<String> tab = [('Hôm nay'), ('Lịch làm việc'), ('Lịch sử')];
+  List<String> tab = [('Ngày hôm nay'), ('Lịch tháng'), ('Đã hoàn thành')];
 
   //List today category
   List<String> tabToday = [('Tất cả'), ('Đã xong'), ('Chưa xong')];
 
   //List Working follow weekday
-  List<String> dayOfWeek = [
-    ('Thứ 2'),
-    ('Thứ 3'),
-    ('Thứ 4'),
-    ('Thứ 5'),
-    ('Thứ 6'),
-    ('Thứ 7'),
-    ('Chủ Nhật')
-  ];
+  // List<String> dayOfWeek = [
+  //   ('Thứ 2'),
+  //   ('Thứ 3'),
+  //   ('Thứ 4'),
+  //   ('Thứ 5'),
+  //   ('Thứ 6'),
+  //   ('Thứ 7'),
+  //   ('Chủ Nhật')
+  // ];
 
   //List weekday (get by DateTime.now)
   String getWeekday(int weekday) {

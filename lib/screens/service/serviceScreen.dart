@@ -162,6 +162,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 decoration: const BoxDecoration(color: divince),
               ),
               _serviceTab(),
+
               Container(
                 height: 10,
                 decoration: const BoxDecoration(color: divince),
@@ -208,18 +209,6 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 height: 10,
               ),
               const Text(
-                'Tên cây (vườn) của bạn :',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              _textFormField('Tên cây (vườn) của bạn', 'Nhập tên cây (vườn)',
-                  false, () {}, _inforController, 100),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
                 'Chiều cao của cây (độ rộng của vườn) :',
                 style: TextStyle(fontSize: 18),
               ),
@@ -227,6 +216,18 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 height: 10,
               ),
               _listSize(widget.service),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Ghi chú :',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _textFormField('Mô tả cây (vườn) của bạn', 'Mô tả cây (vườn)',
+                  false, () {}, _inforController, 150, 3),
             ],
           ),
         )
@@ -274,8 +275,15 @@ class _ServiceDetailState extends State<ServiceDetail> {
     );
   }
 
-  Widget _textFormField(String label, String hint, bool readonly,
-      Function()? onTap, TextEditingController controller, maxLength) {
+  Widget _textFormField(
+    String label,
+    String hint,
+    bool readonly,
+    Function()? onTap,
+    TextEditingController controller,
+    maxLength,
+    height,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -283,10 +291,13 @@ class _ServiceDetailState extends State<ServiceDetail> {
             width: MediaQuery.of(context).size.width - 60,
             child: TextFormField(
               autofocus: false,
+              textAlign: TextAlign.start,
+              minLines: 1,
               readOnly: readonly,
               controller: controller,
               onTap: onTap,
               maxLength: maxLength,
+              maxLines: height,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Vui lòng đủ thông tin';
@@ -390,7 +401,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
               const SizedBox(
                 height: 10,
               ),
-              (service.serviceID == 'SE002')
+              (!service.atHome)
                   ? const SizedBox()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,7 +440,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
               _textFormField('Ngày bắt đầu hợp đồng', 'Chọn ngày bắt đầu', true,
                   () {
                 getStartDate();
-              }, _StartDateController, null),
+              }, _StartDateController, null, 1),
               const SizedBox(
                 height: 10,
               ),
@@ -441,10 +452,10 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 height: 10,
               ),
               _textFormField('Ngày kết thúc hợp đồng', 'Ngày kết thức', true,
-                  null, _endDateController, null),
+                  null, _endDateController, null, 1),
             ],
           ),
-        )
+        ),
       ]),
     );
   }

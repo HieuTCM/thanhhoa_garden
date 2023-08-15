@@ -114,15 +114,11 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  updatecart(
-    String whereCall,
-    String type,
-    OrderCart cart,
-  ) {
+  updatecart(String whereCall, String type, OrderCart cart, int num) {
     if (whereCall == 'checkBox') {
       switch (type) {
         case 'add':
-          setCart(whereCall, cart);
+          setCart(whereCall, cart, num);
           break;
         case 'remove':
           removeCart(whereCall, cart);
@@ -132,7 +128,7 @@ class _CartScreenState extends State<CartScreen> {
       Future.delayed(const Duration(seconds: 2)).then((value) {
         switch (type) {
           case 'add':
-            setCart(whereCall, cart);
+            setCart(whereCall, cart, num);
             break;
           case 'remove':
             removeCart(whereCall, cart);
@@ -142,15 +138,16 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  setCart(String whereCall, OrderCart cart) {
+  setCart(String whereCall, OrderCart cart, int num) {
     switch (whereCall) {
       case 'add':
         {
           setState(() {
             listCart[cart.plantID] = cart.quantity!;
-            totalPlant = totalPlant + 1;
-            totalPrice = totalPrice + cart.plantPrice!;
+            totalPlant = totalPlant + num;
+            totalPrice = totalPrice + cart.plantPrice! * num;
           });
+          getCart();
           break;
         }
 
@@ -161,6 +158,7 @@ class _CartScreenState extends State<CartScreen> {
             totalPlant = totalPlant + cart.quantity!;
             totalPrice = totalPrice + cart.plantPrice! * cart.quantity!;
           });
+          getCart();
           break;
         }
     }
@@ -175,6 +173,7 @@ class _CartScreenState extends State<CartScreen> {
             totalPlant = totalPlant - 1;
             totalPrice = totalPrice - cart.plantPrice!;
           });
+          getCart();
           break;
         }
 
@@ -185,6 +184,7 @@ class _CartScreenState extends State<CartScreen> {
             totalPlant = totalPlant - cart.quantity!;
             totalPrice = totalPrice - cart.plantPrice! * cart.quantity!;
           });
+          getCart();
           break;
         }
     }

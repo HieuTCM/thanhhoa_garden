@@ -131,6 +131,29 @@ class OrderProvider extends ChangeNotifier {
     return result;
   }
 
+  Future<String> payment(Map<String, dynamic> map) async {
+    String result = '';
+    var header = getheader(getTokenAuthenFromSharedPrefs());
+    var body = json.encode(map);
+    try {
+      final res = await http.post(Uri.parse('$mainURL$paymentURL'),
+          body: body, headers: header);
+      if (res.statusCode == 200) {
+        if (res.body.isNotEmpty) {
+          result = res.body;
+          notifyListeners();
+        }
+      }
+      notifyListeners();
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+
+    return result;
+  }
+
   Future<bool> getOrderStatus() async {
     bool result = false;
     List<String> enumStatus = [];

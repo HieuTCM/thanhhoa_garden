@@ -16,6 +16,12 @@
         <action android:name="android.intent.action.VIEW" />
         <data android:scheme="tel" />
     </intent>
+
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" />
+    </intent>
     </queries>
    <application
         android:label="thanhhoa_garden"
@@ -23,6 +29,8 @@
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"

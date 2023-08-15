@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -36,6 +37,8 @@ class AuthenticationProvider extends ChangeNotifier {
         if (jsondata['role'] == 'Customer') {
           sharedPreferences.clear();
           sharedPreferences.setString('Token', jsondata['token']);
+          final fcmToken = await FirebaseMessaging.instance.getToken();
+          setfcmToken(fcmToken!);
           notifyListeners();
           result = '';
         } else {
@@ -78,6 +81,8 @@ class AuthenticationProvider extends ChangeNotifier {
       if (res.statusCode == 200) {
         var jsondata = json.decode(res.body);
         sharedPreferences.setString('Token', jsondata['token']);
+        final fcmToken = await FirebaseMessaging.instance.getToken();
+        setfcmToken(fcmToken!);
         notifyListeners();
         result = true;
       } else {
@@ -123,6 +128,26 @@ class AuthenticationProvider extends ChangeNotifier {
             textColor: Colors.white,
             fontSize: 16.0);
       }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return result;
+  }
+
+  Future<bool> setfcmToken(String token) async {
+    bool result = false;
+
+    try {
+      var header = getheader(getTokenAuthenFromSharedPrefs());
+      final res = await http.post(
+          Uri.parse('$mainURL$updatefcmTokenURL?fcmToken=${token}'),
+          headers: header);
+      if (res.statusCode == 200) {
+        notifyListeners();
+        result = true;
+      } else {}
     } on HttpException catch (e) {
       if (kDebugMode) {
         print(e.toString());

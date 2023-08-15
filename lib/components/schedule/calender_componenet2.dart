@@ -110,11 +110,7 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      schedule[index]
-                                                              .contactModel!
-                                                              .title
-                                                              .toString() +
-                                                          ' - ',
+                                                      '${schedule[index].contactModel!.title} - ',
                                                       style: const TextStyle(
                                                           fontSize: 14,
                                                           fontWeight:
@@ -173,7 +169,7 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
                         }
                       }
                       return const Center(
-                        child: Text('Error'),
+                        child: Text('Lỗi'),
                       );
                     },
                   ),
@@ -196,7 +192,7 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
       children: [
         Row(
           children: [
-            Text(title + ': ',
+            Text('$title: ',
                 style:
                     const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
             Text(

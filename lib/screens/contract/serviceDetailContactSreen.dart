@@ -182,18 +182,6 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
                 height: 10,
               ),
               const Text(
-                'Tên cây (vườn) của bạn :',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              _textFormField('Tên cây (vườn) của bạn', 'Nhập tên cây (vườn)',
-                  true, () {}, _inforController, null),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
                 'Chiều cao của cây (độ rộng của vườn) :',
                 style: TextStyle(fontSize: 18),
               ),
@@ -201,6 +189,18 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
                 height: 10,
               ),
               _listSize(service),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Ghi chú :',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _textFormField('Mô tả cây (vườn) của bạn', 'Mô tả cây (vườn)',
+                  false, () {}, _inforController, 150, 3),
             ],
           ),
         )
@@ -226,7 +226,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
   }
 
   Widget _textFormField(String label, String hint, bool readonly,
-      Function()? onTap, TextEditingController controller, maxLength) {
+      Function()? onTap, TextEditingController controller, maxLength, height) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -236,6 +236,8 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
               autofocus: false,
               readOnly: readonly,
               controller: controller,
+              maxLines: height,
+              minLines: 1,
               onTap: onTap,
               maxLength: maxLength,
               validator: (value) {
@@ -339,7 +341,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
                 height: 10,
               ),
               _textFormField('Ngày bắt đầu hợp đồng', 'Chọn ngày bắt đầu', true,
-                  () {}, _StartDateController, null),
+                  () {}, _StartDateController, null, 1),
               const SizedBox(
                 height: 10,
               ),
@@ -351,7 +353,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
                 height: 10,
               ),
               _textFormField('Ngày kết thúc hợp đồng', 'Ngày kết thức', true,
-                  null, _endDateController, null),
+                  null, _endDateController, null, 1),
             ],
           ),
         )

@@ -68,6 +68,9 @@ const createContactURL = '/contract/createContractCustomer';
 const getContactURL = '/contract/byCustomerTokenAndStatus?';
 const getContactDetailURL = '/contract/contractDetail/';
 
+//payment
+const paymentURL = '/vnpay/submitOrder';
+
 //Schedule
 const getScheduleURL = '/workingDate/getByStaffToken';
 const getScheduleInWeekURL = '/contract/getContractDetailByStaffTokenAndDate?';
