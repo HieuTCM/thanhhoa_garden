@@ -5,11 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_bloc.dart';
 import 'package:thanhhoa_garden/blocs/authentication/auth_event.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/providers/notification/notification_Provider.dart';
 import 'package:thanhhoa_garden/screens/authentication/loginPage.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
+import 'package:thanhhoa_garden/screens/notification/notificationScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
 import 'package:thanhhoa_garden/screens/schedule/schedulePage.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
@@ -87,9 +89,12 @@ class _SideBarState extends State<SideBar> {
                   size: 30,
                   color: buttonColor,
                 )),
-            _listTile(
-                'Thông Báo',
-                () {},
+            _listTile('Thông Báo', () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const NotificationScreen(),
+              ));
+            },
                 const Icon(
                   Icons.notifications_none_outlined,
                   size: 30,
@@ -182,17 +187,26 @@ class _SideBarState extends State<SideBar> {
       onTap: onTap,
       trailing: title != 'Thông Báo'
           ? null
-          : ClipOval(
-              child: Container(
-                color: Colors.red,
-                width: 20,
-                height: 20,
-                child: const Center(
-                    child: Text(
-                  '10',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                )),
-              ),
+          : Consumer<NotificationProvider>(
+              builder: (context, value, _) {
+                int count = value.list!
+                    .where((element) => element.isRead == false)
+                    .length;
+                return (count != 0)
+                    ? ClipOval(
+                        child: Container(
+                            color: Colors.red,
+                            width: 20,
+                            height: 20,
+                            child: Center(
+                                child: Text(
+                              count.toString(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
+                            ))),
+                      )
+                    : const SizedBox();
+              },
             ),
     );
   }

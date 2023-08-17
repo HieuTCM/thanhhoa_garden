@@ -192,6 +192,7 @@ class _CancelOrderButtonState extends State<CancelOrderButton> {
                         if (value) {
                           OverlayLoadingProgress.stop();
                           Navigator.pop(context);
+                          Navigator.pop(context);
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
                                   builder: (context) => HistoryScreen(

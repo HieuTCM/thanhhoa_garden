@@ -11,6 +11,7 @@ import 'package:thanhhoa_garden/blocs/bonsai/category/cate_bloc.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
 import 'package:thanhhoa_garden/blocs/contract/contactBloc.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
+import 'package:thanhhoa_garden/blocs/notification/notiBloc.dart';
 import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/store/storeBloc.dart';
@@ -24,6 +25,7 @@ import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/providers/bonsai/category_provider.dart';
 import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
+import 'package:thanhhoa_garden/providers/notification/notification_Provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
@@ -48,7 +50,6 @@ void main() async {
   }).onError((err) {
     // Error getting token.
   });
-
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen(showFlutterNotification);
@@ -76,6 +77,8 @@ class MyApp extends StatelessWidget {
         ListenableProvider<StoreProvider>(create: (_) => StoreProvider()),
         ListenableProvider<OrderProvider>(create: (_) => OrderProvider()),
         ListenableProvider<ContactProvider>(create: (_) => ContactProvider()),
+        ListenableProvider<NotificationProvider>(
+            create: (_) => NotificationProvider()),
         ProxyProvider<AuthenticationProvider, AuthBloc>(
           update: (_, authProvider, __) => AuthBloc(authProvider: authProvider),
         ),
@@ -103,6 +106,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<ContactProvider, ContactBloc>(
             update: (_, contactProvider, __) =>
                 ContactBloc(ContactProvider: contactProvider)),
+        ProxyProvider<NotificationProvider, NotificationBloc>(
+            update: (_, notificationProvider, __) =>
+                NotificationBloc(notificationProvider: notificationProvider)),
       ],
       child: MaterialApp(
         title: 'Thanh Hoa Garden',

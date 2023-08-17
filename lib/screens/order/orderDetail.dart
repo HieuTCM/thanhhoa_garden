@@ -123,9 +123,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 height: 10,
                 decoration: const BoxDecoration(color: divince),
               ),
-              (widget.order.receiptIMG != null)
-                  ? _tranferTab()
-                  : const SizedBox(),
+              // (widget.order.receiptIMG != null)
+              //     ? _tranferTab()
+              //     : const SizedBox(),
               const SizedBox(
                 height: 10,
               ),
@@ -176,9 +176,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             Row(
               children: [
                 const Text('Trạng Thái thanh toán: '),
-                Text(order.paymentMethod == 'Online'
-                    ? 'Đã thanh toán'
-                    : 'Chưa thanh toán'),
+                Text(order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'),
               ],
             ),
             const SizedBox(
@@ -432,33 +430,33 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     color: darkText, fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                PopupBanner(
-                  fit: BoxFit.contain,
-                  // height: size.height * 0.7,
-                  context: context,
-                  images: [widget.order.receiptIMG],
-                  autoSlide: false,
-                  dotsAlignment: Alignment.bottomCenter,
-                  dotsColorActive: buttonColor,
-                  dotsColorInactive: Colors.grey.withOpacity(0.5),
-                  onClick: (index) {
-                    debugPrint("CLICKED $index");
-                  },
-                ).show();
-              },
-              child: Container(
-                  margin: const EdgeInsets.all(5),
-                  height: (size.width / 5) - 20,
-                  width: (size.width / 5) - 20,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                        fit: BoxFit.contain,
-                        image: NetworkImage(widget.order.receiptIMG)),
-                  )),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     PopupBanner(
+            //       fit: BoxFit.contain,
+            //       // height: size.height * 0.7,
+            //       context: context,
+            //       images: [widget.order.receiptIMG],
+            //       autoSlide: false,
+            //       dotsAlignment: Alignment.bottomCenter,
+            //       dotsColorActive: buttonColor,
+            //       dotsColorInactive: Colors.grey.withOpacity(0.5),
+            //       onClick: (index) {
+            //         debugPrint("CLICKED $index");
+            //       },
+            //     ).show();
+            //   },
+            //   child: Container(
+            //       margin: const EdgeInsets.all(5),
+            //       height: (size.width / 5) - 20,
+            //       width: (size.width / 5) - 20,
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         image: DecorationImage(
+            //             fit: BoxFit.contain,
+            //             image: NetworkImage(widget.order.receiptIMG)),
+            //       )),
+            // ),
           ],
         ),
         Container(

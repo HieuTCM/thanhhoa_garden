@@ -79,6 +79,10 @@ const getScheduleInWeekURL = '/contract/getContractDetailByStaffTokenAndDate?';
 const getScheduleDetailURL = '/workingDate/getByWorkingDate?';
 const confirmWorkingURL = '/workingDate/addWorkingDate?contractDetailID=';
 
+//Notification
+const getNotiURL = '/notification';
+const setIsReadAllURL = '/notification/isReadByToken';
+
 //enum
 const orderStatus = '/enum/order';
 const contactStatus = '/enum/contract';

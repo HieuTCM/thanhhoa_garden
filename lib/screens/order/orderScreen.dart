@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,7 +27,6 @@ import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vnpay_flutter/vnpay_flutter.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -982,20 +979,23 @@ class _OrderScreenState extends State<OrderScreen> {
                       _orderProvider.createOrder(data).then((value) {
                         if (value) {
                           cartBloc.send(GetCart());
-                          Fluttertoast.showToast(
-                              msg: "Tạo Đơn Hàng Thành Công",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: buttonColor,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => HistoryScreen(index: 0),
-                          ));
+
+                          Future.delayed(Duration(seconds: 3)).then((value) {
+                            Fluttertoast.showToast(
+                                msg: "Tạo Đơn Hàng Thành Công",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: buttonColor,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => HistoryScreen(index: 0),
+                            ));
+                          });
                         } else {
                           Fluttertoast.showToast(
                               msg: "Tạo Đơn Hàng Thất Bại",

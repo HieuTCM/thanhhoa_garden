@@ -25,13 +25,13 @@ class OrderObject {
   late final total;
   late final status;
   late final numOfPlant;
+  late final isPaid;
   late User? showStaffModel;
   late User? showCustomerModel;
   late Distance? showDistancePriceModel;
   late Store? showStoreModel;
   late OrderCart? showPlantModel;
   late final totalPage;
-  late final receiptIMG;
 
   OrderObject({
     this.id,
@@ -60,6 +60,7 @@ class OrderObject {
     this.showPlantModel,
     this.totalPage,
     this.numOfPlant,
+    this.isPaid,
   });
 
   OrderObject.fromJson(
@@ -91,6 +92,7 @@ class OrderObject {
     totalPage = json["totalPage"];
     numOfPlant = json["numOfPlant"];
     totalShipCost = json["totalShipCost"];
+    isPaid = json["isPaid"];
     showStaffModel = StaffModel;
     showCustomerModel = CustomerModel;
     showDistancePriceModel = DistancePriceModel;

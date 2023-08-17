@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +10,7 @@ import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/cart/listServiceCart_component.dart';
 import 'package:thanhhoa_garden/components/cart/listcart_component.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/main.dart';
 import 'package:thanhhoa_garden/models/cart/cart.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
@@ -82,6 +85,32 @@ class _CartScreenState extends State<CartScreen> {
             totalService++;
             totalPriceService =
                 totalPriceService + listContactDetail[index].totalPrice;
+          });
+          for (var index in indexService) {
+            setState(() {
+              listContactDetailSelect.add(listContactDetail[index]);
+              listIndex.add(index);
+            });
+          }
+        }
+        ;
+        break;
+      case 'delete':
+        {
+          setState(() {
+            listContactDetailSelect.clear();
+            listIndex.clear();
+            indexService.isNotEmpty ? indexService.remove(index) : null;
+            totalService != 0 ? totalService-- : 0;
+            totalPriceService != 0
+                ? totalPriceService =
+                    totalPriceService - listContactDetail[index].totalPrice
+                : 0;
+
+            // listContactDetail.removeAt(index);
+            // Map<String, dynamic> map = Map<String, dynamic>();
+            // map['detailModelList'] = listContactDetail;
+            // sharedPreferences.setString('ContactDetail', json.encode(map));
           });
           for (var index in indexService) {
             setState(() {

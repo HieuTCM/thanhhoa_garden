@@ -12,6 +12,9 @@ import 'package:thanhhoa_garden/blocs/bonsai/bonsai_state.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_bloc.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_event.dart';
 import 'package:thanhhoa_garden/blocs/cart/cart_state.dart';
+import 'package:thanhhoa_garden/blocs/notification/notiBloc.dart';
+import 'package:thanhhoa_garden/blocs/notification/notiEvent.dart';
+import 'package:thanhhoa_garden/blocs/notification/notiState.dart';
 
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_event.dart';
@@ -22,6 +25,7 @@ import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/service/service.dart';
+import 'package:thanhhoa_garden/providers/notification/notification_Provider.dart';
 import 'package:thanhhoa_garden/screens/bonsai/searchScreen.dart';
 import 'package:thanhhoa_garden/screens/service/serviceScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
@@ -40,16 +44,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   UserObj.User user = getCuctomerIDFromSharedPrefs();
+
   late ServiceBloc serviceBloc;
   late BonsaiBloc bonsaiBloc;
+  late NotificationBloc notificationBloc;
+  late CartBloc cartBloc;
+
   StreamSubscription<ServiceState>? _serviceStateSubscription;
   StreamSubscription<BonsaiState>? _bonsaiStateSubscription;
   StreamSubscription<CartState>? _cartStateSubscription;
+
   late Stream<CartState> cartStream;
   late Stream<BonsaiState> bonsaiStream;
   late Stream<ServiceState> serviceStream;
+  late Stream<NotificationState> notificationStream;
 
-  late CartBloc cartBloc;
   int? Cartcount = 0;
 
   List<Bonsai> listPlant = [];
@@ -61,6 +70,7 @@ class _HomePageState extends State<HomePage> {
     serviceBloc = Provider.of<ServiceBloc>(context, listen: false);
     bonsaiBloc = Provider.of<BonsaiBloc>(context, listen: false);
     cartBloc = Provider.of<CartBloc>(context, listen: false);
+    notificationBloc = Provider.of<NotificationBloc>(context, listen: false);
 
     bonsaiStream = bonsaiBloc.authStateStream;
     serviceStream = serviceBloc.authStateStream;
@@ -74,6 +84,7 @@ class _HomePageState extends State<HomePage> {
         listBonsai: listPlant));
     serviceBloc.send(GetAllServiceEvent());
     cartBloc.send(GetCart());
+    notificationBloc.send(GetAllNotificationEvent());
     // _bonsaiStateSubscription = bonsaiStream.listen(
     //   (event) {},
     // );
@@ -85,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   void didChangeDependencies() {
     _serviceStateSubscription?.cancel();
     _bonsaiStateSubscription?.cancel();
-    _cartStateSubscription?.cancel();
+    // _cartStateSubscription?.cancel();
     super.didChangeDependencies();
   }
 
@@ -93,7 +104,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     serviceBloc.dispose();
     // bonsaiBloc.dispose();
-    _cartStateSubscription?.cancel();
+    // _cartStateSubscription?.cancel();
     _serviceStateSubscription?.cancel();
     _bonsaiStateSubscription?.cancel();
     super.dispose();
@@ -296,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: 20,
                         ),
-                        Text('Cây Cảnh Bán Chạy',
+                        Text('Cây Cảnh',
                             style: TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.bold,
@@ -340,16 +351,45 @@ class _HomePageState extends State<HomePage> {
             ),
           ]),
         ),
-        Positioned(
-            top: 30,
-            left: 10,
-            child: IconButton(
-              icon: const FaIcon(FontAwesomeIcons.gripLines,
-                  color: buttonColor, size: 40),
-              onPressed: () {
-                drawkey.currentState!.openDrawer();
-              },
-            ))
+        Stack(
+          children: [
+            Positioned(
+                top: 30,
+                left: 10,
+                child: IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.gripLines,
+                      color: buttonColor, size: 40),
+                  onPressed: () {
+                    drawkey.currentState!.openDrawer();
+                  },
+                )),
+            Positioned(
+              top: 35,
+              left: 35,
+              child: Consumer<NotificationProvider>(
+                builder: (context, value, _) {
+                  int count = value.list!
+                      .where((element) => element.isRead == false)
+                      .length;
+                  return (count != 0)
+                      ? ClipOval(
+                          child: Container(
+                              color: Colors.red,
+                              width: 20,
+                              height: 20,
+                              child: Center(
+                                  child: Text(
+                                count.toString(),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ))),
+                        )
+                      : const SizedBox();
+                },
+              ),
+            )
+          ],
+        ),
       ]),
     );
   }
