@@ -328,8 +328,13 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
           height: 10,
         ),
         _inforRow('Tên dịch vụ', detail.serviceModel!.name),
-        _inforRow('Lịch chăm sóc',
-            detail.timeWorking.toString().replaceAll(RegExp(r'[\[*\]]'), '')),
+        (detail.timeWorking != "")
+            ? _inforRow(
+                'Lịch chăm sóc',
+                detail.timeWorking
+                    .toString()
+                    .replaceAll(RegExp(r'[\[*\]]'), ''))
+            : const SizedBox(),
         _inforRow('Ngày bắt đầu', formatDateShow(detail.startDate)),
         _inforRow('Ngày kết thức', formatDateShow(detail.endDate)),
         _inforRow(
@@ -371,14 +376,28 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               const SizedBox(
                 width: 30,
               ),
-              Text(
-                '$title : ',
-                style: const TextStyle(
-                    color: darkText, fontSize: 18, fontWeight: FontWeight.bold),
+              Container(
+                constraints: BoxConstraints(
+                  minWidth: size.width * 0.2,
+                ),
+                child: AutoSizeText(
+                  '$title : ',
+                  maxLines: 1,
+                  style: const TextStyle(
+                      color: darkText,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-              Text(
-                value,
-                style: const TextStyle(color: darkText, fontSize: 18),
+              Container(
+                constraints: BoxConstraints(
+                  minWidth: size.width * 0.5,
+                ),
+                child: AutoSizeText(
+                  value,
+                  maxLines: 1,
+                  style: const TextStyle(color: darkText, fontSize: 18),
+                ),
               ),
             ],
           ),

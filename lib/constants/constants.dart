@@ -211,7 +211,9 @@ String formatDateShow(String date) {
 
 var f = NumberFormat("###,###,###", "en_US");
 String setPriceService(double price, int type, int pack, int months) {
-  return f.format(price * months + (price * type / 100) - (price * pack / 100));
+  return f.format(price * months +
+      (price * type / 100) * months -
+      (price * pack / 100) * months);
 }
 
 int countMonths(DateTime date1, DateTime date2) {
