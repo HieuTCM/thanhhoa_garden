@@ -70,6 +70,7 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     cartBloc = Provider.of<CartBloc>(context, listen: false);
     getListStore();
+    getDistancePrice();
     super.initState();
   }
 
@@ -78,7 +79,6 @@ class _OrderScreenState extends State<OrderScreen> {
       if (value) {
         setState(() {
           distancePrice = _orderProvider.distancePrice!;
-          isLoading = false;
         });
       }
     });
@@ -97,9 +97,11 @@ class _OrderScreenState extends State<OrderScreen> {
         getCoordinatesFromAddress(user!.address).then((value) {
           setState(() {
             origin = value;
-            getDistanceNearBy().then((value) {
-              distance = value;
-              getDistancePrice();
+          });
+          getDistanceNearBy().then((value) {
+            distance = value;
+            setState(() {
+              isLoading = false;
             });
           });
         });
@@ -160,6 +162,7 @@ class _OrderScreenState extends State<OrderScreen> {
       }
     });
     Distance[thekey] = double.parse((thevalue / 1000).toStringAsFixed(1));
+
     return Distance;
   }
 
@@ -181,7 +184,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void dispose() {
-    cartBloc.dispose();
+    // cartBloc.dispose();
     super.dispose();
   }
 

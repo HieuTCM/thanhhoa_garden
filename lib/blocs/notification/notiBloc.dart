@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:thanhhoa_garden/blocs/notification/notiEvent.dart';
 import 'package:thanhhoa_garden/blocs/notification/notiState.dart';
 import 'package:thanhhoa_garden/providers/notification/notification_Provider.dart';
@@ -35,6 +36,7 @@ class NotificationBloc {
         await _notificationProvider.getAllNotification().then((value) {
           if (value) {
             final listNoti = _notificationProvider.list;
+
             _notiStateController
                 .add(ListNotificationSuccess(listNotification: listNoti));
           } else {
@@ -51,9 +53,11 @@ class NotificationBloc {
             final listNoti = _notificationProvider.list;
             _notiStateController
                 .add(ListNotificationSuccess(listNotification: listNoti));
+            OverlayLoadingProgress.stop();
           } else {
             // _notiStateController.add(
             //     NotificationFailure(errorMessage: 'Không tìm thấy thông báo'));
+            OverlayLoadingProgress.stop();
             Fluttertoast.showToast(
                 msg: "Lỗi hệ thống",
                 toastLength: Toast.LENGTH_SHORT,

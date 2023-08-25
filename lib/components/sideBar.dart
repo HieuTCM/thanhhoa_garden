@@ -12,6 +12,7 @@ import 'package:thanhhoa_garden/screens/feedback/listFeedbackScreen.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/notification/notificationScreen.dart';
+import 'package:thanhhoa_garden/screens/report/reportScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
 import 'package:thanhhoa_garden/screens/schedule/schedulePage.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
@@ -149,6 +150,17 @@ class _SideBarState extends State<SideBar> {
             },
                 const Icon(
                   Icons.feedback_outlined,
+                  size: 30,
+                  color: buttonColor,
+                )),
+            _listTile('Báo Cáo của tôi', () {
+              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ReportScreen(),
+              ));
+            },
+                const Icon(
+                  Icons.report,
                   size: 30,
                   color: buttonColor,
                 )),

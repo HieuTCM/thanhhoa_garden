@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String? errorUsername;
   String? validateUserName(String value) {
     if (value.isEmpty) {
-      return 'Nhập Username';
+      return 'Nhập tài khoản';
     }
     return null;
   }
@@ -163,9 +163,9 @@ class _RegisterPageState extends State<RegisterPage> {
   String? errorEmail;
   String? validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Enter your name';
+      return 'Nhập email';
     } else {
-      return EmailValidator.validate(value) ? null : 'Email Invald';
+      return EmailValidator.validate(value) ? null : 'Email không hợp lệ';
     }
   }
 

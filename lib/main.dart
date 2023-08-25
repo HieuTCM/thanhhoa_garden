@@ -13,6 +13,7 @@ import 'package:thanhhoa_garden/blocs/contract/contactBloc.dart';
 import 'package:thanhhoa_garden/blocs/feedback/feedback_bloc.dart';
 import 'package:thanhhoa_garden/blocs/notification/notiBloc.dart';
 import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
+import 'package:thanhhoa_garden/blocs/report/reportBloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/store/storeBloc.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
@@ -27,6 +28,7 @@ import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
 import 'package:thanhhoa_garden/providers/notification/notification_Provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
+import 'package:thanhhoa_garden/providers/report/report_provider.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 // import 'package:thanhhoa_garden/screens/MyHomePage.dart';
@@ -77,6 +79,7 @@ class MyApp extends StatelessWidget {
         ListenableProvider<StoreProvider>(create: (_) => StoreProvider()),
         ListenableProvider<OrderProvider>(create: (_) => OrderProvider()),
         ListenableProvider<ContactProvider>(create: (_) => ContactProvider()),
+        ListenableProvider<ReportProvider>(create: (_) => ReportProvider()),
         ListenableProvider<NotificationProvider>(
             create: (_) => NotificationProvider()),
         ProxyProvider<AuthenticationProvider, AuthBloc>(
@@ -109,6 +112,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<NotificationProvider, NotificationBloc>(
             update: (_, notificationProvider, __) =>
                 NotificationBloc(notificationProvider: notificationProvider)),
+        ProxyProvider<ReportProvider, ReportBloc>(
+            update: (_, reportProvider, __) =>
+                ReportBloc(reportProvider: reportProvider)),
       ],
       child: MaterialApp(
         title: 'Thanh Hoa Garden',

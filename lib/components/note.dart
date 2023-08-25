@@ -408,3 +408,66 @@ class _ConfirmCancelOrderState extends State<ConfirmCancelOrder> {
     );
   }
 }
+
+//Report
+class SendReport extends StatefulWidget {
+  final Function callback;
+  SendReport({super.key, required this.callback});
+
+  @override
+  State<SendReport> createState() => _SendReportState();
+}
+
+class _SendReportState extends State<SendReport> {
+  TextEditingController _reasonController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: size.width - 130,
+                child: const AutoSizeText(
+                  'Gửi báo cáo cho chúng tôi nếu bạn cảm thấy không hài lòng về chất lượng phục vụ của nhân viên.',
+                  style: TextStyle(
+                      color: darkText,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Nội dung'),
+              TextFormField(
+                controller: _reasonController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Vui lòng đủ thông tin';
+                  }
+                  return null;
+                },
+                maxLength: 150,
+                onChanged: (value) {
+                  setState(() {
+                    widget.callback(value);
+                  });
+                },
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}

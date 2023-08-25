@@ -331,34 +331,41 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
           ),
           Row(
             children: [
-              Column(
-                children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                                contact.showStaffModel!.avatar ?? NoIMG))),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text('Nhân viên',
-                      style: TextStyle(
-                        color: darkText,
-                        fontSize: 16,
-                      )),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(contact.showStaffModel!.fullName,
-                      style: const TextStyle(
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.33 - 33,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                  contact.showStaffModel!.avatar ?? NoIMG))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text('Nhân viên',
+                        style: TextStyle(
                           color: darkText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold))
-                ],
+                          fontSize: 16,
+                        )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      child: AutoSizeText(contact.showStaffModel!.fullName,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color: darkText,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold)),
+                    )
+                  ],
+                ),
               ),
               Column(children: [
                 const SizedBox(
@@ -389,7 +396,7 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
       children: [
         Container(
           constraints: BoxConstraints(
-            minWidth: size.width - 140,
+            minWidth: size.width * 0.66,
           ),
           child: Row(
             children: [
@@ -403,7 +410,7 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
               ),
               Container(
                 constraints: BoxConstraints(
-                  minWidth: size.width - 270,
+                  minWidth: size.width - 272,
                 ),
                 child: AutoSizeText(
                   value,

@@ -48,12 +48,19 @@ class _CartScreenState extends State<CartScreen> {
   List<ContactDetail> listContactDetail = [];
   List<ContactDetail> listContactDetailSelect = [];
   List<int> listIndex = [];
+
   @override
   void initState() {
     getListService();
     cartBloc = Provider.of<CartBloc>(context, listen: false);
     getCart();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // cartBloc.dispose();
+    super.dispose();
   }
 
   getCart() async {

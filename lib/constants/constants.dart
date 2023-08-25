@@ -107,6 +107,22 @@ String convertStatusContact(String value) {
   return result;
 }
 
+String convertStatusReport(String value) {
+  String result = value;
+  switch (value) {
+    case "NEW":
+      result = 'Mới';
+      break;
+    case "INACTIVE":
+      result = 'Bị từ chối';
+      break;
+    case "DONE":
+      result = 'Đã xác nhận';
+      break;
+  }
+  return result;
+}
+
 String scoreFeedback(int score) {
   switch (score) {
     case 1:

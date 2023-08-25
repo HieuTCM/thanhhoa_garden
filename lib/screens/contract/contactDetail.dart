@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:popup_banner/popup_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/contract/contactBloc.dart';
@@ -17,6 +18,7 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
 import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
+import 'package:thanhhoa_garden/providers/report/report_provider.dart';
 
 class ContactDetailScreen extends StatefulWidget {
   final Contact? contact;
@@ -282,12 +284,8 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             'Ngày kết thúc', getDate(contact.endedDate).substring(0, 10), null),
         _inforRow('Trạng thái', convertStatusContact(contact.status), null),
         _inforRow('Địa chỉ', contact.address, null),
-        _inforRow('Loại hình thanh toán',
-            contact.showPaymentTypeModel!.name ?? 'Chưa chọn', priceColor),
         _inforRow(
             'Giá trị hợp đồng', '${f.format(contact.total)} đ', priceColor),
-        _inforRow(
-            'Số tiền đã cọc', '${f.format(contact.deposit)} đ', priceColor),
         _inforRow(
             'Trạng thái thanh toán',
             contact.isPaid ? 'Hoàn thành' : 'Chưa hoàn thành',
@@ -559,7 +557,37 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 ' % )',
             null),
         _inforRow('Đơn giá', f.format(detail.serviceModel!.price), null),
-        _inforRow('Lưu ý', detail.note, null),
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            children: [
+              _inforRow('Lưu ý', detail.note, null),
+              Spacer(),
+              (widget.contact!.status == 'WORKING')
+                  ? GestureDetector(
+                      onTap: () {
+                        reportDialog(detail.id);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 100,
+                        height: 40,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        margin: const EdgeInsets.only(
+                            left: 10, right: 10, bottom: 10),
+                        child: const AutoSizeText('Gửi báo cáo',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800, color: lightText)),
+                      ),
+                    )
+                  : const SizedBox()
+            ],
+          ),
+        ),
         const SizedBox(
           height: 10,
         ),
@@ -572,5 +600,129 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
         ),
       ]),
     );
+  }
+
+  dynamic reportDialog(String detailID) {
+    // var phone = widget.phone;
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text(
+                'Gửi báo cáo',
+                style: TextStyle(color: buttonColor, fontSize: 25),
+              ),
+            ),
+            content: SizedBox(
+                height: 170,
+                width: size.width - 10,
+                child: SendReport(
+                  callback: setReason,
+                )),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 110,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Text('Quay lại',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (reason.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Vui lòng nhập nội dung báo cáo",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else if (reason.length < 5) {
+                        Fluttertoast.showToast(
+                            msg: "Vui lòng mô tả chi tiết hơn",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        OverlayLoadingProgress.start(context);
+                        Navigator.pop(context);
+                        ReportProvider()
+                            .SendReport(detailID, reason)
+                            .then((value) {
+                          if (value) {
+                            Fluttertoast.showToast(
+                                msg: "Gửi báo cáo thành công",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            OverlayLoadingProgress.stop();
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Gửi báo cáo thất bại",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            OverlayLoadingProgress.stop();
+                          }
+                        });
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 110,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Text('Gửi',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
+  String reason = '';
+  bool validate = false;
+  setReason(String value) {
+    setState(() {
+      reason = value;
+    });
   }
 }

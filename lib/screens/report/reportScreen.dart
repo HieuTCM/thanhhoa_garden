@@ -5,34 +5,38 @@ import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/notification/notiBloc.dart';
 import 'package:thanhhoa_garden/blocs/notification/notiEvent.dart';
 import 'package:thanhhoa_garden/blocs/notification/notiState.dart';
+import 'package:thanhhoa_garden/blocs/report/reportBloc.dart';
+import 'package:thanhhoa_garden/blocs/report/reportEvent.dart';
+import 'package:thanhhoa_garden/blocs/report/reportState.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/notification/notification.dart';
+import 'package:thanhhoa_garden/models/report/report.dart';
 
-class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+class ReportScreen extends StatefulWidget {
+  const ReportScreen({super.key});
 
   @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
+  State<ReportScreen> createState() => _ReportScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
-  late NotificationBloc notificationBloc;
-  late Stream<NotificationState> notificationStream;
+class _ReportScreenState extends State<ReportScreen> {
+  late ReportBloc reportBloc;
+  late Stream<ReportState> reporttream;
 
   @override
   void initState() {
     // TODO: implement initState
-    notificationBloc = Provider.of<NotificationBloc>(context, listen: false);
-    notificationStream = notificationBloc.notificationStream;
-    notificationBloc.send(GetAllNotificationEvent());
+    reportBloc = Provider.of<ReportBloc>(context, listen: false);
+    reporttream = reportBloc.reportStream;
+    reportBloc.send(GetAllReportEvent());
     super.initState();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    notificationBloc.dispose();
+    reportBloc.dispose();
     super.dispose();
   }
 
@@ -50,16 +54,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
                 //search Bar
                 AppBarWiget(
-                    title: 'Thông Báo',
-                    tail: IconButton(
-                      icon: Icon(Icons.checklist_rtl_outlined),
-                      color: buttonColor,
-                      iconSize: 40,
-                      onPressed: () {
-                        OverlayLoadingProgress.start(context);
-                        notificationBloc.send(CheckAllNotificationEvent());
-                      },
-                    )),
+                  title: 'Báo cáo của bạn',
+                ),
                 const SizedBox(
                   height: 5,
                 ),
@@ -73,24 +69,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Expanded(child: _notiList()),
+                Expanded(child: _reportList()),
               ]))),
     );
   }
 
-  Widget _notiList() {
-    return StreamBuilder<NotificationState>(
-      stream: notificationStream,
-      initialData: NotificationInitial(),
+  Widget _reportList() {
+    return StreamBuilder<ReportState>(
+      stream: reporttream,
+      initialData: ReportInitial(),
       builder: (context, snapshot) {
         final state = snapshot.data;
-        if (state is NotificationLoading) {
+        if (state is ReportLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is ListNotificationSuccess) {
-          List<NotificationModel> list = [...state.listNotification!];
+        } else if (state is ListReportSuccess) {
+          List<ReportModel> list = [...state.listReport!];
           return list.isEmpty
               ? const Center(
-                  child: Text('Không có thông báo'),
+                  child: Text('Bạn chưa gửi báo cáo nào'),
                 )
               : ListView.builder(
                   shrinkWrap: true,
@@ -98,10 +94,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   physics: const ScrollPhysics(),
                   itemCount: list.length,
                   itemBuilder: (context, index) {
-                    return _notiTab(list[index]);
+                    return _reportTab(list[index]);
                   },
                 );
-        } else if (state is NotificationFailure) {
+        } else if (state is ReportFailure) {
           return Text(state.errorMessage);
         } else {
           return Container();
@@ -110,7 +106,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  Widget _notiTab(NotificationModel model) {
+  Widget _reportTab(ReportModel model) {
     var size = MediaQuery.of(context).size;
     return Container(
       constraints: const BoxConstraints(minHeight: 70),
@@ -119,7 +115,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       padding: const EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
           border: Border.all(color: buttonColor, width: 3.0),
-          color: model.isRead ? Colors.white : barColor),
+          color: Colors.white),
       child: Column(children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +123,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             Container(
               alignment: Alignment.center,
               width: size.width - 46,
-              child: AutoSizeText(model.title),
+              child: AutoSizeText('Dịch vụ : ' + model.serviceName),
             )
           ],
         ),
@@ -147,10 +143,37 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
         Row(
           children: [
+            SizedBox(
+              width: size.width - 46,
+              child: AutoSizeText(
+                'Trạng thái : ${convertStatusReport(model.status)}',
+                style: const TextStyle(color: Colors.green, fontSize: 16),
+              ),
+            )
+          ],
+        ),
+        (model.reason != null)
+            ? Row(
+                children: [
+                  SizedBox(
+                    width: size.width - 46,
+                    child: AutoSizeText(
+                      'Lý do : ${model.reason}',
+                      style: const TextStyle(color: Colors.green, fontSize: 16),
+                    ),
+                  )
+                ],
+              )
+            : const SizedBox(),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
             Container(
               alignment: Alignment.centerRight,
               width: size.width - 46,
-              child: AutoSizeText(getDate(model.date)),
+              child: AutoSizeText(getDate(model.createdDate)),
             )
           ],
         )

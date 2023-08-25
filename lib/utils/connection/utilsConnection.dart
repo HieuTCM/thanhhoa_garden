@@ -83,6 +83,10 @@ const confirmWorkingURL = '/workingDate/addWorkingDate?contractDetailID=';
 const getNotiURL = '/notification';
 const setIsReadAllURL = '/notification/isReadByToken';
 
+//repost
+const sendReportURL = '/report';
+const getReportURL = '/report/getByCustomerToken';
+
 //enum
 const orderStatus = '/enum/order';
 const contactStatus = '/enum/contract';

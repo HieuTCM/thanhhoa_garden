@@ -90,7 +90,6 @@ class Contact {
     imgList = Img;
     showCustomerModel = User.fetchInfo(json['showCustomerModel']);
     showStaffModel = User.fetchInfo(json['showStaffModel']);
-    showPaymentTypeModel = PaymentType.fromJson(json['showPaymentTypeModel']);
     showStoreModel = Store.fromJson(json['showStoreModel']);
   }
 }
