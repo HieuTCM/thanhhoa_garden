@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:geolocator/geolocator.dart';
 
@@ -166,6 +167,7 @@ class _MapScreenState extends State<MapScreen> {
             _mapController.animateCamera(
               CameraUpdate.newCameraPosition(cameraPosition),
             );
+            _addMarker(LatLng(value.latitude, value.longitude));
           });
         },
         child: const Icon(Icons.center_focus_strong),
@@ -203,6 +205,16 @@ class _MapScreenState extends State<MapScreen> {
               suffixIcon: IconButton(
                 onPressed: () {
                   _searchController.clear();
+                  setState(() {
+                    origin = LatLng(0, 0);
+                    selectMarker = Marker(
+                      markerId: const MarkerId('Bạn'),
+                      infoWindow: const InfoWindow(title: 'Vị trí của bạn'),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueBlue),
+                      position: origin,
+                    );
+                  });
                 },
                 icon: const Icon(Icons.close),
               ),
@@ -227,8 +239,19 @@ class _MapScreenState extends State<MapScreen> {
         ),
         GestureDetector(
           onTap: () {
-            widget.callback(_searchController.text, origin);
-            Navigator.pop(context);
+            if (_searchController.text.isEmpty) {
+              Fluttertoast.showToast(
+                  msg: "Bạn chưa chọn địa chỉ",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            } else {
+              widget.callback(_searchController.text, origin);
+              Navigator.pop(context);
+            }
           },
           child: Container(
               width: 50,

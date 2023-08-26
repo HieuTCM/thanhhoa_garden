@@ -30,7 +30,7 @@ class CategoryBloc {
                 .add(ListCategorySuccess(listCategory: listCategory));
           } else {
             _categoryController
-                .add(CategoryFailure(errorMessage: 'Get Bonsai List Failed'));
+                .add(CategoryFailure(errorMessage: 'Lấy danh sách danh mục thất bại'));
           }
         });
         break;

@@ -448,6 +448,28 @@ class _OrderScreenState extends State<OrderScreen> {
                       fontWeight: FontWeight.w500),
                 ),
               ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 10),
+                child: AutoSizeText(
+                  listStore
+                      .where((element) => element.id == distance.keys.first)
+                      .first
+                      .storeName,
+                  style: const TextStyle(color: darkText, fontSize: 16.5),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 10),
+                child: AutoSizeText(
+                  'Địa chỉ :  ${listStore.where((element) => element.id == distance.keys.first).first.address}',
+                  style: const TextStyle(color: darkText, fontSize: 16.5),
+                ),
+              ),
               (!isLoading)
                   ? Container(
                       padding: const EdgeInsets.all(10),
@@ -768,22 +790,22 @@ class _OrderScreenState extends State<OrderScreen> {
     return buttonColor;
   }
 
-  List<String> imgURL = [];
-  List<File> listFile = [];
-  Future _pickImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    // final image = await ImagePicker().pickMedia();
-    if (image == null) return;
-    File? img = File(image.path);
-    OverlayLoadingProgress.start(context);
-    ImgProvider().upload(img).then((value) {
-      setState(() {
-        imgURL.add(value);
-        listFile.add(img);
-      });
-      OverlayLoadingProgress.stop();
-    });
-  }
+  // List<String> imgURL = [];
+  // List<File> listFile = [];
+  // Future _pickImage(ImageSource source) async {
+  //   final image = await ImagePicker().pickImage(source: source);
+  //   // final image = await ImagePicker().pickMedia();
+  //   if (image == null) return;
+  //   File? img = File(image.path);
+  //   OverlayLoadingProgress.start(context);
+  //   ImgProvider().upload(img).then((value) {
+  //     setState(() {
+  //       imgURL.add(value);
+  //       listFile.add(img);
+  //     });
+  //     OverlayLoadingProgress.stop();
+  //   });
+  // }
 
   _comfirmDialog() {
     var size = MediaQuery.of(context).size;

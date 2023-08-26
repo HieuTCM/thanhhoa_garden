@@ -38,7 +38,7 @@ class BonsaiBloc {
                 ListBonsaiSuccess(listBonsai: fetchBonsaiList));
           } else {
             _BonsaiStateController.add(
-                BonsaiFailure(errorMessage: 'Get Bonsai List Failed'));
+                BonsaiFailure(errorMessage: 'Lấy danh sách cây thất bại'));
           }
         });
         break;
@@ -50,7 +50,7 @@ class BonsaiBloc {
             _BonsaiStateController.add(BonsaiSuccess(bonsai: Bonsai));
           } else {
             _BonsaiStateController.add(
-                BonsaiFailure(errorMessage: 'Get Bonsai Failed'));
+                BonsaiFailure(errorMessage: 'Lấy danh sách cây thất bại'));
           }
         });
         break;

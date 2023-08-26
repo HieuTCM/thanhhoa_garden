@@ -405,6 +405,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.only(left : 10),
+          child: AutoSizeText(
+            widget.order.showStoreModel!.storeName,
+            style: const TextStyle(color: darkText, fontSize: 18),
+          ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(10),
           child: AutoSizeText(
             widget.order.showStoreModel!.address,

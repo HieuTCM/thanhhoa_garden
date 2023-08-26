@@ -1,16 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:provider/provider.dart';
-import 'package:thanhhoa_garden/blocs/notification/notiBloc.dart';
-import 'package:thanhhoa_garden/blocs/notification/notiEvent.dart';
-import 'package:thanhhoa_garden/blocs/notification/notiState.dart';
 import 'package:thanhhoa_garden/blocs/report/reportBloc.dart';
 import 'package:thanhhoa_garden/blocs/report/reportEvent.dart';
 import 'package:thanhhoa_garden/blocs/report/reportState.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
-import 'package:thanhhoa_garden/models/notification/notification.dart';
 import 'package:thanhhoa_garden/models/report/report.dart';
 
 class ReportScreen extends StatefulWidget {
