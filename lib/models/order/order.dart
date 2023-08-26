@@ -161,6 +161,7 @@ class OrderDetail {
     quantity = json["quantity"];
     price = json["price"];
     isFeedback = json["isFeedback"];
+    totalPage = json["totalPage"];
     showPlantModel = PlantModel;
     showCustomerModel = CustomerModel;
     showDistancePriceModel = DistancePriceModel;

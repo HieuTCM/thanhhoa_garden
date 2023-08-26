@@ -20,6 +20,7 @@ import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
+import 'package:thanhhoa_garden/screens/feedback/feedbackPlantScreen.dart';
 
 class BonsaiDetail extends StatefulWidget {
   final String bonsaiID;
@@ -269,7 +270,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
                 } else if (state is ListFeedbackSuccess) {
                   return state.listFeedback!.isEmpty
                       ? const Center(
-                          child: Text('Không tìm thấy đáng giá'),
+                          child: Text('Cây chưa có đánh giá '),
                         )
                       : _listFeedback(state.listFeedback!);
                 } else if (state is FeedbackFailure) {
@@ -317,6 +318,12 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
             alignment: Alignment.center,
             height: 40,
             child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => FeedbackPlantScreen(
+                          PlantID: widget.bonsaiID,
+                        )));
+              },
               child: const Text(
                 'Xem tất cả >>',
                 style: TextStyle(

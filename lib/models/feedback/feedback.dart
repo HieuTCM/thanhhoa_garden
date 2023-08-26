@@ -22,6 +22,7 @@ class FeedbackModel {
   late final totalFeedback;
   late final avgRatingFeedback;
   late final createdDate;
+  late final totalPage;
   late List<ImageURL>? listImg;
   late OrderCart? showPlantModel;
   late User? showCustomerModel;
@@ -37,6 +38,7 @@ class FeedbackModel {
       this.showCustomerModel,
       this.showPlantModel,
       this.status,
+      this.totalPage,
       this.totalFeedback,
       this.totalRating});
 
@@ -48,6 +50,7 @@ class FeedbackModel {
     totalFeedback = json["totalFeedback"];
     totalRating = json["totalRating"];
     avgRatingFeedback = json["avgRatingFeedback"];
+    totalPage = json["totalPage"];
     createdDate = json["createdDate"];
     if (json['imgList'] != null) {
       for (var data in json['imgList']) {
