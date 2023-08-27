@@ -20,6 +20,7 @@ import 'package:thanhhoa_garden/screens/contract/serviceDetailContactSreen.dart'
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
+import 'package:flutter/gestures.dart';
 
 class ConfirmContactScreen extends StatefulWidget {
   final Function callback;
@@ -209,7 +210,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               ),
             ]),
           ),
-          Positioned(top: size.height - 65, child: _floatingBarService()),
+          Positioned(top: size.height - 95, child: _floatingBarService()),
         ],
       ),
     );
@@ -413,97 +414,122 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
     var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.all(10),
-      height: 65,
+      height: 95,
       width: size.width,
       decoration: const BoxDecoration(color: barColor),
-      child: Row(
+      child: Column(
         children: [
-          const SizedBox(
-            width: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Số dịch vụ ${widget.totalService}',
-                  style: const TextStyle(
-                      color: darkText,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
-              Text('${f.format(widget.totalPriceService)} đ',
-                  style: const TextStyle(
-                      color: priceColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500)),
-            ],
-          ),
-          Spacer(),
-          (isLoading)
-              ? const Text('Đang tìm cửa hàng gần bạn nhất...')
-              : GestureDetector(
-                  onTap: () async {
-                    String title =
-                        'Hợp đồng ${widget.listContact[0].serviceModel!.name}';
-                    ContactRequest request = ContactRequest(
-                        title: title,
-                        fullName: _nameController.text,
-                        phone: _phoneController.text,
-                        address: _addressController.text,
-                        email: _emailController.text,
-                        storeID: distance.keys.first,
-                        detailModelList: widget.listContact);
-
-                    var map = ContactRequest().toJson(request);
-                    ContactProvider().createContact(map).then((value) {
-                      if (value) {
-                        Fluttertoast.showToast(
-                            msg: "Tạo hợp đồng thành công",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.green,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        List<Map<String, dynamic>> listContactDetail =
-                            getListContactDetailFromSharedPrefs();
-                        for (var data in widget.listIndex) {
-                          listContactDetail.removeAt(data);
-                        }
-                        Map<String, dynamic> map = Map<String, dynamic>();
-                        map['detailModelList'] = listContactDetail;
-                        sharedPreferences.setString(
-                            'ContactDetail', json.encode(map));
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => HistoryScreen(index: 1),
-                        ));
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Tạo hợp đồng thất bại",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      }
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    width: 130,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: buttonColor,
-                        borderRadius: BorderRadius.circular(50)),
-                    child: const Text(
-                      'Xác nhận',
-                      style: TextStyle(
-                          color: lightText,
-                          fontSize: 18,
+          SizedBox(
+            width: size.width - 20,
+            child: RichText(
+              text: TextSpan(
+                  style: const TextStyle(color: darkText, fontSize: 14),
+                  text: 'Bấm xác nhận điều đó có nghĩa là bạn đồng ý với ',
+                  children: [
+                    TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => showPolyci(policyContract, context),
+                      text: 'điều khoản của chúng tôi',
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold),
                     ),
-                  ),
-                )
+                  ]),
+            ),
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Số dịch vụ ${widget.totalService}',
+                      style: const TextStyle(
+                          color: darkText,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500)),
+                  Text('${f.format(widget.totalPriceService)} đ',
+                      style: const TextStyle(
+                          color: priceColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500)),
+                ],
+              ),
+              Spacer(),
+              (isLoading)
+                  ? const Text('Đang tìm cửa hàng gần bạn nhất...')
+                  : GestureDetector(
+                      onTap: () async {
+                        String title =
+                            'Hợp đồng ${widget.listContact[0].serviceModel!.name}';
+                        ContactRequest request = ContactRequest(
+                            title: title,
+                            fullName: _nameController.text,
+                            phone: _phoneController.text,
+                            address: _addressController.text,
+                            email: _emailController.text,
+                            storeID: distance.keys.first,
+                            detailModelList: widget.listContact);
+
+                        var map = ContactRequest().toJson(request);
+                        ContactProvider().createContact(map).then((value) {
+                          if (value) {
+                            Fluttertoast.showToast(
+                                msg: "Tạo hợp đồng thành công",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            List<Map<String, dynamic>> listContactDetail =
+                                getListContactDetailFromSharedPrefs();
+                            for (var data in widget.listIndex) {
+                              listContactDetail.removeAt(data);
+                            }
+                            Map<String, dynamic> map = Map<String, dynamic>();
+                            map['detailModelList'] = listContactDetail;
+                            sharedPreferences.setString(
+                                'ContactDetail', json.encode(map));
+                            Navigator.of(context).pop();
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => HistoryScreen(index: 1),
+                            ));
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Tạo hợp đồng thất bại",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          }
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        width: 130,
+                        height: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: const Text(
+                          'Xác nhận',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+            ],
+          ),
         ],
       ),
     );

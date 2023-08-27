@@ -36,7 +36,7 @@ class NotificationBloc {
         await _notificationProvider.getAllNotification().then((value) {
           if (value) {
             final listNoti = _notificationProvider.list;
-
+            final count = _notificationProvider.countNotRead;
             _notiStateController
                 .add(ListNotificationSuccess(listNotification: listNoti));
           } else {

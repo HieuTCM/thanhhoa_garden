@@ -368,10 +368,7 @@ class _HomePageState extends State<HomePage> {
               left: 35,
               child: Consumer<NotificationProvider>(
                 builder: (context, value, _) {
-                  int count = value.list!
-                      .where((element) => element.isRead == false)
-                      .length;
-                  return (count != 0)
+                  return (value.countNotRead != 0)
                       ? ClipOval(
                           child: Container(
                               color: Colors.red,
@@ -379,7 +376,7 @@ class _HomePageState extends State<HomePage> {
                               height: 20,
                               child: Center(
                                   child: Text(
-                                count.toString(),
+                                value.countNotRead.toString(),
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 12),
                               ))),
@@ -406,7 +403,8 @@ class _HomePageState extends State<HomePage> {
                 width: 130,
                 height: 145,
                 alignment: Alignment.center,
-                child: _serviceTab(listService[index], icons[index]));
+                child: _serviceTab(listService[index],
+                    icons[(index > 2) ? index % 2 - 1 : index]));
           },
         ));
   }

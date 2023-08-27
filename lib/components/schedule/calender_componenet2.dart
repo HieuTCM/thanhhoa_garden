@@ -70,7 +70,10 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
                         return const Circular();
                       }
                       if (snapshot.hasData) {
-                        List<ContactDetail> schedule = snapshot.data!;
+                        List<ContactDetail> schedule = snapshot.data!
+                            .where((element) =>
+                                element.contactModel!.status == 'WORKING')
+                            .toList();
                         if (snapshot.data == null) {
                           return const Center(
                             child: Text(
@@ -79,7 +82,16 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           );
-                        } else {
+                        } else if (schedule == null) {
+                          return const Center(
+                            child: Text(
+                              'Chưa có hợp đồng đang hot động',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          );
+                        }
+                        if (count == 0) {
                           return ListView.builder(
                               scrollDirection: Axis.vertical,
                               padding: EdgeInsets.zero,
@@ -91,6 +103,8 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
                                 for (int i = 0; i < days_list.length; i++) {
                                   if (days_list[i] ==
                                       getWeekday(today.weekday)) {
+                                    count++;
+
                                     return Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -166,6 +180,13 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
                                 return const SizedBox();
                               },
                               itemCount: schedule.length);
+                        } else if (count > 0) {
+                          return const Center(
+                            child: Text(
+                              'Hôm nay không có lịch làm việc',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          );
                         }
                       }
                       return const Center(
@@ -180,6 +201,7 @@ class _CanlenderComponentState extends State<CanlenderComponent> {
     );
   }
 
+  var count = 0;
   Future<void> _onDateSelected(DateTime day, DateTime focusedDay) async {
     setState(() {
       today = day;

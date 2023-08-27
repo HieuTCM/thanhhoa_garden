@@ -201,10 +201,7 @@ class _SideBarState extends State<SideBar> {
           ? null
           : Consumer<NotificationProvider>(
               builder: (context, value, _) {
-                int count = value.list!
-                    .where((element) => element.isRead == false)
-                    .length;
-                return (count != 0)
+                return (value.countNotRead != 0)
                     ? ClipOval(
                         child: Container(
                             color: Colors.red,
@@ -212,7 +209,7 @@ class _SideBarState extends State<SideBar> {
                             height: 20,
                             child: Center(
                                 child: Text(
-                              count.toString(),
+                              value.countNotRead.toString(),
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 12),
                             ))),

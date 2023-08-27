@@ -338,7 +338,7 @@ class _SchedulePageState extends State<SchedulePage> {
               },
               child: Container(
                 alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 2.2,
                 height: 30,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
@@ -375,11 +375,20 @@ class _SchedulePageState extends State<SchedulePage> {
           return const Circular();
         }
         if (snapshot.hasData) {
-          List<ContactDetail> cD = snapshot.data!;
+          List<ContactDetail> cD = snapshot.data!
+              .where((element) => element.contactModel!.status == 'WORKING')
+              .toList();
           if (snapshot.data == null) {
             return const Center(
               child: Text(
                 'Không có kết quả để hiển thị',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            );
+          } else if (cD == null) {
+            return const Center(
+              child: Text(
+                'Chưa có hợp đồng đang hoặt động',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             );
@@ -395,165 +404,169 @@ class _SchedulePageState extends State<SchedulePage> {
                       (cD[index].timeWorking.toString().split(", "));
                   if (((selectedTabToday == 0) || (selectedTabToday == 1))) {
                     for (int i = 0; i < days_list.length; i++) {
-                      if (days_list[i] == weekday) {
+                      // if (days_list[i] == weekday) {
+                      if (days_list[i] == 'Thứ 4') {
                         return GestureDetector(
                           onTap: () async {
                             print("need to fix ... sai logic roi");
                           },
-                          child: Column(
-                            children: [
-                              Container(
-                                width: size.width - 40,
-                                margin:
-                                    const EdgeInsets.only(top: 5, bottom: 5),
-                                padding:
-                                    const EdgeInsets.only(top: 5, bottom: 5),
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                          child: Container(
+                              width: size.width,
+                              padding: const EdgeInsets.only(
+                                  left: 10, bottom: 10, right: 5, top: 10),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: buttonColor, width: 1)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    cD[index].contactModel!.title.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                3,
+                                        child: Column(
                                           children: [
-                                            Text(
-                                              cD[index]
-                                                  .contactModel!
-                                                  .title
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
+                                            Container(
+                                              height: 100,
+                                              width: 100,
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: NetworkImage(cD[
+                                                                  index]
+                                                              .contactModel!
+                                                              .showStaffModel!
+                                                              .avatar ??
+                                                          NoIMG))),
                                             ),
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  width: size.width - 40,
-                                                  height: 1,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                          color: divince),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                // _contractFiled('Mã công việc',
-                                                //     cD[index].id.toString()),
-                                                _contractFiled(
-                                                    'Mã hợp đồng',
-                                                    cD[index]
-                                                        .contactModel!
-                                                        .id
-                                                        .toString()
-                                                        .substring(2)),
-                                                _contractFiled(
-                                                    'Dịch vụ',
-                                                    cD[index]
-                                                            .serviceModel!
-                                                            .name
-                                                            .toString() +
-                                                        ' - ' +
-                                                        cD[index]
-                                                            .serviceTypeModel!
-                                                            .name
-                                                            .toString()),
-                                                _contractFiled(
-                                                    'Lịch chăm sóc',
-                                                    cD[index]
-                                                        .timeWorking
-                                                        .toString()),
-                                                _contractFiled(
-                                                    'Khách hàng',
-                                                    cD[index]
-                                                        .contactModel!
-                                                        .fullName
-                                                        .toString()),
-                                                _contractFiled(
-                                                    'Địa chỉ',
-                                                    cD[index]
-                                                        .contactModel!
-                                                        .address
-                                                        .toString()),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      40,
-                                                  child: Row(
-                                                    children: [
-                                                      _contractFiled(
-                                                          'Điện thoại',
-                                                          cD[index]
-                                                              .contactModel!
-                                                              .phone
-                                                              .toString()),
-                                                      Spacer(),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          reportDialog(
-                                                              cD[index].id);
-                                                        },
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          width: 100,
-                                                          height: 40,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(5),
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  buttonColor,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          50)),
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 10,
-                                                                  right: 10,
-                                                                  bottom: 10),
-                                                          child: const AutoSizeText(
-                                                              'Gửi báo cáo',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w800,
-                                                                  color:
-                                                                      lightText)),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                            const Text('Nhân viên',
+                                                style: TextStyle(
+                                                  color: darkText,
+                                                  fontSize: 16,
+                                                )),
+                                            const SizedBox(
+                                              height: 10,
                                             ),
+                                            SizedBox(
+                                              child: AutoSizeText(
+                                                  cD[index]
+                                                      .contactModel!
+                                                      .showStaffModel!
+                                                      .fullName
+                                                      .toString(),
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color: darkText,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            )
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: 10,
-                                decoration: const BoxDecoration(color: divince),
-                              ),
-                            ],
-                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          _contractFiled(
+                                              'Mã hợp đồng',
+                                              cD[index]
+                                                  .contactModel!
+                                                  .id
+                                                  .toString()),
+                                          _contractFiled(
+                                              'Dịch vụ',
+                                              cD[index]
+                                                      .serviceModel!
+                                                      .name
+                                                      .toString() +
+                                                  ' - ' +
+                                                  cD[index]
+                                                      .serviceTypeModel!
+                                                      .name
+                                                      .toString()),
+                                          _contractFiled('Lịch chăm sóc',
+                                              cD[index].timeWorking.toString()),
+                                          _contractFiled(
+                                              'Khách hàng',
+                                              cD[index]
+                                                  .contactModel!
+                                                  .fullName
+                                                  .toString()),
+                                          _contractFiled(
+                                              'Địa chỉ',
+                                              cD[index]
+                                                  .contactModel!
+                                                  .address
+                                                  .toString()),
+                                          // SizedBox(
+                                          //   width: MediaQuery.of(context)
+                                          //           .size
+                                          //           .width -
+                                          //       40,
+                                          //   child: Row(
+                                          //     children: [
+                                          //       _contractFiled(
+                                          //           'Điện thoại',
+                                          //           cD[index]
+                                          //               .contactModel!
+                                          //               .phone
+                                          //               .toString()),
+                                          //       Spacer(),
+                                          //       GestureDetector(
+                                          //         onTap: () {
+                                          //           reportDialog(cD[index].id);
+                                          //         },
+                                          //         child: Container(
+                                          //           alignment: Alignment.center,
+                                          //           width: 100,
+                                          //           height: 40,
+                                          //           decoration: BoxDecoration(
+                                          //               color: buttonColor,
+                                          //               borderRadius:
+                                          //                   BorderRadius
+                                          //                       .circular(50)),
+                                          //           child: const AutoSizeText(
+                                          //               'Gửi báo cáo',
+                                          //               textAlign:
+                                          //                   TextAlign.center,
+                                          //               style: TextStyle(
+                                          //                   fontWeight:
+                                          //                       FontWeight.w800,
+                                          //                   color: lightText)),
+                                          //         ),
+                                          //       )
+                                          //     ],
+                                          //   ),
+                                          // )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
                         );
                       }
                     }
@@ -573,17 +586,29 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget _contractFiled(String title, String des) {
     return Column(
       children: [
-        Row(
-          children: [
-            Text(
-              title + ': ',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-            ),
-            Text(
-              des,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
+        SizedBox(
+          width: MediaQuery.of(context).size.width - 180,
+          child: Row(
+            children: [
+              AutoSizeText(
+                title + ': ',
+                maxLines: 1,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
+              Container(
+                constraints: BoxConstraints(
+                  // minWidth: MediaQuery.of(context).size.width - 260,
+                  maxWidth: MediaQuery.of(context).size.width - 240,
+                ),
+                child: AutoSizeText(
+                  des,
+                  // maxLines: 2,
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           height: 5,
@@ -630,7 +655,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   //List main category
-  List<String> tab = [('Ngày hôm nay'), ('Lịch tháng'), ('Đã hoàn thành')];
+  List<String> tab = [('Ngày hôm nay'), ('Lịch theo tháng')];
 
   //List today category
   List<String> tabToday = [('Tất cả'), ('Đã xong'), ('Chưa xong')];

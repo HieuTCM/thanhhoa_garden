@@ -41,7 +41,7 @@ class _ListFeedbackScreenState extends State<ListFeedbackScreen> {
   int pageNoFeedback = 0;
   int pageNoNotFeedback = 0;
 
-  int PageSize = 10;
+  int PageSize = 100;
 
   @override
   void initState() {

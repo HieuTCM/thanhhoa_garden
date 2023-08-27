@@ -272,6 +272,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           backgroundColor: Colors.green,
                           textColor: Colors.white,
                           fontSize: 16.0);
+                      Navigator.pop(context);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const ListFeedbackScreen(),
                       ));

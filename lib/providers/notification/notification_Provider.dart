@@ -15,6 +15,9 @@ class NotificationProvider extends ChangeNotifier {
   NotificationModel? get notification => _notification;
   List<NotificationModel>? get list => _listNotification;
 
+  int? _countNotRead = 0;
+  int? get countNotRead => _countNotRead;
+
   Future<bool> getAllNotification() async {
     bool result = false;
     List<NotificationModel> list = [];
@@ -32,6 +35,7 @@ class NotificationProvider extends ChangeNotifier {
           }
         }
         _listNotification = list;
+        _countNotRead = list.where((element) => element.isRead == false).length;
         result = true;
         notifyListeners();
       } else {

@@ -28,6 +28,7 @@ import 'package:thanhhoa_garden/screens/order/mapScreen.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:vnpay_flutter/vnpay_flutter.dart';
+import 'package:flutter/gestures.dart';
 
 class OrderScreen extends StatefulWidget {
   final List<OrderCart> listPlant;
@@ -61,9 +62,11 @@ class _OrderScreenState extends State<OrderScreen> {
   Distance distancePrice = Distance();
 
   Map<String, double> listDistance = {};
-  Map<String, dynamic> distance = {};
+  Map<String, dynamic> distance = {'S001': 0};
 
   LatLng origin = LatLng(0, 0);
+
+  Store selectStore = Store();
 
   bool isLoading = false;
   @override
@@ -111,9 +114,16 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Future<LatLng> getCoordinatesFromAddress(String address) async {
     LatLng latLng = LatLng(0.0, 0.0);
-    GeoData data = await Geocoder2.getDataFromAddress(
-        address: address, googleMapApiKey: GG_API_Key, language: 'vi');
-    latLng = LatLng(data.latitude, data.longitude);
+    try {
+      GeoData data = await Geocoder2.getDataFromAddress(
+              address: address, googleMapApiKey: GG_API_Key, language: 'vi')
+          .catchError((e) {
+        print(e.toString());
+      });
+      latLng = LatLng(data.latitude, data.longitude);
+    } catch (e) {
+      print(e.toString());
+    }
 
     return latLng;
   }
@@ -125,7 +135,11 @@ class _OrderScreenState extends State<OrderScreen> {
       isLoading = true;
       getDistanceNearBy().then((value) {
         distance = value;
+
         setState(() {
+          selectStore = listStore
+              .where((element) => element.id == distance.keys.first)
+              .first;
           isLoading = false;
         });
       });
@@ -452,10 +466,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.only(left: 10),
                 child: AutoSizeText(
-                  listStore
-                      .where((element) => element.id == distance.keys.first)
-                      .first
-                      .storeName,
+                  '${selectStore.storeName} ',
                   style: const TextStyle(color: darkText, fontSize: 16.5),
                 ),
               ),
@@ -466,7 +477,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.only(left: 10),
                 child: AutoSizeText(
-                  'Địa chỉ :  ${listStore.where((element) => element.id == distance.keys.first).first.address}',
+                  'Địa chỉ :  ${selectStore.address}',
                   style: const TextStyle(color: darkText, fontSize: 16.5),
                 ),
               ),
@@ -833,7 +844,7 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
           ),
           content: SizedBox(
-            height: 395,
+            height: 400,
             width: size.width - 10,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -967,7 +978,26 @@ class _OrderScreenState extends State<OrderScreen> {
                           fontSize: 16,
                           fontWeight: FontWeight.w500)),
                 ]),
-              )
+              ),
+              SizedBox(
+                width: size.width - 10,
+                child: RichText(
+                  text: TextSpan(
+                      style: const TextStyle(color: darkText, fontSize: 14),
+                      text: 'Bấm xác nhận điều đó có nghĩa là bạn đồng ý với ',
+                      children: [
+                        TextSpan(
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => showPolyci(policyOrder, context),
+                          text: 'điều khoản của chúng tôi',
+                          style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ]),
+                ),
+              ),
             ]),
           ),
           actions: [
@@ -1004,7 +1034,6 @@ class _OrderScreenState extends State<OrderScreen> {
                       _orderProvider.createOrder(data).then((value) {
                         if (value) {
                           cartBloc.send(GetCart());
-
                           Future.delayed(Duration(seconds: 3)).then((value) {
                             Fluttertoast.showToast(
                                 msg: "Tạo Đơn Hàng Thành Công",
@@ -1016,6 +1045,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 fontSize: 16.0);
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            OverlayLoadingProgress.stop();
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
                               builder: (context) => HistoryScreen(index: 0),
@@ -1030,8 +1060,8 @@ class _OrderScreenState extends State<OrderScreen> {
                               backgroundColor: Colors.red,
                               textColor: Colors.white,
                               fontSize: 16.0);
+                          OverlayLoadingProgress.stop();
                         }
-                        OverlayLoadingProgress.stop();
                       });
                     }
                   },

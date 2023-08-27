@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
 import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
+import 'package:thanhhoa_garden/providers/bonsai/category_provider.dart';
 
 class SearchScreen extends StatefulWidget {
   // StreamSubscription<CartState>? cartStateSubscription;
@@ -33,6 +35,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  RangeValues _currentRangeValues = const RangeValues(0, 0);
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
 
@@ -48,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
   late Stream<CategoryState> categoryStream;
 
   late CartBloc cartBloc;
-
+  List<PlantCategory> listCategory = [];
   var selectedTab = 0;
   String cateID = '';
   bool isLoading = false;
@@ -72,6 +75,16 @@ class _SearchScreenState extends State<SearchScreen> {
     _CategoryStateSubscription = categoryStream.listen((event) {});
     _scrollController.addListener(() {
       _getMorePlant();
+    });
+    getCategory();
+  }
+
+  getCategory() async {
+    CategoryProvider provider = CategoryProvider();
+    await provider.getAllCategory().then((value) async {
+      setState(() {
+        listCategory = provider.listCategory!;
+      });
     });
   }
 
@@ -326,7 +339,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Center(
       child: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            _showButtonSheet();
           },
           icon: const Icon(
             Icons.filter_alt_outlined,
@@ -334,5 +347,151 @@ class _SearchScreenState extends State<SearchScreen> {
             size: 40,
           )),
     );
+  }
+
+  _showButtonSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setState /*You can rename this!*/) {
+            return Container(
+              height: 400,
+              color: background,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: const Text('Lọc giá :',
+                            style: TextStyle(fontSize: 16)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                            'Từ  ${f.format(_currentRangeValues.start.round())} đ',
+                            style: const TextStyle(fontSize: 16)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                            ' Đến  ${f.format(_currentRangeValues.end.round())} đ',
+                            style: const TextStyle(fontSize: 16)),
+                      ),
+                    ],
+                  ),
+                  RangeSlider(
+                    values: _currentRangeValues,
+                    min: 0,
+                    max: 100000000,
+                    divisions: 1000,
+                    labels: RangeLabels(
+                      '${f.format(_currentRangeValues.start.round())} đ',
+                      '${f.format(_currentRangeValues.end.round())} đ',
+                    ),
+                    onChanged: (RangeValues values) {
+                      setState(() {
+                        _currentRangeValues = values;
+                      });
+                    },
+                  ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  Row(
+                    children: [
+                      Container(
+                          padding: const EdgeInsets.all(20),
+                          child: const Text('Danh mục :',
+                              style: TextStyle(fontSize: 16))),
+                    ],
+                  ),
+                  SizedBox(
+                      height: 140,
+                      child: ListWheelScrollView.useDelegate(
+                        itemExtent: 50,
+                        clipBehavior: Clip.antiAlias,
+                        onSelectedItemChanged: (index) {
+                          setState(
+                            () {
+                              setfilter(index);
+                              cateID = listCategory[index].categoryID;
+                            },
+                          );
+                        },
+                        childDelegate: ListWheelChildLoopingListDelegate(
+                          children: [
+                            for (int i = 0; i < listCategory.length; i++)
+                              Container(
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: i == selectedTab
+                                        ? buttonColor
+                                        : barColor),
+                                child: Text(
+                                  listCategory[i].categoryName,
+                                  style: TextStyle(
+                                      fontSize: 17.5,
+                                      color: (i == selectedTab
+                                          ? Colors.black
+                                          : Colors.grey)),
+                                ),
+                              )
+                          ],
+                        ),
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        search(_currentRangeValues.start,
+                            _currentRangeValues.end, cateID);
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 150,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: const Text(
+                          'Lọc',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  setfilter(int index) {
+    setState(() {
+      selectedTab = index;
+    });
+  }
+
+  search(double min, double max, String cateID) {
+    setState(() {
+      listPlant.clear();
+      pageNo = 0;
+    });
+    // _searchController.clear();
+    _searchPlant(
+        0, PageSize, 'ID', true, _searchController.text, cateID, min, max);
   }
 }
