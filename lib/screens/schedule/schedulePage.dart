@@ -404,8 +404,8 @@ class _SchedulePageState extends State<SchedulePage> {
                       (cD[index].timeWorking.toString().split(", "));
                   if (((selectedTabToday == 0) || (selectedTabToday == 1))) {
                     for (int i = 0; i < days_list.length; i++) {
-                      // if (days_list[i] == weekday) {
-                      if (days_list[i] == 'Thứ 4') {
+                      if (days_list[i] == weekday) {
+                        // if (days_list[i] == 'Thứ 4') {
                         return GestureDetector(
                           onTap: () async {
                             print("need to fix ... sai logic roi");

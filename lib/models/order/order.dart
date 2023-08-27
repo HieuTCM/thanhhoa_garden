@@ -26,6 +26,7 @@ class OrderObject {
   late final status;
   late final numOfPlant;
   late final isPaid;
+  late final isRefund;
   late User? showStaffModel;
   late User? showCustomerModel;
   late Distance? showDistancePriceModel;
@@ -61,6 +62,7 @@ class OrderObject {
     this.totalPage,
     this.numOfPlant,
     this.isPaid,
+    this.isRefund,
   });
 
   OrderObject.fromJson(
@@ -93,6 +95,7 @@ class OrderObject {
     numOfPlant = json["numOfPlant"];
     totalShipCost = json["totalShipCost"];
     isPaid = json["isPaid"];
+    isPaid = json["isRefund"];
     showStaffModel = StaffModel;
     showCustomerModel = CustomerModel;
     showDistancePriceModel = DistancePriceModel;

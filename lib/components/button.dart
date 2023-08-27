@@ -5,9 +5,11 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
+import 'package:thanhhoa_garden/blocs/contract/contactEvent.dart';
 import 'package:thanhhoa_garden/blocs/order/orderEvent.dart';
 import 'package:thanhhoa_garden/components/note.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
+import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 
@@ -211,6 +213,243 @@ class _CancelOrderButtonState extends State<CancelOrderButton> {
                           Navigator.pop(context);
                           Fluttertoast.showToast(
                               msg: "Hủy đơn thất bại",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+                      });
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 110,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Text('Hủy',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
+  setReason(String value) {
+    setState(() {
+      reason = value;
+    });
+  }
+}
+
+class CancelContractButton extends StatefulWidget {
+  final String status;
+  final String contractid;
+  final String phone;
+  CancelContractButton({
+    super.key,
+    required this.status,
+    required this.contractid,
+    required this.phone,
+  });
+
+  @override
+  State<CancelContractButton> createState() => _CancelContractButtonState();
+}
+
+class _CancelContractButtonState extends State<CancelContractButton> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  String reason = '';
+  @override
+  Widget build(BuildContext context) {
+    var status = widget.status;
+    var phone = widget.phone;
+    var size = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      onTap: () {
+        (status != 'WAITING')
+            ? null
+            : showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Center(
+                      child: Text(
+                        'Xác Nhận Hủy Yêu Cầu Tạo Hợp Đồng',
+                        style: TextStyle(color: buttonColor, fontSize: 25),
+                      ),
+                    ),
+                    content: SizedBox(
+                        height: 250,
+                        width: size.width - 10,
+                        child: NoteCancelContractOrder(
+                          contractid: widget.contractid,
+                          phone: phone,
+                        )),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: 110,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                  color: buttonColor,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: const Text('Quay lại',
+                                  style: TextStyle(
+                                      color: lightText,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showdialogConfirm();
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: 110,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                  color: buttonColor,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: const Text('Xác Nhận',
+                                  style: TextStyle(
+                                      color: lightText,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                });
+      },
+      child: Container(
+        alignment: Alignment.center,
+        width: 100,
+        height: 40,
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            color: (status == 'WAITING') ? buttonColor : barColor,
+            borderRadius: BorderRadius.circular(50)),
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        child: AutoSizeText(
+            (status == 'WAITING') ? 'Hủy yêu cầu' : convertStatusOrder(status),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontWeight: FontWeight.w800,
+                color: (status == 'WAITING') ? lightText : HintIcon)),
+      ),
+    );
+  }
+
+  dynamic showdialogConfirm() {
+    // var phone = widget.phone;
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text(
+                'Xác Nhận Hủy Đơn Hàng',
+                style: TextStyle(color: buttonColor, fontSize: 25),
+              ),
+            ),
+            content: SizedBox(
+                height: 170,
+                width: size.width - 10,
+                child: ConfirmCancelContract(
+                  callback: setReason,
+                  contractid: widget.contractid,
+                )),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 110,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Text('Quay lại',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      OverlayLoadingProgress.start(context);
+                      ContactProvider()
+                          .cancelContract(CancelContactEvent(
+                              status: 'CUSTOMERCANCELED',
+                              contactID: widget.contractid,
+                              reason: reason))
+                          .then((value) {
+                        if (value) {
+                          OverlayLoadingProgress.stop();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => HistoryScreen(
+                                        index: 1,
+                                      )));
+                          Fluttertoast.showToast(
+                              msg: "Hủy yêu cầu thành công",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        } else {
+                          OverlayLoadingProgress.stop();
+                          Navigator.pop(context);
+                          Fluttertoast.showToast(
+                              msg: "Hủy yêu cầu thất bại",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,

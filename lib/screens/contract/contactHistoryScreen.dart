@@ -9,6 +9,7 @@ import 'package:thanhhoa_garden/blocs/contract/contactBloc.dart';
 import 'package:thanhhoa_garden/blocs/contract/contactEvent.dart';
 import 'package:thanhhoa_garden/blocs/contract/contactState.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
+import 'package:thanhhoa_garden/components/button.dart';
 import 'package:thanhhoa_garden/components/sideBar.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
@@ -311,6 +312,15 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
             'Giá trị hợp đồng', '${f.format(contact.total)} đ', priceColor),
         _inforRow('Trạng thái', convertStatusContact(contact.status), null),
         _inforRow('Địa chỉ', contact.address, null),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CancelContractButton(
+                contractid: contact.id,
+                phone: contact.showStoreModel!.phone,
+                status: contact.status)
+          ],
+        )
       ]),
     );
   }

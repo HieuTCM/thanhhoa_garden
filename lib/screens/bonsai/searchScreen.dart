@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +35,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  RangeValues _currentRangeValues = const RangeValues(0, 0);
+  // RangeValues _currentRangeValues = const RangeValues(0, 0);
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
 
@@ -363,42 +363,42 @@ class _SearchScreenState extends State<SearchScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        child: const Text('Lọc giá :',
-                            style: TextStyle(fontSize: 16)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                            'Từ  ${f.format(_currentRangeValues.start.round())} đ',
-                            style: const TextStyle(fontSize: 16)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(
-                            ' Đến  ${f.format(_currentRangeValues.end.round())} đ',
-                            style: const TextStyle(fontSize: 16)),
-                      ),
-                    ],
-                  ),
-                  RangeSlider(
-                    values: _currentRangeValues,
-                    min: 0,
-                    max: 100000000,
-                    divisions: 1000,
-                    labels: RangeLabels(
-                      '${f.format(_currentRangeValues.start.round())} đ',
-                      '${f.format(_currentRangeValues.end.round())} đ',
-                    ),
-                    onChanged: (RangeValues values) {
-                      setState(() {
-                        _currentRangeValues = values;
-                      });
-                    },
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Container(
+                  //       padding: const EdgeInsets.all(10),
+                  //       child: const Text('Lọc giá :',
+                  //           style: TextStyle(fontSize: 16)),
+                  //     ),
+                  //     Container(
+                  //       padding: const EdgeInsets.all(10),
+                  //       child: Text(
+                  //           'Từ  ${f.format(_currentRangeValues.start.round())} đ',
+                  //           style: const TextStyle(fontSize: 16)),
+                  //     ),
+                  //     Container(
+                  //       padding: const EdgeInsets.all(20),
+                  //       child: Text(
+                  //           ' Đến  ${f.format(_currentRangeValues.end.round())} đ',
+                  //           style: const TextStyle(fontSize: 16)),
+                  //     ),
+                  //   ],
+                  // ),
+                  // RangeSlider(
+                  //   values: _currentRangeValues,
+                  //   min: 0,
+                  //   max: 100000000,
+                  //   divisions: 1000,
+                  //   labels: RangeLabels(
+                  //     '${f.format(_currentRangeValues.start.round())} đ',
+                  //     '${f.format(_currentRangeValues.end.round())} đ',
+                  //   ),
+                  //   onChanged: (RangeValues values) {
+                  //     setState(() {
+                  //       _currentRangeValues = values;
+                  //     });
+                  //   },
+                  // ),
                   // const SizedBox(
                   //   height: 20,
                   // ),
@@ -411,7 +411,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                   SizedBox(
-                      height: 140,
+                      height: 250,
                       child: ListWheelScrollView.useDelegate(
                         itemExtent: 50,
                         clipBehavior: Clip.antiAlias,
@@ -434,10 +434,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                     color: i == selectedTab
                                         ? buttonColor
                                         : barColor),
-                                child: Text(
+                                child: AutoSizeText(
                                   listCategory[i].categoryName,
                                   style: TextStyle(
-                                      fontSize: 17.5,
+                                      fontSize: 20,
                                       color: (i == selectedTab
                                           ? Colors.black
                                           : Colors.grey)),
@@ -452,8 +452,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        search(_currentRangeValues.start,
-                            _currentRangeValues.end, cateID);
+                        search(cateID);
                       },
                       child: Container(
                         height: 45,
@@ -463,7 +462,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: buttonColor,
                             borderRadius: BorderRadius.circular(50)),
                         child: const Text(
-                          'Lọc',
+                          'Tìm Kiếm',
                           style: TextStyle(
                               color: lightText,
                               fontSize: 20,
@@ -485,13 +484,13 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  search(double min, double max, String cateID) {
+  search(String cateID) {
     setState(() {
       listPlant.clear();
       pageNo = 0;
     });
     // _searchController.clear();
     _searchPlant(
-        0, PageSize, 'ID', true, _searchController.text, cateID, min, max);
+        0, PageSize, 'ID', true, _searchController.text, cateID, null, null);
   }
 }

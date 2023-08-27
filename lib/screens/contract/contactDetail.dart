@@ -17,6 +17,7 @@ import 'package:thanhhoa_garden/components/note.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart';
 import 'package:thanhhoa_garden/models/contract/contact.dart';
+import 'package:thanhhoa_garden/models/store/store.dart';
 import 'package:thanhhoa_garden/providers/contact/contact_provider.dart';
 import 'package:thanhhoa_garden/providers/report/report_provider.dart';
 
@@ -263,6 +264,10 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                           ? _staffTab(widget.contact!.showStaffModel!)
                           : const SizedBox(),
                       _customerTab(widget.contact!.showCustomerModel!),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _storeTab(widget.contact!.showStoreModel!)
                     ],
                   )),
                   SingleChildScrollView(
@@ -369,6 +374,29 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
     );
   }
 
+  Widget _storeTab(Store store) {
+    // var size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        Container(
+          height: 10,
+          decoration: const BoxDecoration(color: divince),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Text('Thông tin Cửa hàng',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(
+          height: 10,
+        ),
+        _inforRow('Tên', store.storeName, null),
+        _inforRow('Số điện thoại', store.phone, null),
+        _inforRow('Email', store.address, null),
+      ],
+    );
+  }
+
   Widget _tabIndex() {
     return SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -446,7 +474,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
               ),
               Container(
                 constraints: BoxConstraints(
-                  minWidth: size.width - 270,
+                  maxWidth: size.width - 65,
                 ),
                 child: AutoSizeText(
                   value,

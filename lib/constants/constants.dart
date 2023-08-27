@@ -119,6 +119,12 @@ String convertStatusReport(String value) {
     case "DONE":
       result = 'Đã xác nhận';
       break;
+    case "DENIED":
+      result = 'Đã bị từ chối';
+      break;
+    case "APPROVED":
+      result = 'Đã xác nhận';
+      break;
   }
   return result;
 }
@@ -200,7 +206,17 @@ List<String> listReason() {
     'Không muốn chuyển khoản',
     'Đơn trùng',
     'Đã mua tại quầy',
-    'Khách không muốn mua nữa',
+    'không muốn mua nữa',
+    'Lý do khác'
+  ];
+}
+
+List<String> listReasonContract() {
+  return [
+    'Thêm dịch vụ khác',
+    'Chọn Nhầm dịch vụ',
+    'Chi phí này quá cao',
+    'không muốn thuê dịch vụ nữa',
     'Lý do khác'
   ];
 }

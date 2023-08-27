@@ -59,7 +59,7 @@ class _ListFeedbackScreenState extends State<ListFeedbackScreen> {
   @override
   void dispose() {
     OrderBlocFeedback.dispose();
-    feedbackBloc.dispose();
+    // feedbackBloc.dispose();
     // TODO: implement dispose
     super.dispose();
   }

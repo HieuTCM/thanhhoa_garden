@@ -19,6 +19,9 @@ abstract class ContactEvent {
   bool? _sortAsc;
   bool? get sortAsc => _sortAsc;
 
+  String? _reason;
+  String? get reason => _reason;
+
   List<Contact>? _listContact;
   List<Contact>? get listContact => _listContact;
 
@@ -59,5 +62,15 @@ class GetAllContactDetailEvent extends ContactEvent {
       required this.sortBy,
       required this.sortAsc,
       required this.listContactDetail})
+      : super();
+}
+
+class CancelContactEvent extends ContactEvent {
+  String status;
+  String contactID;
+  String reason;
+
+  CancelContactEvent(
+      {required this.status, required this.contactID, required this.reason})
       : super();
 }

@@ -471,3 +471,263 @@ class _SendReportState extends State<SendReport> {
     );
   }
 }
+
+// Note Cancel Contract
+class NoteCancelContractOrder extends StatefulWidget {
+  final String phone;
+  final String contractid;
+  NoteCancelContractOrder(
+      {super.key, required this.phone, required this.contractid});
+
+  @override
+  State<NoteCancelContractOrder> createState() =>
+      _NoteCancelContractOrderState();
+}
+
+class _NoteCancelContractOrderState extends State<NoteCancelContractOrder> {
+  String? phone = '';
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    phone = widget.phone;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(
+                  color: buttonColor, borderRadius: BorderRadius.circular(50)),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              width: size.width - 158,
+              padding: const EdgeInsets.all(10),
+              child: RichText(
+                text: TextSpan(
+                    style: const TextStyle(color: darkText, fontSize: 15),
+                    text: 'Bạn có chắn sẽ huỷ yêu cầu tạo hợp đồng ',
+                    children: [
+                      TextSpan(
+                        text: widget.contractid.toString(),
+                        style: const TextStyle(
+                            color: darkText,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ]),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(
+                  color: buttonColor, borderRadius: BorderRadius.circular(50)),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              width: size.width - 158,
+              padding: const EdgeInsets.all(10),
+              child: RichText(
+                text: const TextSpan(
+                    style: TextStyle(color: darkText, fontSize: 15),
+                    text: 'Nếu ',
+                    children: [
+                      TextSpan(
+                        text: 'Huỷ ',
+                        style: TextStyle(
+                            color: darkText,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: 'bạn sẽ được liên hệ hoàn tiền trong '),
+                      TextSpan(
+                          text: '48h ',
+                          style: TextStyle(
+                              color: darkText,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                      TextSpan(
+                          text:
+                              'tiếp theo (Nếu có). Xin vui lòng kiểm tra điện thoại.'),
+                    ]),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(
+                  color: buttonColor, borderRadius: BorderRadius.circular(50)),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              width: size.width - 158,
+              padding: const EdgeInsets.all(10),
+              child: RichText(
+                text: TextSpan(
+                    style: const TextStyle(color: darkText, fontSize: 15),
+                    text: 'Trong trường hợp quá ',
+                    children: [
+                      const TextSpan(
+                        text: '48h',
+                        style: TextStyle(
+                            color: darkText,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const TextSpan(
+                          text:
+                              ' vẫn chưa được liên hệ gửi lại tiền, vui lòng  '),
+                      TextSpan(
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => makePhoneCall(phone!),
+                          text: 'liên hệ chúng tôi',
+                          style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                      const TextSpan(text: ' hoặc đến cơ sở '),
+                      const TextSpan(
+                        text: 'Thanh Hoa',
+                        style: TextStyle(
+                            color: darkText,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const TextSpan(text: ' gần nhất để được hỗ trợ.'),
+                    ]),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+//Note Confirm Cancel Contract
+class ConfirmCancelContract extends StatefulWidget {
+  final String contractid;
+  final Function callback;
+  ConfirmCancelContract(
+      {super.key, required this.contractid, required this.callback});
+
+  @override
+  State<ConfirmCancelContract> createState() => _ConfirmCancelContractState();
+}
+
+class _ConfirmCancelContractState extends State<ConfirmCancelContract> {
+  TextEditingController _reasonController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    // var size = MediaQuery.of(context).size;
+    List<String> listRea = listReasonContract();
+    String dropdownValue = listRea.last;
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Text(
+                'Hủy yêu cầu: ',
+                style: TextStyle(
+                    color: darkText, fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                widget.contractid.toString(),
+                style: const TextStyle(
+                  color: darkText,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Lý do hủy yêu cầu : ',
+                style: TextStyle(
+                    color: darkText, fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              DropdownButton<String>(
+                isExpanded: false,
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                onChanged: (String? value) {
+                  setState(() {
+                    dropdownValue = value!;
+                    widget.callback(value);
+                  });
+                },
+                items: listRea.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: SizedBox(width: 118, child: Text(value)),
+                  );
+                }).toList(),
+              )
+            ],
+          ),
+          (dropdownValue == 'Lý do khác')
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Nhập lý do : '),
+                    TextFormField(
+                      controller: _reasonController,
+                      maxLength: 150,
+                      onChanged: (value) {
+                        setState(() {
+                          widget.callback(value);
+                        });
+                      },
+                    ),
+                  ],
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+}

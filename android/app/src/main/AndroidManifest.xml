@@ -24,7 +24,7 @@
     </intent>
     </queries>
    <application
-        android:label="thanhhoa_garden"
+        android:label="Thanh Hoa Garden"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

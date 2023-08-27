@@ -155,4 +155,30 @@ class ContactProvider extends ChangeNotifier {
 
     return result;
   }
+
+  Future<bool> cancelContract(ContactEvent event) async {
+    bool result = false;
+    Map<String, dynamic> param = ({});
+    param['contractID'] = '${event.contactID}';
+    if (event.status != null) param['status'] = event.status;
+    String queryString = Uri(queryParameters: param).query;
+    var header = getheader(getTokenAuthenFromSharedPrefs());
+    try {
+      final res = await http.put(
+          Uri.parse(mainURL + contractContractURL + queryString),
+          headers: header);
+      if (res.statusCode == 200) {
+        result = true;
+        notifyListeners();
+      } else {
+        result = false;
+        notifyListeners();
+      }
+    } on HttpException catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return result;
+  }
 }

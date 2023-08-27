@@ -142,7 +142,10 @@ class _ReportScreenState extends State<ReportScreen> {
               width: size.width - 46,
               child: AutoSizeText(
                 'Trạng thái : ${convertStatusReport(model.status)}',
-                style: const TextStyle(color: Colors.green, fontSize: 16),
+                style: TextStyle(
+                    color:
+                        (model.status != 'DENIED') ? Colors.green : Colors.red,
+                    fontSize: 16),
               ),
             )
           ],
@@ -154,7 +157,11 @@ class _ReportScreenState extends State<ReportScreen> {
                     width: size.width - 46,
                     child: AutoSizeText(
                       'Lý do : ${model.reason}',
-                      style: const TextStyle(color: Colors.green, fontSize: 16),
+                      style: TextStyle(
+                          color: (model.status != 'DENIED')
+                              ? Colors.green
+                              : Colors.red,
+                          fontSize: 16),
                     ),
                   )
                 ],

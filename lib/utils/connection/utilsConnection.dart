@@ -67,6 +67,7 @@ const getRatingURL = '/feedback/getRating';
 const createContactURL = '/contract/createContractCustomer';
 const getContactURL = '/contract/byCustomerTokenAndStatus?';
 const getContactDetailURL = '/contract/contractDetail/';
+const contractContractURL = '/contract/changeContractStatus?';
 
 //payment
 const paymentURL = '/vnpay/submitOrder';
