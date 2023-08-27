@@ -3,11 +3,17 @@
 class PlantCategory {
   late final categoryID;
   late final categoryName;
+  late final status;
 
-  PlantCategory({this.categoryID, this.categoryName});
+  PlantCategory({
+    this.categoryID,
+    this.categoryName,
+    this.status,
+  });
 
   PlantCategory.fromJson(Map<String, dynamic> json) {
     categoryID = json["categoryID"];
     categoryName = json["categoryName"];
+    status = json["status"];
   }
 }

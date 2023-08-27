@@ -168,7 +168,7 @@ class _OrderScreenState extends State<OrderScreen> {
       });
     }
     double thevalue = listDistance.values.first;
-    String thekey = '';
+    String thekey = listDistance.keys.first;
     listDistance.forEach((k, v) {
       if (v < thevalue) {
         thevalue = v;

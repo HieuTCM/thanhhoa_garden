@@ -492,5 +492,6 @@ class _SearchScreenState extends State<SearchScreen> {
     // _searchController.clear();
     _searchPlant(
         0, PageSize, 'ID', true, _searchController.text, cateID, null, null);
+    Navigator.pop(context);
   }
 }

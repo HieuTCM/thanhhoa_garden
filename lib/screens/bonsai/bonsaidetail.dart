@@ -18,6 +18,7 @@ import 'package:thanhhoa_garden/components/feedback/listfeedback_component.dart'
 import 'package:thanhhoa_garden/components/listImg.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
+import 'package:thanhhoa_garden/models/bonsai/plantCategory.dart';
 import 'package:thanhhoa_garden/models/feedback/feedback.dart';
 import 'package:thanhhoa_garden/providers/cart/cart_provider.dart';
 import 'package:thanhhoa_garden/screens/feedback/feedbackPlantScreen.dart';
@@ -198,7 +199,21 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
               'Tổng Chiều Cao: ',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(bonsai.height.toString() + ' Cm',
+            Text(bonsai.height.toString(), style: const TextStyle(fontSize: 18)
+                // style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+          ],
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Row(
+          children: [
+            const Text(
+              'Kính thước chậu : ',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(bonsai.plantShipPrice!.potSize.toString(),
                 style: const TextStyle(fontSize: 18)
                 // style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -213,12 +228,69 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
               'Giá: ',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(
-              '${f.format(bonsai.price)} đ',
-              style: const TextStyle(
-                  fontSize: 20, color: priceColor, fontWeight: FontWeight.w500),
+            SizedBox(
+                width: size.width - 330,
+                child: AutoSizeText(
+                  '${f.format(bonsai.price)} đ',
+                  maxLines: 1,
+                  style: const TextStyle(
+                      fontSize: 20,
+                      color: priceColor,
+                      fontWeight: FontWeight.w500),
+                )),
+            const Spacer(),
+            const Text(
+              'Giá vận chuyển: ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
+            SizedBox(
+                width: size.width - 310,
+                child: AutoSizeText(
+                  '${f.format(bonsai.plantShipPrice!.pricePerPlant)} đ / Cây',
+                  maxLines: 1,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      color: priceColor,
+                      fontWeight: FontWeight.w500),
+                )),
           ],
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+            width: size.width,
+            child: AutoSizeText(
+              '* Giá vận chuyện được áp dụng dựa trên kích thước chậu của cây',
+              maxLines: 1,
+              style: const TextStyle(
+                  fontSize: 15.5,
+                  color: priceColor,
+                  fontWeight: FontWeight.w500),
+            )),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          width: size.width,
+          child: const Row(
+            children: [
+              Text(
+                'Danh mục : ',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+            width: size.width,
+            child: AutoSizeText(cateToString(bonsai.listCate!),
+                style: TextStyle(fontSize: 16, height: 1.5))),
+        const SizedBox(
+          height: 5,
         ),
       ]),
     );
@@ -413,5 +485,17 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
         ],
       ),
     );
+  }
+
+  String cateToString(List<PlantCategory> list) {
+    String result = '';
+
+    list.forEach(
+      (element) {
+        result = '${result + element.categoryName}, ';
+      },
+    );
+
+    return result.substring(0, result.length - 2);
   }
 }

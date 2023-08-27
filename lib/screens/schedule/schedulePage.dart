@@ -404,8 +404,8 @@ class _SchedulePageState extends State<SchedulePage> {
                       (cD[index].timeWorking.toString().split(", "));
                   if (((selectedTabToday == 0) || (selectedTabToday == 1))) {
                     for (int i = 0; i < days_list.length; i++) {
-                      if (days_list[i] == weekday) {
-                        // if (days_list[i] == 'Thứ 4') {
+                      // if (days_list[i] == weekday) {
+                      if (days_list[i] == 'Thứ 4') {
                         return GestureDetector(
                           onTap: () async {
                             print("need to fix ... sai logic roi");
@@ -521,46 +521,43 @@ class _SchedulePageState extends State<SchedulePage> {
                                                   .contactModel!
                                                   .address
                                                   .toString()),
-                                          // SizedBox(
-                                          //   width: MediaQuery.of(context)
-                                          //           .size
-                                          //           .width -
-                                          //       40,
-                                          //   child: Row(
-                                          //     children: [
-                                          //       _contractFiled(
-                                          //           'Điện thoại',
-                                          //           cD[index]
-                                          //               .contactModel!
-                                          //               .phone
-                                          //               .toString()),
-                                          //       Spacer(),
-                                          //       GestureDetector(
-                                          //         onTap: () {
-                                          //           reportDialog(cD[index].id);
-                                          //         },
-                                          //         child: Container(
-                                          //           alignment: Alignment.center,
-                                          //           width: 100,
-                                          //           height: 40,
-                                          //           decoration: BoxDecoration(
-                                          //               color: buttonColor,
-                                          //               borderRadius:
-                                          //                   BorderRadius
-                                          //                       .circular(50)),
-                                          //           child: const AutoSizeText(
-                                          //               'Gửi báo cáo',
-                                          //               textAlign:
-                                          //                   TextAlign.center,
-                                          //               style: TextStyle(
-                                          //                   fontWeight:
-                                          //                       FontWeight.w800,
-                                          //                   color: lightText)),
-                                          //         ),
-                                          //       )
-                                          //     ],
-                                          //   ),
-                                          // )
+                                          _contractFiled(
+                                              'Điện thoại',
+                                              cD[index]
+                                                  .contactModel!
+                                                  .phone
+                                                  .toString()),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  reportDialog(cD[index].id);
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 100,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                      color: buttonColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50)),
+                                                  child: const AutoSizeText(
+                                                      'Gửi báo cáo',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          color: lightText)),
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ],

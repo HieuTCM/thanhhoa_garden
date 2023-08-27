@@ -60,30 +60,49 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   getCoordinatesFromAddress(String address, String title) async {
-    GeoData data = await Geocoder2.getDataFromAddress(
-        address: address, googleMapApiKey: GG_API_Key, language: 'vi');
-    if (title == 'search') {
-      setState(() {
-        selectMarker = Marker(
-          markerId: MarkerId(data.address),
-          infoWindow: const InfoWindow(title: 'Vị trí của bạn'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: LatLng(data.latitude, data.longitude),
-        );
+    try {
+      await Geocoder2.getDataFromAddress(
+              address: address, googleMapApiKey: GG_API_Key, language: 'vi')
+          .then((value) {
+        if (value.address.isNotEmpty) {
+          error = '';
+          if (title == 'search') {
+            setState(() {
+              selectMarker = Marker(
+                markerId: MarkerId(value.address),
+                infoWindow: const InfoWindow(title: 'Vị trí của bạn'),
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
+                position: LatLng(value.latitude, value.longitude),
+              );
+              origin = LatLng(value.latitude, value.longitude);
+            });
+          } else {
+            var _storeMarker = Marker(
+              markerId: MarkerId(value.address),
+              infoWindow: InfoWindow(title: title),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueRed),
+              position: LatLng(value.latitude, value.longitude),
+            );
+            setState(() {
+              _makers.add(_storeMarker);
+            });
+          }
+        } else {
+          error = 'Error';
+        }
       });
-    } else {
-      var _storeMarker = Marker(
-        markerId: MarkerId(data.address),
-        infoWindow: InfoWindow(title: title),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-        position: LatLng(data.latitude, data.longitude),
-      );
+    } catch (e) {
       setState(() {
-        _makers.add(_storeMarker);
+        error = e.toString();
       });
+
+      print(e.toString());
     }
   }
 
+  String error = '';
   Future<String> getAddressFromCoordinates(LatLng pos) async {
     String result = "";
     GeoData data = await Geocoder2.getDataFromCoordinates(
@@ -100,6 +119,7 @@ class _MapScreenState extends State<MapScreen> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
         position: LatLng(data.latitude, data.longitude),
       );
+      origin = LatLng(data.latitude, data.longitude);
     });
 
     return result;
@@ -202,22 +222,51 @@ class _MapScreenState extends State<MapScreen> {
             },
             controller: _searchController,
             decoration: InputDecoration(
-              suffixIcon: IconButton(
+              prefixIcon: IconButton(
                 onPressed: () {
-                  _searchController.clear();
                   setState(() {
-                    origin = LatLng(0, 0);
-                    selectMarker = Marker(
-                      markerId: const MarkerId('Bạn'),
-                      infoWindow: const InfoWindow(title: 'Vị trí của bạn'),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueBlue),
-                      position: origin,
-                    );
+                    if (_searchController.text.isEmpty || error.isNotEmpty) {
+                      Fluttertoast.showToast(
+                          msg: "Kiểm tra lại địa chỉ của bạn",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      CameraPosition cameraPosition = CameraPosition(
+                        target: LatLng(selectMarker!.position.latitude,
+                            selectMarker!.position.longitude),
+                        zoom: 11,
+                      );
+                      _mapController.animateCamera(
+                        CameraUpdate.newCameraPosition(cameraPosition),
+                      );
+                    }
                   });
                 },
-                icon: const Icon(Icons.close),
+                icon: const Icon(Icons.search),
               ),
+              suffixIcon: _searchController.text.isEmpty
+                  ? null
+                  : IconButton(
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() {
+                          origin = LatLng(0, 0);
+                          selectMarker = Marker(
+                            markerId: const MarkerId('Bạn'),
+                            infoWindow:
+                                const InfoWindow(title: 'Vị trí của bạn'),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                                BitmapDescriptor.hueBlue),
+                            position: origin,
+                          );
+                        });
+                      },
+                      icon: const Icon(Icons.close),
+                    ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.0),
                 borderSide: const BorderSide(
@@ -239,9 +288,9 @@ class _MapScreenState extends State<MapScreen> {
         ),
         GestureDetector(
           onTap: () {
-            if (_searchController.text.isEmpty) {
+            if (_searchController.text.isEmpty || error.isNotEmpty) {
               Fluttertoast.showToast(
-                  msg: "Bạn chưa chọn địa chỉ",
+                  msg: "Kiểm tra lại địa chỉ của bạn",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                   timeInSecForIosWeb: 1,

@@ -30,7 +30,9 @@ class CategoryProvider extends ChangeNotifier {
           list.add(cate);
           for (var data in jsondata) {
             _Category = PlantCategory.fromJson(data);
-            list.add(_Category!);
+            if (_Category!.status == 'ACTIVE') {
+              list.add(_Category!);
+            }
           }
         }
         _listCategory = list;
