@@ -69,7 +69,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
 
   @override
   void dispose() {
-    feedbackBloc.dispose();
+    // feedbackBloc.dispose();
     // TODO: implement dispose
     super.dispose();
   }

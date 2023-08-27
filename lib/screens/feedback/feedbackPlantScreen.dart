@@ -36,7 +36,7 @@ class _FeedbackPlantScreenState extends State<FeedbackPlantScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    feedbackBloc.dispose();
+    // feedbackBloc.dispose();
     super.dispose();
   }
 
