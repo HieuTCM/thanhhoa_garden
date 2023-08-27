@@ -43,7 +43,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
   CartProvider cartProvider = CartProvider();
   late CartBloc cartBloc;
 
-  int count = 0;
+  int count = 1;
   @override
   void initState() {
     cartBloc = Provider.of<CartBloc>(context, listen: false);
@@ -348,7 +348,7 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
           GestureDetector(
             onTap: () {
               setState(() {
-                if (count > 0) {
+                if (count > 1) {
                   count -= 1;
                 }
               });

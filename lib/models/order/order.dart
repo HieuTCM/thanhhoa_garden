@@ -95,7 +95,7 @@ class OrderObject {
     numOfPlant = json["numOfPlant"];
     totalShipCost = json["totalShipCost"];
     isPaid = json["isPaid"];
-    isPaid = json["isRefund"];
+    isRefund = json["isRefund"];
     showStaffModel = StaffModel;
     showCustomerModel = CustomerModel;
     showDistancePriceModel = DistancePriceModel;

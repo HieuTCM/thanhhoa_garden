@@ -843,162 +843,170 @@ class _OrderScreenState extends State<OrderScreen> {
               style: TextStyle(color: buttonColor, fontSize: 25),
             ),
           ),
-          content: SizedBox(
-            height: 400,
-            width: size.width - 10,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _rowInfor('Tên', order.fullName),
-              const SizedBox(
-                height: 10,
-              ),
-              _rowInfor('Email', order.email),
-              const SizedBox(
-                height: 10,
-              ),
-              _rowInfor('Số điện thoại', order.phone),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Container(
-                    height: 7,
-                    width: 7,
-                    decoration: BoxDecoration(
-                        color: buttonColor,
-                        borderRadius: BorderRadius.circular(50)),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    'Địa chỉ: ',
-                    style: TextStyle(
-                        color: buttonColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: size.width - 10,
-                child: AutoSizeText(
-                  '\t\t' + order.address,
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Thông tin đơn hàng : ',
-                style: TextStyle(
-                    color: buttonColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(children: [
-                Text(
-                    '${widget.listPlant.fold(0, (sum, item) => sum + item.quantity!)} sản phẩm'),
-                const Spacer(),
-                const Text('Giá: '),
-                Text(
-                  '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!))} đ',
-                  style: const TextStyle(color: priceColor),
-                ),
-              ]),
-              const SizedBox(
-                height: 10,
-              ),
-              const Row(
-                children: [Text('Phí giao hàng: ')],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+          content: SingleChildScrollView(
+            child: SizedBox(
+              height: 400,
+              width: size.width - 10,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _rowInfor('Tên', order.fullName),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _rowInfor('Email', order.email),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _rowInfor('Số điện thoại', order.phone),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          height: 7,
+                          width: 7,
+                          decoration: BoxDecoration(
+                              color: buttonColor,
+                              borderRadius: BorderRadius.circular(50)),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Địa chỉ: ',
+                          style: TextStyle(
+                              color: buttonColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: size.width - 10,
+                      child: AutoSizeText(
+                        '\t\t' + order.address,
+                        maxLines: 2,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'Thông tin đơn hàng : ',
+                      style: TextStyle(
+                          color: buttonColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(children: [
+                      Text(
+                          '${widget.listPlant.fold(0, (sum, item) => sum + item.quantity!)} sản phẩm'),
+                      const Spacer(),
+                      const Text('Giá: '),
+                      Text(
+                        '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!))} đ',
+                        style: const TextStyle(color: priceColor),
+                      ),
+                    ]),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Row(
+                      children: [Text('Phí giao hàng: ')],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Phí vận chuyển cây : ',
-                            style: TextStyle(color: darkText, fontSize: 16)),
-                        SizedBox(
+                        const Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Phí vận chuyển cây : ',
+                                  style:
+                                      TextStyle(color: darkText, fontSize: 16)),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text('Phí giao hàng: ',
+                                  style:
+                                      TextStyle(color: darkText, fontSize: 16)),
+                            ]),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                                '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!))} đ',
+                                style: const TextStyle(color: priceColor)),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                                '${f.format((distance.values.first) * distancePrice.pricePerKm ?? 0)} đ',
+                                style: const TextStyle(color: priceColor)),
+                            Text(' ( ${(distance.values.first)} Km )',
+                                style: const TextStyle(
+                                    color: Colors.red, fontSize: 15)),
+                          ],
+                        )
+                      ],
+                    ),
+                    Center(
+                      child: Column(children: [
+                        const Text('Tổng cộng : ',
+                            style: TextStyle(
+                                color: darkText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text('Phí giao hàng: ',
-                            style: TextStyle(color: darkText, fontSize: 16)),
+                        Text(
+                            '${f.format((widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!)) + (widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!)) + ((distance.values.first) * distancePrice.pricePerKm ?? 0))} đ',
+                            style: const TextStyle(
+                                color: priceColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
                       ]),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                          '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!))} đ',
-                          style: const TextStyle(color: priceColor)),
-                      const SizedBox(
-                        height: 10,
+                    ),
+                    SizedBox(
+                      width: size.width - 10,
+                      child: RichText(
+                        text: TextSpan(
+                            style:
+                                const TextStyle(color: darkText, fontSize: 14),
+                            text:
+                                'Bấm xác nhận điều đó có nghĩa là bạn đồng ý với ',
+                            children: [
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap =
+                                      () => showPolyci(policyOrder, context),
+                                text: 'điều khoản của chúng tôi',
+                                style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ]),
                       ),
-                      Text(
-                          '${f.format((distance.values.first) * distancePrice.pricePerKm ?? 0)} đ',
-                          style: const TextStyle(color: priceColor)),
-                      Text(' ( ${(distance.values.first)} Km )',
-                          style:
-                              const TextStyle(color: Colors.red, fontSize: 15)),
-                    ],
-                  )
-                ],
-              ),
-              Center(
-                child: Column(children: [
-                  const Text('Tổng cộng : ',
-                      style: TextStyle(
-                          color: darkText,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500)),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                      '${f.format((widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!)) + (widget.listPlant.fold(0.0, (sum, item) => sum + item.shipPrice! * item.quantity!)) + ((distance.values.first) * distancePrice.pricePerKm ?? 0))} đ',
-                      style: const TextStyle(
-                          color: priceColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500)),
-                ]),
-              ),
-              SizedBox(
-                width: size.width - 10,
-                child: RichText(
-                  text: TextSpan(
-                      style: const TextStyle(color: darkText, fontSize: 14),
-                      text: 'Bấm xác nhận điều đó có nghĩa là bạn đồng ý với ',
-                      children: [
-                        TextSpan(
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => showPolyci(policyOrder, context),
-                          text: 'điều khoản của chúng tôi',
-                          style: const TextStyle(
-                              color: Colors.blue,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ]),
-                ),
-              ),
-            ]),
+                    ),
+                  ]),
+            ),
           ),
           actions: [
             Row(
