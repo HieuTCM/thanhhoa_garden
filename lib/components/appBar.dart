@@ -20,7 +20,7 @@ class _AppBarWigetState extends State<AppBarWiget> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       // height: 65,
       width: size.width,
       // decoration: const BoxDecoration(color: Colors.amber),
