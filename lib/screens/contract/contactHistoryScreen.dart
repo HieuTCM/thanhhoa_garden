@@ -412,25 +412,30 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
       children: [
         Container(
           constraints: BoxConstraints(
-            minWidth: size.width * 0.66,
+            maxWidth: size.width - 133,
           ),
           child: Row(
             children: [
               const SizedBox(
                 width: 10,
               ),
-              Text(
-                '$title : ',
-                style: const TextStyle(
-                    color: darkText, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Container(
-                constraints: BoxConstraints(
-                  minWidth: size.width - 272,
+              SizedBox(
+                width: 100,
+                child: AutoSizeText(
+                  '$title : ',
+                  maxLines: 1,
+                  style: const TextStyle(
+                      color: darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 243,
                 child: AutoSizeText(
                   value,
-                  style: TextStyle(color: colorValue ?? darkText, fontSize: 16),
+                  maxLines: 1,
+                  style: TextStyle(color: colorValue ?? darkText, fontSize: 18),
                 ),
               ),
             ],

@@ -491,14 +491,25 @@ class _CartScreenState extends State<CartScreen> {
 
           GestureDetector(
             onTap: () async {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ConfirmContactScreen(
-                    listContact: listContactDetailSelect,
-                    listIndex: listIndex,
-                    callback: () {},
-                    totalPriceService: totalPriceService,
-                    totalService: totalService),
-              ));
+              if (listContactDetailSelect.length > 3) {
+                Fluttertoast.showToast(
+                    msg: "Hợp đồng tối đa 3 dịch vụ",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ConfirmContactScreen(
+                      listContact: listContactDetailSelect,
+                      listIndex: listIndex,
+                      callback: () {},
+                      totalPriceService: totalPriceService,
+                      totalService: totalService),
+                ));
+              }
             },
             child: Container(
               margin: const EdgeInsets.only(left: 10, right: 10),

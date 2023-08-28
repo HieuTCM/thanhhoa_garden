@@ -284,7 +284,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
           height: 58,
           child: AutoSizeText(
               'Thời gian ${servicePackSelect.range}'
-              '(${servicePackSelect.percentage == 0 ? '' : 'ưu đãi  ${servicePackSelect.percentage} %)'}',
+              '${servicePackSelect.percentage == 0 ? '' : '( ưu đãi  ${servicePackSelect.percentage} %)'}',
               style: const TextStyle(fontSize: 18, color: buttonColor))),
     );
   }

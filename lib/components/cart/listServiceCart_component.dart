@@ -171,9 +171,16 @@ class _ListCartServiceState extends State<ListCartService> {
               setState(() {
                 listContactDetail.removeAt(index);
                 Map<String, dynamic> map = Map<String, dynamic>();
-                map['detailModelList'] = listContactDetail;
-                sharedPreferences.setString('ContactDetail', json.encode(map));
+                List<Map<String, dynamic>> list = [];
+                for (var data in listContactDetail) {
+                  list.add(data.toJson(data));
+                }
+                map['detailModelList'] = list;
+                sharedPreferences.remove('ContactDetail');
+                sharedPreferences.setString(
+                    'ContactDetail', json.encode(map).toString());
                 widget.callback('delete', index);
+                // getListService();
               });
             },
             child: Container(
