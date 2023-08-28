@@ -296,9 +296,15 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
       decoration: BoxDecoration(
           gradient: tabBackground, borderRadius: BorderRadius.circular(10)),
       child: Column(children: [
-        Text(
-          contact.title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          width: MediaQuery.of(context).size.width,
+          child: AutoSizeText(
+            contact.title,
+            maxLines: 1,
+            style: const TextStyle(fontSize: 500, fontWeight: FontWeight.bold),
+          ),
         ),
         const SizedBox(
           height: 10,

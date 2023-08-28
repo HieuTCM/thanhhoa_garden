@@ -63,7 +63,7 @@ class _NoteOrderState extends State<NoteOrder> {
               width: size.width - 30,
               padding: const EdgeInsets.all(10),
               child: const AutoSizeText(
-                'Khách hàng có thể huỷ đơn và được hoàn tiền 100% khi đơn chưa được giao.',
+                'Khách hàng có thể huỷ đơn và được hoàn tiền 100% khi đơn chưa được của hàng xác nhận.',
                 style: TextStyle(color: darkText, fontSize: 18),
               ),
             ),

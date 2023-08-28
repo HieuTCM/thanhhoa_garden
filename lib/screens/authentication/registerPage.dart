@@ -96,17 +96,6 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  String? errorphone;
-  String? validatePhone(String value) {
-    RegExp regExp = RegExp(r'(^(?:[+0]9)?[0-9]{10}$)');
-    if (value.isEmpty) {
-      return 'Nhập số điện thoại';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Số điện thoại không khả dụng';
-    }
-    return (regExp.hasMatch(value)) ? null : "Số điện thoại không khả dụng";
-  }
-
   String? errorUsername;
   String? validateUserName(String value) {
     if (value.isEmpty) {
@@ -167,6 +156,17 @@ class _RegisterPageState extends State<RegisterPage> {
     } else {
       return EmailValidator.validate(value) ? null : 'Email không hợp lệ';
     }
+  }
+
+  String? errorphone;
+  String? validatePhone(String value) {
+    RegExp regExp = RegExp(r'(^(?:[+0]9)?[0-9]{10}$)');
+    if (value.isEmpty) {
+      return 'Nhập số điện thoại';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Số điện thoại không khả dụng';
+    }
+    return (regExp.hasMatch(value)) ? null : "Số điện thoại không khả dụng";
   }
 
   Color getColor(Set<MaterialState> states) {

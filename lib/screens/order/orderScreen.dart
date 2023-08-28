@@ -29,6 +29,7 @@ import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:vnpay_flutter/vnpay_flutter.dart';
 import 'package:flutter/gestures.dart';
+import 'package:email_validator/email_validator.dart';
 
 class OrderScreen extends StatefulWidget {
   final List<OrderCart> listPlant;
@@ -45,6 +46,8 @@ class _OrderScreenState extends State<OrderScreen> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   late CartBloc cartBloc;
+
+  final _formKey = GlobalKey<FormState>();
 
   // MapController _mapController = MapController();
   // List<LatLng> _routePoints = [];
@@ -69,6 +72,48 @@ class _OrderScreenState extends State<OrderScreen> {
   Store selectStore = Store();
 
   bool isLoading = false;
+
+  String? errorName;
+  String? validateName(String value) {
+    RegExp regExp = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
+    bool check = regExp.hasMatch(value);
+    if (value.isEmpty) {
+      return 'Nhập tên';
+    } else if (check) {
+      return 'Tên không chứ kí tự đặc biệt';
+    } else if (value.length < 3) {
+      return 'Tên phải nhiều hơn 3 từ';
+    } else if (value.length >= 50) {
+      return 'Tên ít hơn 50 từ ';
+    } else {
+      return (!regExp.hasMatch(value)) ? null : 'Tên không chứ kí tự đặc biệt';
+    }
+  }
+
+  String? errorEmail;
+  String? validateEmail(String value) {
+    if (value.isEmpty) {
+      return 'Nhập email';
+    } else {
+      return EmailValidator.validate(value) ? null : 'Email không hợp lệ';
+    }
+  }
+
+  String? errorphone;
+  String? validatePhone(String value) {
+    RegExp regExp = RegExp(r'(^(?:[+0]9)?[0-9]{10}$)');
+    if (value.isEmpty) {
+      return 'Nhập số điện thoại';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Số điện thoại không khả dụng';
+    }
+    return (regExp.hasMatch(value)) ? null : "Số điện thoại không khả dụng";
+  }
+
+  String? validateAddres(String value) {
+    return null;
+  }
+
   @override
   void initState() {
     cartBloc = Provider.of<CartBloc>(context, listen: false);
@@ -104,6 +149,9 @@ class _OrderScreenState extends State<OrderScreen> {
           getDistanceNearBy().then((value) {
             distance = value;
             setState(() {
+              selectStore = listStore
+                  .where((element) => element.id == distance.keys.first)
+                  .first;
               isLoading = false;
             });
           });
@@ -115,16 +163,16 @@ class _OrderScreenState extends State<OrderScreen> {
   Future<LatLng> getCoordinatesFromAddress(String address) async {
     LatLng latLng = LatLng(0.0, 0.0);
     try {
-      GeoData data = await Geocoder2.getDataFromAddress(
+      await Geocoder2.getDataFromAddress(
               address: address, googleMapApiKey: GG_API_Key, language: 'vi')
-          .catchError((e) {
-        print(e.toString());
+          .then((value) {
+        if (value.latitude != 0) {
+          latLng = LatLng(value.latitude, value.longitude);
+        }
       });
-      latLng = LatLng(data.latitude, data.longitude);
     } catch (e) {
       print(e.toString());
     }
-
     return latLng;
   }
 
@@ -205,74 +253,78 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     // var size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: background,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(
-                height: 35,
-              ),
-              AppBarWiget(
-                title: 'Xác Nhận Thanh Toán',
-              ),
-              Container(
-                height: 10,
-                decoration: const BoxDecoration(color: divince),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  'Thông tin sản phẩm',
-                  style: TextStyle(
-                      color: darkText,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              Container(child: _listPlant(widget.listPlant)),
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                height: 50,
-                child: Row(children: [
-                  Text(
-                      '${widget.listPlant.fold(0, (sum, item) => sum + item.quantity!)} sản phẩm'),
-                  const Spacer(),
-                  Text(
-                      '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!))} đ'),
-                ]),
-              ),
-              Container(
-                height: 10,
-                decoration: const BoxDecoration(color: divince),
-              ),
-              (user == null)
-                  ? const SizedBox(
-                      height: 200,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _shipTab(widget.listPlant),
-                        Container(
-                          height: 10,
-                          decoration: const BoxDecoration(color: divince),
-                        ),
-                        _paymentTab()
-                      ],
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        backgroundColor: background,
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 35,
                     ),
-              Container(
-                height: 90,
-              ),
-            ]),
-          ),
-          Positioned(bottom: 0, child: _floatingBar()),
-        ],
+                    AppBarWiget(
+                      title: 'Xác Nhận Thanh Toán',
+                    ),
+                    Container(
+                      height: 10,
+                      decoration: const BoxDecoration(color: divince),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: const Text(
+                        'Thông tin sản phẩm',
+                        style: TextStyle(
+                            color: darkText,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Container(child: _listPlant(widget.listPlant)),
+                    Container(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      height: 50,
+                      child: Row(children: [
+                        Text(
+                            '${widget.listPlant.fold(0, (sum, item) => sum + item.quantity!)} sản phẩm'),
+                        const Spacer(),
+                        Text(
+                            '${f.format(widget.listPlant.fold(0.0, (sum, item) => sum + item.plantPrice! * item.quantity!))} đ'),
+                      ]),
+                    ),
+                    Container(
+                      height: 10,
+                      decoration: const BoxDecoration(color: divince),
+                    ),
+                    (user == null)
+                        ? const SizedBox(
+                            height: 200,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _shipTab(widget.listPlant),
+                              Container(
+                                height: 10,
+                                decoration: const BoxDecoration(color: divince),
+                              ),
+                              _paymentTab()
+                            ],
+                          ),
+                    Container(
+                      height: 90,
+                    ),
+                  ]),
+            ),
+            Positioned(bottom: 0, child: _floatingBar()),
+          ],
+        ),
       ),
     );
   }
@@ -306,7 +358,9 @@ class _OrderScreenState extends State<OrderScreen> {
               ? Container()
               : GestureDetector(
                   onTap: () {
-                    _comfirmDialog();
+                    if (_formKey.currentState!.validate()) {
+                      _comfirmDialog();
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 10, right: 10),
@@ -408,20 +462,20 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
         //Full name
         _textFormField("Tên người nhận", 'Nhập tên người nhận', false, null,
-            _nameController),
+            _nameController, 50, validateName),
         //Email
         _textFormField("Email người nhận", 'Nhập Email người nhận', false, null,
-            _emailController),
+            _emailController, 100, validateEmail),
         //Phone
         _textFormField("Số điện thoại người nhận", 'Nhập số điện thoại', false,
-            null, _phoneController),
+            null, _phoneController, 10, validatePhone),
         //address
         _textFormField(
             "Địa chỉ giao hàng", 'Bấm vào đây để chọn địa chỉ !!!', true, () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MapScreen(callback: setAdress),
           ));
-        }, _addressController),
+        }, _addressController, null, validateAddres),
         GestureDetector(
           onTap: () {
             setState(() {
@@ -462,25 +516,33 @@ class _OrderScreenState extends State<OrderScreen> {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.only(left: 10),
-                child: AutoSizeText(
-                  '${selectStore.storeName} ',
-                  style: const TextStyle(color: darkText, fontSize: 16.5),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.only(left: 10),
-                child: AutoSizeText(
-                  'Địa chỉ :  ${selectStore.address}',
-                  style: const TextStyle(color: darkText, fontSize: 16.5),
-                ),
-              ),
+              (!isLoading)
+                  ? Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.only(left: 10),
+                          child: AutoSizeText(
+                            '${selectStore.storeName} ',
+                            style: const TextStyle(
+                                color: darkText, fontSize: 16.5),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.only(left: 10),
+                          child: AutoSizeText(
+                            'Địa chỉ :  ${selectStore.address}',
+                            style: const TextStyle(
+                                color: darkText, fontSize: 16.5),
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
               (!isLoading)
                   ? Container(
                       padding: const EdgeInsets.all(10),
@@ -723,8 +785,14 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget _textFormField(String label, String hint, bool readonly,
-      Function()? onTap, TextEditingController controller) {
+  Widget _textFormField(
+      String label,
+      String hint,
+      bool readonly,
+      Function()? onTap,
+      TextEditingController controller,
+      int? length,
+      Function? validate) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -736,6 +804,10 @@ class _OrderScreenState extends State<OrderScreen> {
               readOnly: readonly,
               controller: controller,
               onTap: onTap,
+              validator: (value) {
+                return validate!(value);
+              },
+              maxLength: length,
               decoration: InputDecoration(
                 labelText: label,
                 hintText: hint,
@@ -800,23 +872,6 @@ class _OrderScreenState extends State<OrderScreen> {
     }
     return buttonColor;
   }
-
-  // List<String> imgURL = [];
-  // List<File> listFile = [];
-  // Future _pickImage(ImageSource source) async {
-  //   final image = await ImagePicker().pickImage(source: source);
-  //   // final image = await ImagePicker().pickMedia();
-  //   if (image == null) return;
-  //   File? img = File(image.path);
-  //   OverlayLoadingProgress.start(context);
-  //   ImgProvider().upload(img).then((value) {
-  //     setState(() {
-  //       imgURL.add(value);
-  //       listFile.add(img);
-  //     });
-  //     OverlayLoadingProgress.stop();
-  //   });
-  // }
 
   _comfirmDialog() {
     var size = MediaQuery.of(context).size;

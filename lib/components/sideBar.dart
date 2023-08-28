@@ -112,14 +112,6 @@ class _SideBarState extends State<SideBar> {
                   size: 30,
                   color: buttonColor,
                 )),
-            _listTile(
-                'Xem Dịch Vụ',
-                () {},
-                const Icon(
-                  Icons.cleaning_services_outlined,
-                  size: 30,
-                  color: buttonColor,
-                )),
             _listTile('Lịch Sử Của Bạn', () {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(

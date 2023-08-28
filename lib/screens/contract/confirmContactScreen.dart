@@ -21,6 +21,7 @@ import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:thanhhoa_garden/utils/helper/shared_prefs.dart';
 import 'package:flutter/gestures.dart';
+import 'package:email_validator/email_validator.dart';
 
 class ConfirmContactScreen extends StatefulWidget {
   final Function callback;
@@ -49,6 +50,8 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
 
   StoreProvider _storeProvider = StoreProvider();
   AuthenticationProvider _authenticationProvider = AuthenticationProvider();
+
+  final _formKey = GlobalKey<FormState>();
 
   LatLng origin = LatLng(0, 0);
   // double _distance = 0.0;
@@ -88,9 +91,17 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
 
   Future<LatLng> getCoordinatesFromAddress(String address) async {
     LatLng latLng = LatLng(0.0, 0.0);
-    GeoData data = await Geocoder2.getDataFromAddress(
-        address: address, googleMapApiKey: GG_API_Key, language: 'vi');
-    latLng = LatLng(data.latitude, data.longitude);
+    try {
+      await Geocoder2.getDataFromAddress(
+              address: address, googleMapApiKey: GG_API_Key, language: 'vi')
+          .then((value) {
+        if (value.latitude != 0) {
+          latLng = LatLng(value.latitude, value.longitude);
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
 
     return latLng;
   }
@@ -131,7 +142,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
       });
     }
     double thevalue = listDistance.values.first;
-    String thekey = '';
+    String thekey = listDistance.keys.first;
     listDistance.forEach((k, v) {
       if (v < thevalue) {
         thevalue = v;
@@ -174,44 +185,47 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: background,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(children: [
-              const SizedBox(
-                height: 35,
-              ),
-              AppBarWiget(
-                title: 'Thông tin hợp đồng',
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 10,
-                decoration: const BoxDecoration(color: divince),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              _shipTab(),
-              Container(
-                height: 10,
-                decoration: const BoxDecoration(color: divince),
-              ),
-              Container(
-                // height: size.height * 0.7,
-                child: _listService(),
-              ),
-              Container(
-                height: 65,
-              ),
-            ]),
-          ),
-          Positioned(top: size.height - 95, child: _floatingBarService()),
-        ],
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        backgroundColor: background,
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(children: [
+                const SizedBox(
+                  height: 35,
+                ),
+                AppBarWiget(
+                  title: 'Thông tin hợp đồng',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 10,
+                  decoration: const BoxDecoration(color: divince),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _shipTab(),
+                Container(
+                  height: 10,
+                  decoration: const BoxDecoration(color: divince),
+                ),
+                Container(
+                  // height: size.height * 0.7,
+                  child: _listService(),
+                ),
+                Container(
+                  height: 65,
+                ),
+              ]),
+            ),
+            Positioned(top: size.height - 95, child: _floatingBarService()),
+          ],
+        ),
       ),
     );
   }
@@ -231,21 +245,27 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
           ),
           //Full name
           _textFormField("Tên khách hàng", 'Nhập khách hàng', false, null,
-              _nameController),
+              _nameController, 50, validateName),
           //Email
           _textFormField("Email khách hàng", 'Nhập Email khách hàng', false,
-              null, _emailController),
+              null, _emailController, 100, validateEmail),
           //Phone
           _textFormField("Số điện thoại khách hàng", 'Nhập số điện thoại',
-              false, null, _phoneController),
+              false, null, _phoneController, 10, validatePhone),
           //address
           _textFormField("Địa chỉ giao hàng", 'Bấm vào đây để chọn địa chỉ !!!',
-              false, null, _addressController),
+              false, null, _addressController, null, validateAddres),
         ]);
   }
 
-  Widget _textFormField(String label, String hint, bool readonly,
-      Function()? onTap, TextEditingController controller) {
+  Widget _textFormField(
+      String label,
+      String hint,
+      bool readonly,
+      Function()? onTap,
+      TextEditingController controller,
+      int? length,
+      Function? validate) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -256,6 +276,10 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               autofocus: false,
               readOnly: readonly,
               controller: controller,
+              validator: (value) {
+                return validate!(value);
+              },
+              maxLength: length,
               onTap: onTap,
               decoration: InputDecoration(
                 labelText: label,
@@ -379,7 +403,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               ),
               Container(
                 constraints: BoxConstraints(
-                  minWidth: size.width * 0.2,
+                  maxWidth: size.width * 0.2,
                 ),
                 child: AutoSizeText(
                   '$title : ',
@@ -392,7 +416,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               ),
               Container(
                 constraints: BoxConstraints(
-                  minWidth: size.width * 0.5,
+                  maxWidth: size.width * 0.8 - 50,
                 ),
                 child: AutoSizeText(
                   value,
@@ -463,53 +487,55 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                   ? const Text('Đang tìm cửa hàng gần bạn nhất...')
                   : GestureDetector(
                       onTap: () async {
-                        String title =
-                            'Hợp đồng ${widget.listContact[0].serviceModel!.name}';
-                        ContactRequest request = ContactRequest(
-                            title: title,
-                            fullName: _nameController.text,
-                            phone: _phoneController.text,
-                            address: _addressController.text,
-                            email: _emailController.text,
-                            storeID: distance.keys.first,
-                            detailModelList: widget.listContact);
+                        if (_formKey.currentState!.validate()) {
+                          String title =
+                              'Hợp đồng ${widget.listContact[0].serviceModel!.name}';
+                          ContactRequest request = ContactRequest(
+                              title: title,
+                              fullName: _nameController.text,
+                              phone: _phoneController.text,
+                              address: _addressController.text,
+                              email: _emailController.text,
+                              storeID: distance.keys.first,
+                              detailModelList: widget.listContact);
 
-                        var map = ContactRequest().toJson(request);
-                        ContactProvider().createContact(map).then((value) {
-                          if (value) {
-                            Fluttertoast.showToast(
-                                msg: "Tạo hợp đồng thành công",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.green,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                            List<Map<String, dynamic>> listContactDetail =
-                                getListContactDetailFromSharedPrefs();
-                            for (var data in widget.listIndex) {
-                              listContactDetail.removeAt(data);
+                          var map = ContactRequest().toJson(request);
+                          ContactProvider().createContact(map).then((value) {
+                            if (value) {
+                              Fluttertoast.showToast(
+                                  msg: "Tạo hợp đồng thành công",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              List<Map<String, dynamic>> listContactDetail =
+                                  getListContactDetailFromSharedPrefs();
+                              for (var data in widget.listIndex) {
+                                listContactDetail.removeAt(data);
+                              }
+                              Map<String, dynamic> map = Map<String, dynamic>();
+                              map['detailModelList'] = listContactDetail;
+                              sharedPreferences.setString(
+                                  'ContactDetail', json.encode(map));
+                              Navigator.of(context).pop();
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) => HistoryScreen(index: 1),
+                              ));
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Tạo hợp đồng thất bại",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                             }
-                            Map<String, dynamic> map = Map<String, dynamic>();
-                            map['detailModelList'] = listContactDetail;
-                            sharedPreferences.setString(
-                                'ContactDetail', json.encode(map));
-                            Navigator.of(context).pop();
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                              builder: (context) => HistoryScreen(index: 1),
-                            ));
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: "Tạo hợp đồng thất bại",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          }
-                        });
+                          });
+                        }
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 10, right: 10),
@@ -533,5 +559,46 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
         ],
       ),
     );
+  }
+
+  String? errorName;
+  String? validateName(String value) {
+    RegExp regExp = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
+    bool check = regExp.hasMatch(value);
+    if (value.isEmpty) {
+      return 'Nhập tên';
+    } else if (check) {
+      return 'Tên không chứ kí tự đặc biệt';
+    } else if (value.length < 3) {
+      return 'Tên phải nhiều hơn 3 từ';
+    } else if (value.length >= 50) {
+      return 'Tên ít hơn 50 từ ';
+    } else {
+      return (!regExp.hasMatch(value)) ? null : 'Tên không chứ kí tự đặc biệt';
+    }
+  }
+
+  String? errorEmail;
+  String? validateEmail(String value) {
+    if (value.isEmpty) {
+      return 'Nhập email';
+    } else {
+      return EmailValidator.validate(value) ? null : 'Email không hợp lệ';
+    }
+  }
+
+  String? errorphone;
+  String? validatePhone(String value) {
+    RegExp regExp = RegExp(r'(^(?:[+0]9)?[0-9]{10}$)');
+    if (value.isEmpty) {
+      return 'Nhập số điện thoại';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Số điện thoại không khả dụng';
+    }
+    return (regExp.hasMatch(value)) ? null : "Số điện thoại không khả dụng";
+  }
+
+  String? validateAddres(String value) {
+    return null;
   }
 }
