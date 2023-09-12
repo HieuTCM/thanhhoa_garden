@@ -285,8 +285,8 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
         _inforRow('Tên hợp đồng', contact.title, null),
         _inforRow('Ngày bắt đầu', getDate(contact.startedDate).substring(0, 10),
             null),
-        _inforRow(
-            'Ngày kết thúc', getDate(contact.endedDate).substring(0, 10), null),
+        // _inforRow(
+        //     'Ngày kết thúc', getDate(contact.endedDate).substring(0, 10), null),
         _inforRow('Trạng thái', convertStatusContact(contact.status), null),
         _inforRow('Địa chỉ', contact.address, null),
         _inforRow(
@@ -567,7 +567,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 null)
             : const SizedBox(),
         _inforRow('Ngày bắt đầu', formatDateShow(detail.startDate), null),
-        _inforRow('Ngày kết thức', formatDateShow(detail.endDate), null),
+        // _inforRow('Ngày kết thức', formatDateShow(detail.endDate), null),
         _inforRow(
             'Gói dịch vụ',
             detail.servicePackModel!.range +

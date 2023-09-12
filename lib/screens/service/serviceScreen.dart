@@ -658,8 +658,10 @@ class _ServiceDetailState extends State<ServiceDetail> {
     if (_formKey.currentState!.validate()) {
       ContactDetail contactDetail = ContactDetail(
           note: _inforController.text,
-          timeWorking:
-              selectDate!.toString().replaceAll(RegExp(r'[\[*\]]'), ''),
+          timeWorking: selectDate!
+              .toString()
+              .replaceAll(RegExp(r'[\[*\]]'), '')
+              .replaceAll(RegExp(', '), ' - '),
           servicePackID: servicePackSelect.id,
           serviceTypeID: typeService.id,
           startDate: formatDateStartDateContact(_StartDateController.text),

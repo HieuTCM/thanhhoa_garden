@@ -312,8 +312,8 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
         _inforRow('Mã hợp đồng', contact.id.toString().substring(2), null),
         _inforRow('Ngày bắt đầu', getDate(contact.startedDate).substring(0, 10),
             null),
-        _inforRow(
-            'Ngày kết thúc', getDate(contact.endedDate).substring(0, 10), null),
+        // _inforRow(
+        //     'Ngày kết thúc', getDate(contact.endedDate).substring(0, 10), null),
         _inforRow(
             'Giá trị hợp đồng', '${f.format(contact.total)} đ', priceColor),
         _inforRow('Trạng thái', convertStatusContact(contact.status), null),
@@ -391,8 +391,8 @@ class _ContactHistorySreenState extends State<ContactHistorySreen> {
                     'Mã hợp đồng', contact.id.toString().substring(2), null),
                 _inforRow('Ngày bắt đầu',
                     getDate(contact.startedDate).substring(0, 10), null),
-                _inforRow('Ngày kết thúc',
-                    getDate(contact.endedDate).substring(0, 10), null),
+                // _inforRow('Ngày kết thúc',
+                //     getDate(contact.endedDate).substring(0, 10), null),
                 _inforRow('Giá trị hợp đồng', '${f.format(contact.total)} đ',
                     priceColor),
                 _inforRow(

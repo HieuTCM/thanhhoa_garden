@@ -197,7 +197,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                   height: 35,
                 ),
                 AppBarWiget(
-                  title: 'Thông tin hợp đồng',
+                  title: 'Yêu cầu tạo hợp đồng',
                 ),
                 const SizedBox(
                   height: 10,
@@ -484,7 +484,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               ),
               Spacer(),
               (isLoading)
-                  ? const Text('Đang tìm cửa hàng gần bạn nhất...')
+                  ? const Text('Đang tìm cửa hàng ...')
                   : GestureDetector(
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
@@ -503,7 +503,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                           ContactProvider().createContact(map).then((value) {
                             if (value) {
                               Fluttertoast.showToast(
-                                  msg: "Tạo hợp đồng thành công",
+                                  msg: "Gửi yêu cầu thành công",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
@@ -526,7 +526,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                               ));
                             } else {
                               Fluttertoast.showToast(
-                                  msg: "Tạo hợp đồng thất bại",
+                                  msg: "Gửi yêu cầu thất bại",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,

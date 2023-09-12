@@ -518,7 +518,7 @@ class _CartScreenState extends State<CartScreen> {
               decoration: BoxDecoration(
                   color: buttonColor, borderRadius: BorderRadius.circular(50)),
               child: const Text(
-                'Tạo hợp đồng',
+                'Tạo yêu cầu',
                 style: TextStyle(
                     color: lightText,
                     fontSize: 18,

@@ -224,32 +224,46 @@ class _BonsaiDetailState extends State<BonsaiDetail> {
         ),
         Row(
           children: [
-            const Text(
-              'Giá: ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            SizedBox(
+              width: size.width * 0.2,
+              child: const AutoSizeText(
+                'Giá cây: ',
+                maxLines: 1,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             SizedBox(
-                width: size.width - 330,
+                width: size.width * 0.6,
                 child: AutoSizeText(
-                  '${f.format(bonsai.price)} đ',
+                  '${f.format(bonsai.price)} đ / Cây',
                   maxLines: 1,
                   style: const TextStyle(
                       fontSize: 20,
                       color: priceColor,
                       fontWeight: FontWeight.w500),
                 )),
-            const Spacer(),
-            const Text(
-              'Giá vận chuyển: ',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ],
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Row(
+          children: [
+            SizedBox(
+              width: size.width * 0.3,
+              child: const AutoSizeText(
+                'Giá vận chuyển: ',
+                maxLines: 1,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             SizedBox(
-                width: size.width - 310,
+                width: size.width * 0.6,
                 child: AutoSizeText(
                   '${f.format(bonsai.plantShipPrice!.pricePerPlant)} đ / Cây',
                   maxLines: 1,
                   style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 20,
                       color: priceColor,
                       fontWeight: FontWeight.w500),
                 )),

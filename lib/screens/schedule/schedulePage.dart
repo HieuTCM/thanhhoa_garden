@@ -401,7 +401,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 itemCount: cD.length,
                 itemBuilder: (BuildContext context, int index) {
                   List days_list =
-                      (cD[index].timeWorking.toString().split(", "));
+                      (cD[index].timeWorking.toString().split(" - "));
                   if (((selectedTabToday == 0) || (selectedTabToday == 1))) {
                     for (int i = 0; i < days_list.length; i++) {
                       // if (days_list[i] == weekday) {
