@@ -49,8 +49,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
   DateTime? startDate;
   DateTime? endDate;
   void initState() {
-    startDate = DateTime.now();
-    endDate = startDate!.add(Duration(days: 30));
+    startDate = DateTime.now().add(const Duration(days: 3));
+    endDate = startDate!.add(const Duration(days: 30));
     service = widget.service;
     typeService = service.typeList!.first;
     _StartDateController.text = formatDate1(startDate!);
@@ -464,14 +464,19 @@ class _ServiceDetailState extends State<ServiceDetail> {
     startDate = await showDatePicker(
         helpText: 'Chọn ngày bắt đầu hợp đồng',
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
+        initialDate: DateTime.now().add(const Duration(days: 3)),
+        firstDate: DateTime.now().add(const Duration(days: 3)),
         lastDate: DateTime(2101));
-    setState(() {
-      _StartDateController.text = formatDate1(startDate!);
-    });
+    if (startDate != null) {
+      setState(() {
+        _StartDateController.text = formatDate1(startDate!);
+      });
 
-    getEndDate(startDate!, servicePackSelect);
+      getEndDate(startDate!, servicePackSelect);
+    } else {
+      startDate = DateFormat("dd/MM/yyy").parse(_StartDateController.text);
+      getEndDate(startDate!, servicePackSelect);
+    }
   }
 
   getEndDate(DateTime startDate, ServicePack servicePack) async {
@@ -516,7 +521,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
             lastDate: DateTime(2101));
     }
     setState(() {
-      _endDateController.text = formatDate1(endDate!);
+      if (endDate != null) _endDateController.text = formatDate1(endDate!);
       print('Start : ' + _StartDateController.text);
       print('End: ' + _endDateController.text);
       totalPrice = setPriceService(widget.service.price, typeService.percentage,

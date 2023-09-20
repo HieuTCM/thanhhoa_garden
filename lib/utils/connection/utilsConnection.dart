@@ -75,6 +75,7 @@ const paymentURL = '/vnpay/submitOrder';
 //Schedule
 const getScheduleURL = '/workingDate/getByStaffToken';
 const getScheduleInWeekURL = '/contract/getContractDetailByStaffTokenAndDate?';
+const getWorkingdate = '/workingDate/v2/getByWorkingDate?';
 
 //ScheduleDetail
 const getScheduleDetailURL = '/workingDate/getByWorkingDate?';

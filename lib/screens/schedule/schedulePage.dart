@@ -66,256 +66,13 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 10,
             decoration: const BoxDecoration(color: divince),
           ),
-          // (selectedTab == 0 || selectedTab == 1)
-          //     ? Container(
-          //         height: 1,
-          //         width: size.width,
-          //         decoration: const BoxDecoration(color: buttonColor),
-          //       )
-          //     : const SizedBox(),
-          //Working List
           Expanded(
-            child: selectedTab == 2
-                ? _listSchedule()
-                : selectedTab == 0
-                    ? _listJobToday()
-                    : _ScheduleFollowWeek(),
+            child: selectedTab == 0 ? _listJobToday() : _ScheduleFollowWeek(),
           ),
         ]),
       ),
     );
   }
-
-  //All Of the Schedule that Staff done (History)
-  Widget _listSchedule() {
-    var size = MediaQuery.of(context).size;
-    return FutureBuilder<List<WorkingDate>>(
-      future: fetchSchedule(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Circular();
-        }
-        if (snapshot.hasData) {
-          List<WorkingDate> date = snapshot.data!;
-          if (snapshot.data! == null) {
-            return const Center(
-              child: Text(
-                'Không có kết quả để hiển thị',
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-            );
-          } else {
-            return ListView.builder(
-                controller: _scrollController,
-                shrinkWrap: true,
-                itemCount: date.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: ExpansionTile(
-                      collapsedTextColor: Colors.black,
-                      collapsedIconColor: Colors.black,
-                      iconColor: buttonColor,
-                      textColor: Colors.black,
-                      backgroundColor: Colors.white,
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            formatDatenoTime(
-                                date[index].workingDate.toString()),
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(date[index].serviceName.toString(),
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600)),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          _contractFiled(
-                              'Khách hàng', date[index].fullName.toString()),
-                          _contractFiled(
-                              'Địa chỉ', date[index].address.toString()),
-                        ],
-                      ),
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                                margin: const EdgeInsets.only(
-                                    left: 5, right: 5, bottom: 10),
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: size.width - 40,
-                                              height: 1,
-                                              decoration: const BoxDecoration(
-                                                  color: divince),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text('Thông tin dịch vụ',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: buttonColor)),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            _contractFiled('ID',
-                                                date[index].id.toString()),
-                                            _contractFiled(
-                                                'Ngày làm việc',
-                                                date[index]
-                                                    .timeWorking
-                                                    .toString()),
-                                            _contractFiled('Chú ý',
-                                                date[index].note.toString()),
-                                            _contractFiled(
-                                                date[index]
-                                                            .serviceTypeID
-                                                            .toString() ==
-                                                        'ST005'
-                                                    ? 'Kích thước vườn'
-                                                    : date[index]
-                                                                .serviceTypeID
-                                                                .toString() ==
-                                                            'ST006'
-                                                        ? 'Kích thước vườn'
-                                                        : date[index]
-                                                                    .serviceTypeID
-                                                                    .toString() ==
-                                                                'ST007'
-                                                            ? 'Kích thước vườn'
-                                                            : date[index]
-                                                                        .serviceTypeID
-                                                                        .toString() ==
-                                                                    'ST008'
-                                                                ? 'Kích thước vườn'
-                                                                : 'Chiều cao cây',
-                                                date[index]
-                                                    .typeSize
-                                                    .toString()),
-                                            _contractFiled(
-                                                'Thời gian',
-                                                date[index]
-                                                    .packRange
-                                                    .toString()),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Container(
-                                              width: size.width - 40,
-                                              height: 1,
-                                              decoration: const BoxDecoration(
-                                                  color: divince),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text('Thông tin khách hàng',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: buttonColor)),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            _contractFiled(
-                                                'Khách hàng',
-                                                date[index]
-                                                    .fullName
-                                                    .toString()),
-                                            _contractFiled('địa chỉ',
-                                                date[index].address.toString()),
-                                            _contractFiled('Điện thoại',
-                                                date[index].phone.toString()),
-                                            _contractFiled(
-                                                'Email',
-                                                date[index].email == null
-                                                    ? 'không có'
-                                                    : date[index]
-                                                        .email
-                                                        .toString()),
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )),
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                });
-          }
-        }
-        return const Center(
-          child: Text('Error'),
-        );
-      },
-    );
-  }
-
-  // Widget _listCategoryInWeek() {
-  //   DateTime now = DateTime.now();
-  //   String weekday = getWeekday(now.weekday);
-  //   int seletedDay = formatNumDay(weekday);
-  //   return ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       padding: EdgeInsets.zero,
-  //       itemBuilder: (context, index) {
-  //         return GestureDetector(
-  //             onTap: () {
-  //               setState(() {
-  //                 selectedTabInWeek = index;
-  //               });
-  //             },
-  //             child: Container(
-  //               alignment: Alignment.center,
-  //               width: MediaQuery.of(context).size.width / 7,
-  //               height: 30,
-  //               // padding: const EdgeInsets.all(5),
-  //               decoration: BoxDecoration(
-  //                   border: seletedDay == index
-  //                       ? Border.all(width: 1, color: Colors.black)
-  //                       : Border.all(width: 0, color: background),
-  //                   color: (selectedTabInWeek == index)
-  //                       ? buttonColor
-  //                       : Colors.white),
-  //               //margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-  //               child: AutoSizeText(
-  //                 dayOfWeek[index],
-  //                 textAlign: TextAlign.center,
-  //                 style: TextStyle(
-  //                     fontWeight: FontWeight.w800,
-  //                     color:
-  //                         (selectedTabInWeek == index) ? lightText : HintIcon),
-  //               ),
-  //             ));
-  //       },
-  //       itemCount: 7);
-  // }
 
   //UI Main Category
   Widget _listCategory() {
@@ -334,7 +91,6 @@ class _SchedulePageState extends State<SchedulePage> {
                       ? selectedTabInWeek = selectedDay
                       : selectedTabInWeek = 0;
                 });
-                // _searchPlant(0, PageSize, 'ID', true, null, cateID, null, null);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -614,27 +370,6 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  // Widget _contractFiled2(String title, String des) {
-  //   return Column(
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Text(title + ': ',
-  //               style:
-  //                   const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-  //           Text(
-  //             des,
-  //             style: const TextStyle(fontSize: 14),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(
-  //         height: 5,
-  //       ),
-  //     ],
-  //   );
-  // }
-
   //List Working follow weekday
   Widget _ScheduleFollowWeek() {
     DateTime now = DateTime.now();
@@ -652,22 +387,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   //List main category
-  List<String> tab = [('Ngày hôm nay'), ('Lịch theo tháng')];
-
-  //List today category
-  List<String> tabToday = [('Tất cả'), ('Đã xong'), ('Chưa xong')];
-
-  //List Working follow weekday
-  // List<String> dayOfWeek = [
-  //   ('Thứ 2'),
-  //   ('Thứ 3'),
-  //   ('Thứ 4'),
-  //   ('Thứ 5'),
-  //   ('Thứ 6'),
-  //   ('Thứ 7'),
-  //   ('Chủ Nhật')
-  // ];
-
+  List<String> tab = [('Hôm nay'), ('Lịch theo tháng')];
   //List weekday (get by DateTime.now)
   String getWeekday(int weekday) {
     switch (weekday) {

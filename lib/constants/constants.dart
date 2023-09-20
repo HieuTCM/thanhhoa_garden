@@ -85,8 +85,14 @@ String convertStatusContact(String value) {
     case "WAITING":
       result = 'Chờ xác nhận';
       break;
+    // case "CONFIRMING":
+    //   result = 'Xác nhận';
+    //   break;
     case "CUSTOMERCANCELED":
       result = 'Đã huỷ';
+      break;
+    case "STAFFCANCELED":
+      result = 'Bị Hủy';
       break;
     case "DENIED":
       result = 'Bị từ chối';
@@ -124,6 +130,50 @@ String convertStatusReport(String value) {
       break;
     case "APPROVED":
       result = 'Đã xác nhận';
+      break;
+  }
+  return result;
+}
+
+String convertStatusWorkingDate(String value) {
+  String result = value;
+  switch (value) {
+    case "WAITING":
+      result = 'Chờ thực hiện';
+      break;
+    case "WORKING":
+      result = 'Đang thực hiện';
+      break;
+    case "DONE":
+      result = 'Hoàn thành';
+      break;
+    case "CUSTOMERCANCELED":
+      result = 'KH Hủy';
+      break;
+    case "STAFFCANCELED":
+      result = 'Hủy';
+      break;
+  }
+  return result;
+}
+
+Color colorWorkingDate(String value) {
+  Color result = Colors.black;
+  switch (value) {
+    case "WAITING":
+      result = Colors.yellow.shade700;
+      break;
+    case "WORKING":
+      result = Colors.green;
+      break;
+    case "DONE":
+      result = buttonColor;
+      break;
+    case "CUSTOMERCANCELED":
+      result = Colors.red;
+      break;
+    case "STAFFCANCELED":
+      result = Colors.red;
       break;
   }
   return result;
@@ -221,6 +271,11 @@ List<String> listReasonContract() {
   ];
 }
 
+List<String> tab = [
+  ('Hôm nay'),
+  ('Lịch theo tháng'),
+  ('Lịch theo HĐ'),
+];
 String getDate(String date) {
   DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
   return date = DateFormat('dd/MM/yyyy hh:mm a').format(parseDate);
@@ -228,6 +283,11 @@ String getDate(String date) {
 
 String formatDate1(DateTime date) {
   String result = DateFormat('dd/MM/yyyy').format(date);
+  return result;
+}
+
+String getToday(DateTime date) {
+  String result = DateFormat('yyyy-MM-dd').format(date);
   return result;
 }
 

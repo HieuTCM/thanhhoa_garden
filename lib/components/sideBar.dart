@@ -13,6 +13,7 @@ import 'package:thanhhoa_garden/screens/home/historyScreen.dart';
 import 'package:thanhhoa_garden/screens/home/homePage.dart';
 import 'package:thanhhoa_garden/screens/notification/notificationScreen.dart';
 import 'package:thanhhoa_garden/screens/report/reportScreen.dart';
+import 'package:thanhhoa_garden/screens/schedule/scheduleScreen.dart';
 import 'package:thanhhoa_garden/screens/store/storeScreen.dart';
 import 'package:thanhhoa_garden/screens/schedule/schedulePage.dart';
 import 'package:thanhhoa_garden/models/authentication/user.dart' as UserObj;
@@ -126,11 +127,11 @@ class _SideBarState extends State<SideBar> {
             _listTile('Lịch Chăm sóc', () {
               Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SchedulePage(),
+                builder: (context) => ScheduleScreen(),
               ));
             },
                 const Icon(
-                  Icons.shopping_bag_outlined,
+                  Icons.calendar_month,
                   size: 30,
                   color: buttonColor,
                 )),

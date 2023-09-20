@@ -16,6 +16,7 @@ import 'package:thanhhoa_garden/blocs/order/orderBloc.dart';
 import 'package:thanhhoa_garden/blocs/report/reportBloc.dart';
 import 'package:thanhhoa_garden/blocs/service/service_bloc.dart';
 import 'package:thanhhoa_garden/blocs/store/storeBloc.dart';
+import 'package:thanhhoa_garden/blocs/workingDate/workingDate_bloc.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/firebase_options.dart';
 import 'package:thanhhoa_garden/models/bonsai/bonsai.dart';
@@ -29,6 +30,7 @@ import 'package:thanhhoa_garden/providers/feedback/feedback_provider.dart';
 import 'package:thanhhoa_garden/providers/notification/notification_Provider.dart';
 import 'package:thanhhoa_garden/providers/order/order_provider.dart';
 import 'package:thanhhoa_garden/providers/report/report_provider.dart';
+import 'package:thanhhoa_garden/providers/schedule/workingProvider.dart';
 import 'package:thanhhoa_garden/providers/service/service_provider.dart';
 import 'package:thanhhoa_garden/providers/store/store_provider.dart';
 // import 'package:thanhhoa_garden/screens/MyHomePage.dart';
@@ -80,6 +82,8 @@ class MyApp extends StatelessWidget {
         ListenableProvider<OrderProvider>(create: (_) => OrderProvider()),
         ListenableProvider<ContactProvider>(create: (_) => ContactProvider()),
         ListenableProvider<ReportProvider>(create: (_) => ReportProvider()),
+        ListenableProvider<WorkingDateProvider>(
+            create: (_) => WorkingDateProvider()),
         ListenableProvider<NotificationProvider>(
             create: (_) => NotificationProvider()),
         ProxyProvider<AuthenticationProvider, AuthBloc>(
@@ -115,6 +119,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<ReportProvider, ReportBloc>(
             update: (_, reportProvider, __) =>
                 ReportBloc(reportProvider: reportProvider)),
+        ProxyProvider<WorkingDateProvider, WorkingDateBloc>(
+            update: (_, workingDateProvider, __) =>
+                WorkingDateBloc(WorkingDateProvider: workingDateProvider)),
       ],
       child: MaterialApp(
         title: 'Thanh Hoa Garden',

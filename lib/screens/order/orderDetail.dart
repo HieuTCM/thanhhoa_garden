@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:popup_banner/popup_banner.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
 import 'package:thanhhoa_garden/components/button.dart';
 import 'package:thanhhoa_garden/components/note.dart';
@@ -405,7 +406,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left : 10),
+          padding: const EdgeInsets.only(left: 10),
           child: AutoSizeText(
             widget.order.showStoreModel!.storeName,
             style: const TextStyle(color: darkText, fontSize: 18),

@@ -137,8 +137,8 @@ class _ListFeebbackState extends State<ListFeebback> {
                                   GestureDetector(
                                     onTap: () {
                                       PopupBanner(
-                                        fit: BoxFit.cover,
-                                        height: size.width,
+                                        fit: BoxFit.fitWidth,
+                                        height: size.height - 150,
                                         context: context,
                                         images: [
                                           for (int i = 0;

@@ -227,8 +227,8 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                               ? IconButton(
                                   onPressed: () {
                                     PopupBanner(
-                                      fit: BoxFit.cover,
-                                      height: size.height * 0.8,
+                                      fit: BoxFit.fitWidth,
+                                      height: size.height - 150,
                                       context: context,
                                       images: [
                                         for (int i = 0;
@@ -584,7 +584,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 detail.serviceTypeModel!.percentage.toString() +
                 ' % )',
             null),
-        _inforRow('Đơn giá', f.format(detail.serviceModel!.price), null),
+        _inforRow('Đơn giá', f.format(detail.totalPrice), null),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Row(
