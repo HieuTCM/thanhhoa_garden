@@ -23,6 +23,7 @@ class WorkingDate {
   String? startDate;
   String? endDate;
   String? expectedEndDate;
+  String? typeUnit;
   double? totalPrice;
   String? serviceID;
   String? serviceName;
@@ -35,7 +36,9 @@ class WorkingDate {
   String? packRange;
   int? packPercentage;
   String? packApplyDate;
+  String? packUnit;
   User? showStaffModel;
+  bool? isReported;
   int? totalPage;
 
   WorkingDate(
@@ -52,6 +55,7 @@ class WorkingDate {
       this.address,
       this.phone,
       this.email,
+      this.isReported,
       this.contractDetailID,
       this.timeWorking,
       this.note,
@@ -66,6 +70,8 @@ class WorkingDate {
       this.typePercentage,
       this.typeSize,
       this.typeApplyDate,
+      this.packUnit,
+      this.typeUnit,
       this.servicePackID,
       this.packRange,
       this.packPercentage,
@@ -87,7 +93,7 @@ class WorkingDate {
     address = json["address"];
     phone = json["phone"];
     email = json["email"];
-    contractDetailID = json["contractDetailIDs"];
+    contractDetailID = json["contractDetailID"];
     timeWorking = json["timeWorking"];
     note = json["note"];
     startDate = json["startDate"];
@@ -100,12 +106,14 @@ class WorkingDate {
     typeName = json["typeName"];
     typePercentage = json["typePercentage"];
     typeSize = json["typeSize"];
+    typeUnit = json["typeUnit"];
     typeApplyDate = json["typeApplyDate"];
     servicePackID = json["servicePackID"];
     packRange = json["packRange"];
     packPercentage = json["packPercentage"];
-    packPercentage = json["packPercentage"];
-    packPercentage = json["packPercentage"];
+    packApplyDate = json["packApplyDate"];
+    isReported = json["isReported"];
+    packUnit = json["packUnit"];
     showStaffModel = User.fetchInfo(json["showStaffModel"]);
     totalPage = json["totalPage"];
   }

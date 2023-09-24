@@ -590,29 +590,29 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
           child: Row(
             children: [
               _inforRow('Lưu ý', detail.note, null),
-              Spacer(),
-              (widget.contact!.status == 'WORKING')
-                  ? GestureDetector(
-                      onTap: () {
-                        reportDialog(detail.id);
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 100,
-                        height: 40,
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: buttonColor,
-                            borderRadius: BorderRadius.circular(50)),
-                        margin: const EdgeInsets.only(
-                            left: 10, right: 10, bottom: 10),
-                        child: const AutoSizeText('Gửi báo cáo',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w800, color: lightText)),
-                      ),
-                    )
-                  : const SizedBox()
+              // Spacer(),
+              // (widget.contact!.status == 'WORKING')
+              //     ? GestureDetector(
+              //         onTap: () {
+              //           reportDialog(detail.id);
+              //         },
+              //         child: Container(
+              //           alignment: Alignment.center,
+              //           width: 100,
+              //           height: 40,
+              //           padding: const EdgeInsets.all(5),
+              //           decoration: BoxDecoration(
+              //               color: buttonColor,
+              //               borderRadius: BorderRadius.circular(50)),
+              //           margin: const EdgeInsets.only(
+              //               left: 10, right: 10, bottom: 10),
+              //           child: const AutoSizeText('Gửi báo cáo',
+              //               textAlign: TextAlign.center,
+              //               style: TextStyle(
+              //                   fontWeight: FontWeight.w800, color: lightText)),
+              //         ),
+              //       )
+              //     : const SizedBox()
             ],
           ),
         ),

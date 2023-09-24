@@ -274,7 +274,7 @@ List<String> listReasonContract() {
 List<String> tab = [
   ('Hôm nay'),
   ('Lịch theo tháng'),
-  ('Lịch theo HĐ'),
+  // ('Lịch theo HĐ'),
 ];
 String getDate(String date) {
   DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);

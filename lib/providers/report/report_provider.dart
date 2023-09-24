@@ -15,10 +15,10 @@ class ReportProvider extends ChangeNotifier {
   ReportModel? get report => _report;
   List<ReportModel>? get list => _listReport;
 
-  Future<bool> SendReport(String detailID, String reason) async {
+  Future<bool> SendReport(String workingDateID, String reason) async {
     bool result = false;
     Map<String, String?> params =
-        ({'description': reason, 'contractDetailID': detailID});
+        ({'description': reason, 'workingDateID': workingDateID});
     var body = json.encode(params);
     var header = getheader(getTokenAuthenFromSharedPrefs());
     try {

@@ -2,17 +2,21 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:popup_banner/popup_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:thanhhoa_garden/blocs/workingDate/workingDate_bloc.dart';
 import 'package:thanhhoa_garden/blocs/workingDate/workingDate_event.dart';
 import 'package:thanhhoa_garden/blocs/workingDate/workingDate_state.dart';
 import 'package:thanhhoa_garden/components/appBar.dart';
+import 'package:thanhhoa_garden/components/note.dart';
 import 'package:thanhhoa_garden/constants/constants.dart';
 import 'package:thanhhoa_garden/models/workingDate/scheduleToday/schedule_today.dart';
 import 'package:thanhhoa_garden/models/workingDate/working_date.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:thanhhoa_garden/providers/report/report_provider.dart';
 import 'package:thanhhoa_garden/providers/schedule/workingProvider.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -27,8 +31,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   late Stream<WorkingDateState> workingDateStream;
 
   int selectedTab = 0;
-  String today = getToday(DateTime.now());
-  String test = '2023-09-18';
+  String test = getToday(DateTime.now());
+  // String test = '2023-09-18';
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -89,23 +93,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       to,
     );
     for (var date in _listDate) {
-      DateTime parseDate =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss").parseUTC(date.workingDate!);
-      if (events[parseDate] != null) {
-        for (var d in events[parseDate]!) {
-          if (d.id != date.id) {
-            setState(() {
-              events.addAll({
-                parseDate: [...events[parseDate] ?? [], date]
-              });
-            });
-          }
-        }
-      } else {
+      if (date.workingDate != null) {
+        DateTime parseDate =
+            DateFormat("yyyy-MM-dd'T'HH:mm:ss").parseUTC(date.workingDate!);
+
         setState(() {
-          events.addAll({
-            parseDate: [...events[parseDate] ?? [], date]
-          });
+          if (events.containsKey(parseDate)) {
+            if (!events[parseDate]!.any((d) => d.id == date.id)) {
+              events[parseDate]!.add(date);
+            } else {
+              int index =
+                  events[parseDate]!.indexWhere((obj) => obj.id == date.id);
+              events[parseDate]![index] = date;
+            }
+          } else {
+            events[parseDate] = [date];
+          }
         });
       }
     }
@@ -120,44 +123,46 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       //     addEvent();
       //   },
       // ),
-      body: Column(children: [
-        const SizedBox(
-          height: 35,
-        ),
-        AppBarWiget(title: 'Lịch Chăm Sóc'),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          height: 10,
-          decoration: const BoxDecoration(color: divince),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(width: size.width, height: 50, child: _listCategory()),
-        const SizedBox(
-          height: 10,
-        ),
-        SingleChildScrollView(
-          child: IndexedStack(
-            index: selectedTab,
-            children: [
-              SizedBox(height: size.height - 175, child: _listJobsToday()),
-              SizedBox(
-                height: size.height - 175,
-                child: Column(
-                  children: [
-                    _calendar(),
-                    _listEvents(),
-                  ],
-                ),
-              ),
-              const Text('3'),
-            ],
+      body: SingleChildScrollView(
+        child: Column(children: [
+          const SizedBox(
+            height: 35,
           ),
-        )
-      ]),
+          AppBarWiget(title: 'Lịch Chăm Sóc'),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 10,
+            decoration: const BoxDecoration(color: divince),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(width: size.width, height: 50, child: _listCategory()),
+          const SizedBox(
+            height: 10,
+          ),
+          SingleChildScrollView(
+            child: IndexedStack(
+              index: selectedTab,
+              children: [
+                SizedBox(height: size.height - 175, child: _listJobsToday()),
+                SizedBox(
+                  height: size.height - 175,
+                  child: Column(
+                    children: [
+                      _calendar(),
+                      _listEvents(),
+                    ],
+                  ),
+                ),
+                const Text('3'),
+              ],
+            ),
+          )
+        ]),
+      ),
     );
   }
 
@@ -203,7 +208,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               },
               child: Container(
                 alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: MediaQuery.of(context).size.width / 2.2,
                 height: 30,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
@@ -269,6 +274,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(bottom: 5),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          _rowInfo('Mã lịch: ', date.id, null),
           _rowInfo('Ngày thực hiện : ',
               getDate(date.workingDate.toString()).substring(0, 10), null),
           _rowInfo('Mã hợp đồng : ', date.contractID, null),
@@ -279,15 +285,52 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               'Trạng thái : ',
               convertStatusWorkingDate(date.status.toString()),
               colorWorkingDate(date.status.toString())),
+          const SizedBox(
+            height: 5,
+          ),
+          (CheckDayReport(date) && !date.isReported!)
+              ? Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      reportDialog(date.id!);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 40,
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      margin: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 10),
+                      child: const AutoSizeText('Gửi báo cáo',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, color: lightText)),
+                    ),
+                  ),
+                )
+              : const SizedBox()
         ]),
       ),
     );
   }
 
+  bool CheckDayReport(WorkingDate date) {
+    var today = DateTime.now();
+    var checkday = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date.workingDate!);
+    if (today == checkday) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Widget _rowInfo(title, value, color) {
     var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(bottom: 5, top: 5),
+      padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         children: [
           SizedBox(
@@ -323,17 +366,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: AutoSizeText(
               title.toString(),
               maxLines: 2,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(
-            width: 10,
+            width: 5,
           ),
           SizedBox(
               width: size.width * 0.6 - 75,
               child: Text(
                 value.toString(),
-                style: TextStyle(fontSize: 17, color: color),
+                style: TextStyle(fontSize: 15, color: color),
               )),
         ],
       ),
@@ -358,8 +401,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     child: Column(
                   children: [
                     _rowInfoDialog('Mã hợp đồng : ', date.contractID, null),
+                    _rowInfoDialog(
+                        'Mã dịch vụ : ', date.contractDetailID, null),
                     _rowInfoDialog('Tên hợp đồng : ', date.title, null),
                     _rowInfoDialog('Tên dịch vụ : ', date.serviceName, null),
+                    _rowInfoDialog('Thông tin cây : ', date.note, null),
+                    _rowInfoDialog(
+                        'Tên người phụ trách : ',
+                        date.showStaffModel!.fullName ?? 'Chưa có thông tin',
+                        null),
                     _rowInfoDialog(
                         'Ngày làm việc trong tuần : ', date.timeWorking, null),
                     _rowInfoDialog(
@@ -539,7 +589,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 (focusedDay.month == 11))
                             ? 30
                             : 31)));
-        print('object 123');
       },
       calendarBuilders: CalendarBuilders(
         markerBuilder: (BuildContext context, date, events) {
@@ -566,7 +615,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         },
         dowBuilder: (context, day) {
           if (day.weekday == DateTime.sunday) {
-            final text = DateFormat.E().format(day);
             return const Center(
               child: Text(
                 'CN',
@@ -593,5 +641,148 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         },
       ),
     );
+  }
+
+  dynamic reportDialog(String workingDateID) {
+    // var phone = widget.phone;
+    var size = MediaQuery.of(context).size;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text(
+                'Gửi báo cáo',
+                style: TextStyle(color: buttonColor, fontSize: 25),
+              ),
+            ),
+            content: SizedBox(
+                height: 170,
+                width: size.width - 10,
+                child: SendReport(
+                  callback: setReason,
+                )),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 110,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Text('Quay lại',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (reason.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Vui lòng nhập nội dung báo cáo",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else if (reason.length < 5) {
+                        Fluttertoast.showToast(
+                            msg: "Vui lòng mô tả chi tiết hơn",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        OverlayLoadingProgress.start(context);
+                        Navigator.pop(context);
+                        ReportProvider()
+                            .SendReport(workingDateID, reason)
+                            .then((value) {
+                          if (value) {
+                            Fluttertoast.showToast(
+                                msg: "Gửi báo cáo thành công",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            setEventsList(
+                                null,
+                                getToday(DateTime.utc(
+                                    _focusedDay.year, _focusedDay.month, 1)),
+                                getToday(DateTime.utc(
+                                    _focusedDay.year,
+                                    _focusedDay.month,
+                                    ((_focusedDay.month == 2) &&
+                                            ((_focusedDay.year % 4) == 0))
+                                        ? 29
+                                        : ((_focusedDay.month == 2) &&
+                                                ((_focusedDay.year % 4) != 0))
+                                            ? 28
+                                            : ((_focusedDay.month == 4) ||
+                                                    (_focusedDay.month == 6) ||
+                                                    (_focusedDay.month == 9) ||
+                                                    (_focusedDay.month == 11))
+                                                ? 30
+                                                : 31)));
+                            OverlayLoadingProgress.stop();
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Gửi báo cáo thất bại",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            OverlayLoadingProgress.stop();
+                          }
+                        });
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 110,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: const Text('Gửi',
+                          style: TextStyle(
+                              color: lightText,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
+  String reason = '';
+  bool validate = false;
+  setReason(String value) {
+    setState(() {
+      reason = value;
+    });
   }
 }

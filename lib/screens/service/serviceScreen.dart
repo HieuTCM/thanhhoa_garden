@@ -483,33 +483,16 @@ class _ServiceDetailState extends State<ServiceDetail> {
     switch (servicePack.unit) {
       case 'tháng':
         {
-          switch (servicePack.range) {
-            case '1':
-              endDate = startDate.add(const Duration(days: 30));
-              break;
-            case '3':
-              endDate = startDate.add(const Duration(days: 90));
-              break;
-            case '6':
-              endDate = startDate.add(const Duration(days: 180));
-              break;
-          }
+          var range = int.parse(servicePack.range) * 30;
+          endDate = startDate.add(Duration(days: range));
+
           break;
         }
       case 'năm':
         {
-          switch (servicePack.range) {
-            case '1':
-              endDate = startDate.add(const Duration(days: 365));
-              break;
-            default:
-              endDate = await showDatePicker(
-                  helpText: 'Chọn ngày kết thúc hợp đồng',
-                  context: context,
-                  initialDate: startDate.add(const Duration(days: 366)),
-                  firstDate: startDate.add(const Duration(days: 366)),
-                  lastDate: DateTime(2101));
-          }
+          var range = int.parse(servicePack.range) * 365;
+          endDate = startDate.add(Duration(days: range));
+
           break;
         }
       default:
