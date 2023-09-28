@@ -320,7 +320,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   bool CheckDayReport(WorkingDate date) {
     var today = DateTime.now();
     var checkday = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date.workingDate!);
-    if (today == checkday) {
+    if (today.month == checkday.month &&
+        today.day == checkday.day &&
+        today.year == checkday.year) {
       return true;
     } else {
       return false;

@@ -117,7 +117,6 @@ class OrderProvider extends ChangeNotifier {
       if (res.statusCode == 200) {
         if (res.body.isNotEmpty) {
           result = true;
-
           notifyListeners();
         }
       }

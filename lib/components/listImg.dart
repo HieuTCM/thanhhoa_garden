@@ -45,7 +45,7 @@ class _ListImgState extends State<ListImg> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                           fit: BoxFit.cover, image: NetworkImage(img.url)),
-                    )),
+                    ))
             ],
           ),
           const Spacer(),

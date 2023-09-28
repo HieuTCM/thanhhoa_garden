@@ -36,7 +36,9 @@ class Service {
     atHome = json['atHome'];
     priceID = json['priceID'];
     for (var data in json['imgList']) {
-      Img.add(ImageURL.fromJson(data));
+      if (!data["url"].toString().contains(RegExp(r'SIMG'))) {
+        Img.add(ImageURL.fromJson(data));
+      }
     }
     if (json['imgList'] == null) {
       Img.add(ImageURL(url: NoIMG, id: 0));

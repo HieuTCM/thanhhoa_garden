@@ -85,9 +85,9 @@ String convertStatusContact(String value) {
     case "WAITING":
       result = 'Chờ xác nhận';
       break;
-    // case "CONFIRMING":
-    //   result = 'Xác nhận';
-    //   break;
+    case "CONFIRMING":
+      result = 'Đang xác nhận';
+      break;
     case "CUSTOMERCANCELED":
       result = 'Đã huỷ';
       break;

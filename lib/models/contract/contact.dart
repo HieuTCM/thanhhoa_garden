@@ -164,13 +164,16 @@ class ContactDetail {
   late final totalPrice;
   late final servicePackID;
   late final serviceTypeID;
+  late final plantStatus;
   late final startDate;
+  late final expectedEndDate;
   late final endDate;
   late final totalPage;
   late Service? serviceModel;
   late TypeService? serviceTypeModel;
   late ServicePack? servicePackModel;
   late Contact? contactModel;
+  List<ImageURL2>? plantStatusIMGModelList;
 
   ContactDetail(
       {this.id,
@@ -179,40 +182,63 @@ class ContactDetail {
       this.note,
       this.servicePackID,
       this.serviceTypeID,
+      this.plantStatus,
       this.timeWorking,
       this.totalPrice,
+      this.expectedEndDate,
       this.totalPage,
       this.serviceModel,
       this.serviceTypeModel,
+      this.plantStatusIMGModelList,
       this.contactModel,
       this.servicePackModel});
 
   ContactDetail.fromJson(Map<String, dynamic> json) {
+    List<ImageURL2> Img = [];
     note = json['note'];
     id = json['id'];
     timeWorking = json['timeWorking'];
     totalPrice = json['totalPrice'];
     servicePackID = json['servicePackID'];
+    expectedEndDate = json['expectedEndDate'];
     serviceTypeID = json['serviceTypeID'];
+    plantStatus = json['plantStatus'];
     startDate = json['startDate'];
     endDate = json['endDate'];
     totalPage = json['totalPage'];
     serviceModel = Service.fromJson(json['serviceModel']);
     serviceTypeModel = TypeService.fromJson(json['serviceTypeModel']);
     servicePackModel = ServicePack.fromJson(json['servicePackModel']);
+    for (var data in json['plantStatusIMGModelList']) {
+      Img.add(ImageURL2.fromJson(data));
+    }
+    if (json['plantStatusIMGModelList'] == null) {
+      Img.add(ImageURL2(url: NoIMG, id: 0));
+    }
+    plantStatusIMGModelList = Img;
   }
   ContactDetail.fromJson2(Map<String, dynamic> json) {
+    List<ImageURL2> Img = [];
     id = json['id'];
     note = json['note'];
     timeWorking = json['timeWorking'];
     totalPrice = json['totalPrice'];
+    expectedEndDate = json['expectedEndDate'];
     startDate = json['startDate'];
+    plantStatus = json['plantStatus'];
     endDate = json['endDate'];
     totalPage = json['totalPage'];
     serviceModel = Service.fromJson2(json['showServiceModel']);
     serviceTypeModel = TypeService.fromJson2(json['showServiceTypeModel']);
     servicePackModel = ServicePack.fromJsonModel(json['showServicePackModel']);
     contactModel = Contact.fromJson(json['showContractModel']);
+    for (var data in json['plantStatusIMGModelList']) {
+      Img.add(ImageURL2.fromJson(data));
+    }
+    if (json['plantStatusIMGModelList'] == null) {
+      Img.add(ImageURL2(url: NoIMG, id: 0));
+    }
+    plantStatusIMGModelList = Img;
   }
 
   Map<String, dynamic> toJson(ContactDetail contactDetail) {

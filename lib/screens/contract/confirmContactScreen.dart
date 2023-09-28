@@ -365,6 +365,8 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
         _inforRow(
             'Gói dịch vụ',
             detail.servicePackModel!.range +
+                ' ' +
+                detail.servicePackModel!.unit +
                 ' ( giảm ' +
                 detail.servicePackModel!.percentage.toString() +
                 ' % )'),
@@ -374,7 +376,8 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                 ' (thêm ' +
                 detail.serviceTypeModel!.percentage.toString() +
                 ' % )'),
-        _inforRow('Đơn giá', f.format(detail.serviceModel!.price)),
+        _inforRow('Giá dịch vụ', '${f.format(detail.serviceModel!.price)} đ'),
+        _inforRow('Tổng giá', '${f.format(detail.totalPrice)} đ'),
         _inforRow('Lưu ý', detail.note),
         const SizedBox(
           height: 10,
@@ -403,7 +406,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
               ),
               Container(
                 constraints: BoxConstraints(
-                  maxWidth: size.width * 0.2,
+                  maxWidth: size.width * 0.25,
                 ),
                 child: AutoSizeText(
                   '$title : ',
@@ -414,9 +417,12 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
+              const SizedBox(
+                width: 10,
+              ),
               Container(
                 constraints: BoxConstraints(
-                  maxWidth: size.width * 0.8 - 50,
+                  maxWidth: size.width * 0.75 - 50,
                 ),
                 child: AutoSizeText(
                   value,

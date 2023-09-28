@@ -220,7 +220,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
       child: SizedBox(
           width: MediaQuery.of(context).size.width - 130,
           child: AutoSizeText(
-              'Chiều cao (diện tích) ${typeService.size} (tăng ${typeService.percentage}%)',
+              'Chiều cao (diện tích) ${typeService.size} ${typeService.unit} (tăng ${typeService.percentage}%)',
               style: const TextStyle(fontSize: 18, color: buttonColor))),
     );
   }
@@ -283,7 +283,7 @@ class _ServiceDetailContactState extends State<ServiceDetailContact> {
           width: MediaQuery.of(context).size.width - 130,
           height: 58,
           child: AutoSizeText(
-              'Thời gian ${servicePackSelect.range}'
+              'Thời gian ${servicePackSelect.range} ${servicePackSelect.unit} '
               '${servicePackSelect.percentage == 0 ? '' : '( ưu đãi  ${servicePackSelect.percentage} %)'}',
               style: const TextStyle(fontSize: 18, color: buttonColor))),
     );

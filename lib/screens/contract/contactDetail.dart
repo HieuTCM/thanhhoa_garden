@@ -281,7 +281,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   Widget _contactTab(Contact contact) {
     return Column(
       children: [
-        _inforRow('Mã hợp đồng', contact.id.toString().substring(2), null),
+        _inforRow('Mã hợp đồng', contact.id.toString(), null),
         _inforRow('Tên hợp đồng', contact.title, null),
         _inforRow('Ngày bắt đầu', getDate(contact.startedDate).substring(0, 10),
             null),
@@ -291,10 +291,11 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
         _inforRow('Địa chỉ', contact.address, null),
         _inforRow(
             'Giá trị hợp đồng', '${f.format(contact.total)} đ', priceColor),
-        _inforRow(
-            'Trạng thái thanh toán',
-            contact.isPaid ? 'Hoàn thành' : 'Chưa hoàn thành',
-            contact.isPaid ? buttonColor : priceColor),
+
+        // _inforRow(
+        //     'Trạng thái thanh toán',
+        //     contact.isPaid ? 'Hoàn thành' : 'Chưa hoàn thành',
+        //     contact.isPaid ? buttonColor : priceColor),
       ],
     );
   }
@@ -319,12 +320,15 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
         Row(
           children: [
             const SizedBox(
-              width: 10,
+              width: 30,
             ),
-            const Text(
-              'Số điện thoại: ',
-              style: TextStyle(
-                  color: darkText, fontSize: 16, fontWeight: FontWeight.bold),
+            SizedBox(
+              width: size.width * 0.3,
+              child: const Text(
+                'Số điện thoại: ',
+                style: TextStyle(
+                    color: darkText, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
             GestureDetector(
               onTap: (() {
@@ -336,7 +340,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
                 ),
                 child: AutoSizeText(
                   staff.phone,
-                  style: const TextStyle(color: buttonColor, fontSize: 18),
+                  style: const TextStyle(color: buttonColor, fontSize: 16),
                 ),
               ),
             ),
@@ -375,7 +379,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
   }
 
   Widget _storeTab(Store store) {
-    // var size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
@@ -391,7 +395,38 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
           height: 10,
         ),
         _inforRow('Tên', store.storeName, null),
-        _inforRow('Số điện thoại', store.phone, null),
+        Row(
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            SizedBox(
+              width: size.width * 0.3,
+              child: const Text(
+                'Số điện thoại: ',
+                style: TextStyle(
+                    color: darkText, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            GestureDetector(
+              onTap: (() {
+                makePhoneCall(store.phone);
+              }),
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: size.width - 270,
+                ),
+                child: AutoSizeText(
+                  store.phone,
+                  style: const TextStyle(color: buttonColor, fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         _inforRow('Email', store.address, null),
       ],
     );
@@ -465,19 +500,24 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
           child: Row(
             children: [
               const SizedBox(
-                width: 10,
+                width: 30,
               ),
-              Text(
-                '$title : ',
-                style: const TextStyle(
-                    color: darkText, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              Container(
-                constraints: BoxConstraints(
-                  maxWidth: size.width - 65,
+              SizedBox(
+                width: size.width * 0.3,
+                child: AutoSizeText(
+                  '$title : ',
+                  maxLines: 2,
+                  style: const TextStyle(
+                      color: darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
+              ),
+              SizedBox(
+                width: size.width - 155,
                 child: AutoSizeText(
                   value,
+                  maxLines: 4,
                   style: TextStyle(color: colorValue ?? darkText, fontSize: 16),
                 ),
               ),
@@ -616,6 +656,48 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             ],
           ),
         ),
+        _inforRow('Thông tin cây khi tiếp nhận', detail.plantStatus, null),
+
+        detail.plantStatusIMGModelList!.isNotEmpty
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 30),
+                  width: size.width * 0.8,
+                  child: const AutoSizeText('Hình ảnh cây khi tiếp nhận',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                ),
+                IconButton(
+                    onPressed: () {
+                      PopupBanner(
+                        fit: BoxFit.fitWidth,
+                        height: size.height - 150,
+                        context: context,
+                        images: [
+                          for (int i = 0;
+                              i < detail.plantStatusIMGModelList!.length;
+                              i++)
+                            detail.plantStatusIMGModelList![i].url
+                        ],
+                        autoSlide: false,
+                        dotsAlignment: Alignment.bottomCenter,
+                        dotsColorActive: buttonColor,
+                        dotsColorInactive: Colors.grey.withOpacity(0.5),
+                        onClick: (index) {
+                          debugPrint("CLICKED $index");
+                        },
+                      ).show();
+                    },
+                    icon: const Icon(
+                      Icons.image,
+                      color: buttonColor,
+                      size: 35,
+                    )),
+                const SizedBox(
+                  width: 30,
+                )
+              ])
+            : const SizedBox(),
         const SizedBox(
           height: 10,
         ),
