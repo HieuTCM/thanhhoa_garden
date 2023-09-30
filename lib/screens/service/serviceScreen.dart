@@ -39,6 +39,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
   TypeService typeService = TypeService();
 
   TextEditingController _inforController = TextEditingController();
+  TextEditingController _planNameController = TextEditingController();
   TextEditingController _StartDateController = TextEditingController();
   TextEditingController _endDateController = TextEditingController();
 
@@ -219,6 +220,15 @@ class _ServiceDetailState extends State<ServiceDetail> {
               const SizedBox(
                 height: 10,
               ),
+              const Text(
+                'Tên cây :',
+                style: TextStyle(fontSize: 18),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _textFormField('Thông tin cây của bạn', 'Tên cây (Loại cây)',
+                  false, () {}, _planNameController, 50, 1),
               const Text(
                 'Ghi chú :',
                 style: TextStyle(fontSize: 18),
@@ -548,8 +558,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 selectedColor: buttonColor,
                 selectedItemsTextStyle: const TextStyle(color: lightText),
                 validator: (value) {
-                  if (value!.length > 3) {
-                    return "Chọn tối đa 3 ngày làm việc";
+                  if (value!.length != 3) {
+                    return "Chọn 3 ngày làm việc";
                   }
                   if (value.length == 0) {
                     return "Bạn chưa chọn ngày làm việc";
@@ -646,6 +656,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
     if (_formKey.currentState!.validate()) {
       ContactDetail contactDetail = ContactDetail(
           note: _inforController.text,
+          plantName: _planNameController.text,
           timeWorking: selectDate!
               .toString()
               .replaceAll(RegExp(r'[\[*\]]'), '')
@@ -671,6 +682,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
           textColor: Colors.white,
           fontSize: 16.0);
       _inforController.clear();
+      _planNameController.clear();
     }
   }
 }

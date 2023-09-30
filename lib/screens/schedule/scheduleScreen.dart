@@ -34,7 +34,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   String test = getToday(DateTime.now());
   // String test = '2023-09-18';
 
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   Map<DateTime, List<WorkingDate>> events = {};
@@ -362,13 +362,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Container(
       padding: const EdgeInsets.only(bottom: 5, top: 5),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: size.width * 0.3 - 25,
             child: AutoSizeText(
               title.toString(),
               maxLines: 2,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(
@@ -409,7 +410,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     _rowInfoDialog('Tên dịch vụ : ', date.serviceName, null),
                     _rowInfoDialog('Thông tin cây : ', date.note, null),
                     _rowInfoDialog(
-                        'Tên người phụ trách : ',
+                        'Nhân viên : ',
                         date.showStaffModel!.fullName ?? 'Chưa có thông tin',
                         null),
                     _rowInfoDialog(
@@ -497,19 +498,24 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   const Spacer(),
                                   GestureDetector(
                                     onTap: () {
-                                      PopupBanner(
-                                        fit: BoxFit.fitWidth,
-                                        useDots: false,
-                                        height: size.height - 150,
-                                        context: context,
-                                        images: [date.endWorkingIMG ?? NoIMG],
-                                        autoSlide: false,
-                                        dotsAlignment: Alignment.bottomCenter,
-                                        dotsColorActive: buttonColor,
-                                        dotsColorInactive:
-                                            Colors.grey.withOpacity(0.5),
-                                        onClick: (index) {},
-                                      ).show();
+                                      date.endWorkingIMG == null
+                                          ? null
+                                          : PopupBanner(
+                                              fit: BoxFit.fitWidth,
+                                              useDots: false,
+                                              height: size.height - 150,
+                                              context: context,
+                                              images: [
+                                                date.endWorkingIMG ?? NoIMG
+                                              ],
+                                              autoSlide: false,
+                                              dotsAlignment:
+                                                  Alignment.bottomCenter,
+                                              dotsColorActive: buttonColor,
+                                              dotsColorInactive:
+                                                  Colors.grey.withOpacity(0.5),
+                                              onClick: (index) {},
+                                            ).show();
                                     },
                                     child: Container(
                                       width: 50,
@@ -526,7 +532,35 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                     width: 50,
                                   ),
                                 ],
-                              )
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    width: 40,
+                                  ),
+                                  Text(
+                                      getDate(date.startWorking!).substring(10),
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  const Spacer(),
+                                  Text(
+                                      date.endWorking != null
+                                          ? getDate(date.endWorking!)
+                                              .substring(10)
+                                          : '__/__/__',
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  const SizedBox(
+                                    width: 50,
+                                  ),
+                                ],
+                              ),
                             ],
                           )
                         : const SizedBox(),
@@ -608,9 +642,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     width: 8,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _getEventsForDay(date)[index].status == 'WAITING'
-                            ? Colors.yellow
-                            : Colors.green),
+                        color: colorWorkingDate(
+                            _getEventsForDay(date)[index].status.toString())),
                   ),
                 );
               });

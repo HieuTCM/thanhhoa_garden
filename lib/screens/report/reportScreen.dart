@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -112,61 +114,32 @@ class _ReportScreenState extends State<ReportScreen> {
           border: Border.all(color: buttonColor, width: 3.0),
           color: Colors.white),
       child: Column(children: [
+        const SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               alignment: Alignment.center,
               width: size.width - 46,
-              child: AutoSizeText('Dịch vụ : ' + model.serviceName),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            SizedBox(
-              width: size.width - 46,
-              child: AutoSizeText(model.description),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            SizedBox(
-              width: size.width - 46,
               child: AutoSizeText(
-                'Trạng thái : ${convertStatusReport(model.status)}',
-                style: TextStyle(
-                    color:
-                        (model.status != 'DENIED') ? Colors.green : Colors.red,
-                    fontSize: 16),
+                'Dịch vụ : ' + model.showServiceModel!.name,
+                style: const TextStyle(fontSize: 18),
               ),
             )
           ],
         ),
-        (model.reason != null)
-            ? Row(
-                children: [
-                  SizedBox(
-                    width: size.width - 46,
-                    child: AutoSizeText(
-                      'Lý do : ${model.reason}',
-                      style: TextStyle(
-                          color: (model.status != 'DENIED')
-                              ? Colors.green
-                              : Colors.red,
-                          fontSize: 16),
-                    ),
-                  )
-                ],
-              )
-            : const SizedBox(),
+        const SizedBox(
+          height: 10,
+        ),
+        _inforRow('Mã hợp đồng', model.contractID, null),
+        _inforRow(
+            'Ngày làm việc',
+            getDate(model.showWorkingDateModel!.workingDate!).substring(0, 10),
+            null),
+        _inforRow('Nhân viên', model.showStaffModel!.fullName, null),
+        _inforRow('Nội dung', model.description, null),
         const SizedBox(
           height: 10,
         ),
@@ -178,8 +151,50 @@ class _ReportScreenState extends State<ReportScreen> {
               child: AutoSizeText(getDate(model.createdDate)),
             )
           ],
-        )
+        ),
+        const SizedBox(
+          height: 10,
+        ),
       ]),
+    );
+  }
+
+  Widget _inforRow(String title, String value, Color? colorValue) {
+    var size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            minWidth: size.width,
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: size.width * 0.3,
+                child: AutoSizeText(
+                  '$title : ',
+                  maxLines: 2,
+                  style: const TextStyle(
+                      color: darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                width: size.width - 180,
+                child: AutoSizeText(
+                  value,
+                  maxLines: 4,
+                  style: TextStyle(color: colorValue ?? darkText, fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 }

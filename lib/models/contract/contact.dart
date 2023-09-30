@@ -166,6 +166,7 @@ class ContactDetail {
   late final serviceTypeID;
   late final plantStatus;
   late final startDate;
+  late final plantName;
   late final expectedEndDate;
   late final endDate;
   late final totalPage;
@@ -184,6 +185,7 @@ class ContactDetail {
       this.serviceTypeID,
       this.plantStatus,
       this.timeWorking,
+      this.plantName,
       this.totalPrice,
       this.expectedEndDate,
       this.totalPage,
@@ -202,6 +204,7 @@ class ContactDetail {
     servicePackID = json['servicePackID'];
     expectedEndDate = json['expectedEndDate'];
     serviceTypeID = json['serviceTypeID'];
+    plantName = json['plantName'];
     plantStatus = json['plantStatus'];
     startDate = json['startDate'];
     endDate = json['endDate'];
@@ -209,11 +212,13 @@ class ContactDetail {
     serviceModel = Service.fromJson(json['serviceModel']);
     serviceTypeModel = TypeService.fromJson(json['serviceTypeModel']);
     servicePackModel = ServicePack.fromJson(json['servicePackModel']);
-    for (var data in json['plantStatusIMGModelList']) {
-      Img.add(ImageURL2.fromJson(data));
-    }
+
     if (json['plantStatusIMGModelList'] == null) {
       Img.add(ImageURL2(url: NoIMG, id: 0));
+    } else {
+      for (var data in json['plantStatusIMGModelList']) {
+        Img.add(ImageURL2.fromJson(data));
+      }
     }
     plantStatusIMGModelList = Img;
   }
@@ -226,6 +231,7 @@ class ContactDetail {
     expectedEndDate = json['expectedEndDate'];
     startDate = json['startDate'];
     plantStatus = json['plantStatus'];
+    plantName = json['plantName'];
     endDate = json['endDate'];
     totalPage = json['totalPage'];
     serviceModel = Service.fromJson2(json['showServiceModel']);
@@ -247,6 +253,7 @@ class ContactDetail {
     json['timeWorking'] = contactDetail.timeWorking;
     json['totalPrice'] = contactDetail.totalPrice;
     json['servicePackID'] = contactDetail.servicePackID;
+    json['plantName'] = contactDetail.plantName;
     json['serviceTypeID'] = contactDetail.serviceTypeID;
     json['startDate'] = contactDetail.startDate;
     json['endDate'] = contactDetail.endDate;
@@ -267,6 +274,7 @@ class ContactDetail {
     json['servicePackID'] = contactDetail.servicePackID;
     json['serviceTypeID'] = contactDetail.serviceTypeID;
     json['startDate'] = contactDetail.startDate;
+    json['plantName'] = contactDetail.plantName;
     json['endDate'] = contactDetail.endDate;
     return json;
   }

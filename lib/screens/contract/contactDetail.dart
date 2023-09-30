@@ -498,6 +498,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             minWidth: size.width - 140,
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 width: 30,
@@ -598,6 +599,7 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
           height: 10,
         ),
         _inforRow('Tên dịch vụ', detail.serviceModel!.name, null),
+        _inforRow('Tên cây (Loại cây)', detail.plantName, null),
         detail.serviceModel!.atHome
             ? _inforRow(
                 'Lịch chăm sóc',
@@ -656,7 +658,10 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
             ],
           ),
         ),
-        _inforRow('Thông tin cây khi tiếp nhận', detail.plantStatus, null),
+        (detail.plantStatus != null)
+            ? _inforRow('Thông tin cây khi tiếp nhận',
+                detail.plantStatus.toString(), null)
+            : const SizedBox(),
 
         detail.plantStatusIMGModelList!.isNotEmpty
             ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

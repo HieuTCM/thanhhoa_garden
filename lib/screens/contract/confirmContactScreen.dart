@@ -353,6 +353,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
           height: 10,
         ),
         _inforRow('Tên dịch vụ', detail.serviceModel!.name),
+        _inforRow('Tên cây (Loại cây)', detail.plantName),
         (detail.timeWorking != "")
             ? _inforRow(
                 'Lịch chăm sóc',
@@ -400,6 +401,7 @@ class _ConfirmContactScreenState extends State<ConfirmContactScreen> {
         Container(
           width: size.width,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 width: 30,

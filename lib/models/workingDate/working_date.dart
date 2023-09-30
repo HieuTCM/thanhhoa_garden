@@ -114,7 +114,9 @@ class WorkingDate {
     packApplyDate = json["packApplyDate"];
     isReported = json["isReported"];
     packUnit = json["packUnit"];
-    showStaffModel = User.fetchInfo(json["showStaffModel"]);
+    showStaffModel = json["showStaffModel"] == null
+        ? json["showStaffModel"]
+        : User.fetchInfo(json["showStaffModel"]);
     totalPage = json["totalPage"];
   }
   factory WorkingDate.fromJson(Map<String, dynamic> json) =>
