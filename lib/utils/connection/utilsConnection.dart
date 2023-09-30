@@ -17,7 +17,8 @@ Map<String, String> headerLogin = {
 };
 
 //Main URL API
-const mainURL = 'https://thanhhoagarden.herokuapp.com';
+// const mainURL = 'https://thanhhoagarden.herokuapp.com';
+const mainURL = 'https://thanhhoaserver3-c9f7bb81b2a6.herokuapp.com/';
 
 //User
 const loginWithUsernamePasswordURL = '/user/login?';

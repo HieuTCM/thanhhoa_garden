@@ -747,6 +747,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             .SendReport(workingDateID, reason)
                             .then((value) {
                           if (value) {
+                            getListJobsToday(null, test, test, []);
                             Fluttertoast.showToast(
                                 msg: "Gửi báo cáo thành công",
                                 toastLength: Toast.LENGTH_SHORT,
